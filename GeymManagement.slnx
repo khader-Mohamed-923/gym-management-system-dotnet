@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="GeymDomain/GymManagement.Domain.csproj" Id="247f6eb2-1a8e-4f2e-9ff9-d8b9a3809e4c" />
+  <Project Path="GeymInfrastructure/GymManagement.Infrastructure.csproj" Id="0014d884-1066-47b5-bfd9-a7a68b781e15" />
+  <Project Path="GeymManagement/GymManagement.Presentation.csproj" />
+</Solution>
