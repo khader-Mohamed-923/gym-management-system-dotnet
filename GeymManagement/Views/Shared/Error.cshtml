@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Error";
+    var requestId = Context.TraceIdentifier;
+}
+
+<div class="text-center" style="margin-top: 80px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="font-size: 100px; color: #dc3545; animation: shake 0.5s infinite alternate;">⚠️</div>
+
+    <h1 class="text-danger font-weight-bold" style="margin-top: 20px;">Oops! Something went wrong.</h1>
+    <p class="lead text-muted" style="max-width: 600px; margin: 20px auto;">
+        We are experiencing a temporary technical issue with the Gym System. Our technical team has been notified automatically and is working to resolve it.
+    </p>
+
+    @if (!string.IsNullOrEmpty(requestId))
+    {
+        <div class="alert alert-light d-inline-block" style="border: 1px dashed #ccc; padding: 10px 20px;">
+            <strong>Error Tracking ID (Ticket ID):</strong> <code class="text-secondary">@requestId</code>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg style-btn" style="padding: 10px 30px; border-radius: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            Back to Home Page
+        </a>
+    </div>
+</div>

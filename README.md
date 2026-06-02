@@ -901,7 +901,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- Clean Architecture principles by Robert C. Martin
+- N-Tier Architecture principles by Robert C. Martin
 - Entity Framework Core documentation and best practices
 - Autofac community and documentation
 - Serilog structured logging patterns
