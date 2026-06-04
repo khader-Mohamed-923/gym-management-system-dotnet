@@ -12,6 +12,8 @@ public static class DatabaseSeeder
         await PlanSeeder.SeedAsync(context);
         await CategorySeeder.SeedAsync(context);
 
+        await MemberSeeder.SeedAsync(context);
+
 
     }
 }
