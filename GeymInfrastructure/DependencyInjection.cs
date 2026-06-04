@@ -1,9 +1,10 @@
 using GeymInfrastructure.Repositories;
-using GeymManagement.Data.Interceptors;
+using GeymInfrastructure.Data.Interceptors;
 using GeymManagement.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using GymManagement.Infrastructure.Repositories;
 
 namespace GeymInfrastructure;
 
@@ -14,19 +15,20 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
 
-        services.AddScoped<AuditSaveChangesInterceptor>();
-
+        services.AddSingleton<AuditColumnsInterceptor>();
 
         services.AddDbContext<GymDbContext>((sp, options) =>
         {
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"));
 
+
             options.AddInterceptors(
-                sp.GetRequiredService<AuditSaveChangesInterceptor>());
+                sp.GetRequiredService<AuditColumnsInterceptor>());
         });
 
-   
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IMemberRepository, MemberRepository>();
 
         return services;
     }

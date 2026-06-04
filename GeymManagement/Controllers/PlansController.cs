@@ -1,26 +1,22 @@
 ﻿using GeymInfrastructure.Repositories;
+using GymManagement.Infrastructure.Models;
+using GymManagement.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeymManagement.Controllers;
+namespace GymManagement.Controllers;
 
-public class PlansController : Controller
+public class PlansController(IRepository<Plan> plans) : Controller
 {
-    private readonly IPlanRepository _planRepository;
-
-    public PlansController(IPlanRepository planRepository)
-    {
-        _planRepository = planRepository;
-    }
-
+  
     public async Task<IActionResult> Index()
     {
-        var plans = await _planRepository.GetAllAsync();
-        return View(plans);
+        var allplans = await plans.GetAllAsync();
+        return View(allplans);
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        var plan = await _planRepository.GetPlanById(id);
+        var plan = await plans.GetByIdAsync(id);
         if (plan is null)
         {
             return RedirectToAction(nameof(Index));

@@ -21,7 +21,7 @@ internal class HealthRecordConfiguration : IEntityTypeConfiguration<HealthRecord
 
         builder.Property(hr => hr.BloodType)
             .HasConversion<string>()
-            .HasMaxLength(10);
+            .HasMaxLength(40);
 
 
         builder.HasQueryFilter(h => !h.IsDeleted);
