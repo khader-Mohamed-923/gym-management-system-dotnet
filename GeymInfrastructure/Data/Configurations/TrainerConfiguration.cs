@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManagement.Infrastructure.Data.Configurations;
 
-public class TrainerConfiguration : UserConfiguration<Trainer>
+public class TrainerConfiguration : IEntityTypeConfiguration<Trainer>
 {
-    public override void Configure(EntityTypeBuilder<Trainer> builder)
+    public void Configure(EntityTypeBuilder<Trainer> builder)
     {
-        base.Configure(builder);
         builder.Property(t => t.Speciality)
-                .HasConversion<string>()
-                .HasMaxLength(20);
+        .HasConversion<string>()
+        .HasMaxLength(20);
     }
 }
