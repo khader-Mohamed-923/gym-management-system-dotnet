@@ -1,5 +1,6 @@
 using GeymInfrastructure;
 using GeymManagement.DbContexts;
+using GymManagement.Domain.Services;
 using GymManagement.Infrastructure.Seed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,8 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddInfrastructure(configuration);
+
+        services.AddScoped<IMemberService, MemberService>();
 
 
         var serviceProvider = services.BuildServiceProvider();
