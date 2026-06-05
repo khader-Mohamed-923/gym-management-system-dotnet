@@ -59,6 +59,8 @@ dlldata.c
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
+commit_changes.bat
+GeymManagement/wwwroot/css/kinetic-engine.css
 
 # .NET
 project.lock.json
