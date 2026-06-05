@@ -11,8 +11,8 @@ public class InfrastructureModule : Module
     protected override void Load(ContainerBuilder builder)
     {
 
-        builder.RegisterType<PlanRepository>()
-               .As<IPlanRepository>()
+        builder.RegisterType<MemberRepository>()
+               .As<IMemberRepository>()
                .InstancePerLifetimeScope();
 
         builder.RegisterType<DataCleanupJob>()

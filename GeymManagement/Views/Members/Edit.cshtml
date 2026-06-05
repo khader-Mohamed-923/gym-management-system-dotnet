@@ -1,0 +1,107 @@
+﻿@model MemberEditViewModel
+
+<div class="container">
+    <main role="main" class="pb-3">
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+
+                    @* --- بداية لوجيك الـ Alert في صفحة الـ Edit --- *@
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div id="Alert" class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div id="Alert" class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @* --- نهاية لوجيك الـ Alert --- *@
+
+
+                    <div class="card card-details border-0 p-2 shadow">
+                        <div class="card-body text-center">
+                            <div class="text-center mt-3">
+                                <img src="~/images/@Model.Photo" alt="@Model.Name" class="rounded-circle"
+                                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #fff; margin-top: -60px;" />
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="mb-1 text-primary-color">@Model.Name</h2>
+                                <form asp-controller="Members" asp-action="Edit" method="post">
+
+                                    <input type="hidden" asp-for="Id" />
+                                    <input type="hidden" asp-for="Name" />
+                                    <input type="hidden" asp-for="Photo" />
+
+                                    <div class="mt-4 text-start">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <div class="p-3 bg-light rounded">
+                                                    <small class="text-muted d-block mb-1">Email</small>
+                                                    <input asp-for="Email" class="form-control" />
+                                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="p-3 bg-light rounded">
+                                                    <small class="text-muted d-block mb-1">Phone</small>
+                                                    <input asp-for="Phone" class="form-control" />
+                                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div class="p-3 bg-light rounded">
+                                                    <small class="text-muted d-block mb-1">Building Number</small>
+                                                    <input asp-for="BuildingNumber" class="form-control" />
+                                                    <span asp-validation-for="BuildingNumber" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="p-3 bg-light rounded">
+                                                    <small class="text-muted d-block mb-1">City</small>
+                                                    <input asp-for="City" class="form-control" />
+                                                    <span asp-validation-for="City" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="p-3 bg-light rounded">
+                                                    <small class="text-muted d-block mb-1">Street</small>
+                                                    <input asp-for="Street" class="form-control" />
+                                                    <span asp-validation-for="Street" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between gap-2 mt-3 px-3 pb-3">
+                                        <a asp-controller="Members" asp-action="Index" class="btn btn-fill">
+                                            Back to List
+                                        </a>
+                                        <button type="submit" class="btn btn-fill">Done</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+@* دمج نفس سكريبت الـ الاختفاء التلقائي اللي مستخدمه في الـ Index *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_AlertDismissScript" />
+}

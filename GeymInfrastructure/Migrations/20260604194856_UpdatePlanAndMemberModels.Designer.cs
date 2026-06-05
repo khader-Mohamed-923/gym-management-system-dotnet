@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20260603074838_UpdateInterceptorAndConfigurations")]
-    partial class UpdateInterceptorAndConfigurations
+    [Migration("20260604194856_UpdatePlanAndMemberModels")]
+    partial class UpdatePlanAndMemberModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -315,8 +315,9 @@ namespace GymManagement.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -361,8 +362,8 @@ namespace GymManagement.Infrastructure.Migrations
                 {
                     b.HasBaseType("GymManagement.Infrastructure.Models.User");
 
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("JoinDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Photo")
                         .HasMaxLength(500)

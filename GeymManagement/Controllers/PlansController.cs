@@ -1,27 +1,27 @@
-﻿using GeymInfrastructure.Repositories;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
+﻿using GymManagement.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GymManagement.Controllers;
-
-public class PlansController(IRepository<Plan> plans) : Controller
+namespace GymManagement.Presentation.Controllers
 {
-  
-    public async Task<IActionResult> Index()
+    public class PlansController(IPlanService planService) : Controller
     {
-        var allplans = await plans.GetAllAsync();
-        return View(allplans);
-    }
-
-    public async Task<IActionResult> Details(int id)
-    {
-        var plan = await plans.GetByIdAsync(id);
-        if (plan is null)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            return RedirectToAction(nameof(Index));
+            var viewModel = await planService.GetAllPlansAsync(cancellationToken);
+            return View(viewModel);
         }
 
-        return View(plan);
+        [HttpGet]
+        public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+        {
+            var viewModel = await planService.GetPlanByIdAsync(id, cancellationToken);
+
+            if (viewModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(viewModel);
+        }
     }
 }

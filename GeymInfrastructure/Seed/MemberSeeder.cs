@@ -26,7 +26,7 @@ public static class MemberSeeder
                 Phone = "01012345678",
                 
              
-                JoinDate = DateTime.UtcNow,
+                JoinDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 
                 Gender = Gender.Male, 
                 
@@ -42,7 +42,7 @@ public static class MemberSeeder
                 Name = "Ahmed Ali",
                 Email = "ahmed.ali@gmail.com",
                 Phone = "01234567890",
-                JoinDate = DateTime.UtcNow,
+                JoinDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 Gender = Gender.Male,
                 Address = new Address
                 {

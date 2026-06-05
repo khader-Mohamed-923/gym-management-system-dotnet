@@ -17,5 +17,5 @@ public class Session : BaseEntity
     public Trainer Trainer { get; set; } = null!;
 
 
-    public ICollection<Boking> Bokings { get; set; } = [];
+    public ICollection<Booking> Bokings { get; set; } = [];
 }

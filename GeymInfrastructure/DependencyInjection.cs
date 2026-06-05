@@ -14,7 +14,6 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-
         services.AddSingleton<AuditColumnsInterceptor>();
 
         services.AddDbContext<GymDbContext>((sp, options) =>
@@ -22,13 +21,11 @@ public static class DependencyInjection
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"));
 
-
             options.AddInterceptors(
                 sp.GetRequiredService<AuditColumnsInterceptor>());
         });
 
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddScoped<IMemberRepository, MemberRepository>();
+        services.AddScoped(typeof(IMemberRepository<>), typeof(Repository<>));
 
         return services;
     }
