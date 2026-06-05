@@ -14,7 +14,7 @@ public class MemberIndexViewModel
 
     public string? PhotoPath { get; set; }
 
-    public DateTime JoinDate { get; set; } 
+    public DateOnly JoinDate { get; set; } 
 
 
 
