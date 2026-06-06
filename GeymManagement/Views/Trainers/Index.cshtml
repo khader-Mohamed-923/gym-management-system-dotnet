@@ -3,11 +3,11 @@
     ViewData["Title"] = "Trainers";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
         <div>
             <h1 class="iron-title">OUR TRAINERS</h1>
@@ -19,7 +19,7 @@
         </a>
     </div>
 
-    <!-- Alert Messages -->
+    
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
@@ -41,7 +41,7 @@
 
     @if (Model.Any())
     {
-        <!-- Trainers Table -->
+        
         <div class="glass-card animate-in" style="overflow-x: auto;">
             <table class="data-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
@@ -86,7 +86,7 @@
     }
     else
     {
-        <!-- Empty State -->
+        
         <div class="empty-state animate-in">
             <div class="empty-icon">🏋️</div>
             <h2 class="empty-title">No Trainers Available</h2>
@@ -100,7 +100,7 @@
 </div>
 
 <style>
-    /* Specialization Badge Styles */
+    
     .specialization-badge {
         display: inline-flex;
         align-items: center;
