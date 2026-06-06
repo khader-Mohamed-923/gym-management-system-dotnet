@@ -778,3 +778,59 @@ body {
 .animate-in:nth-child(3) { animation-delay: 0.15s; }
 .animate-in:nth-child(4) { animation-delay: 0.20s; }
 .animate-in:nth-child(5) { animation-delay: 0.25s; }
+
+/* ===== Auto-dismiss Alert Animation ===== */
+@keyframes alertFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.alert-dismissible {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.alert-dismissible.fade-out {
+    animation: alertFadeOut 0.5s ease forwards;
+}
+
+.alert-close {
+    position: absolute;
+    top: 50%;
+    right: var(--space-md);
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: currentColor;
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    padding: var(--space-xs);
+    line-height: 1;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+.alert-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.3;
+    animation: alertProgress 5s linear forwards;
+}
+
+@keyframes alertProgress {
+    from { width: 100%; }
+    to { width: 0%; }
+}
