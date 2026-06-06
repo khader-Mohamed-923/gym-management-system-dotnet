@@ -1,22 +1,53 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Delete Member";
+}
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card p-5 shadow text-center">
-                <p class="fs-3 text-primary-color mb-4">Are you sure you want to delete this member?</p>
+<!-- Iron UI Styles -->
+<link rel="stylesheet" href="~/css/iron-ui.css" />
 
-                <div class="alert alert-warning text-start" role="alert">
-                    <strong>Warning!</strong> This action cannot be undone. All member data will be permanently deleted.
+<div class="iron-container">
+    <!-- Page Header -->
+    <div class="iron-page-header">
+        <h1 class="iron-title" style="background: linear-gradient(135deg, var(--ember), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DELETE MEMBER</h1>
+        <p class="iron-subtitle">Confirm member removal</p>
+    </div>
+
+    <div class="details-container" style="max-width: 500px;">
+        <div class="glass-card glow-card-red animate-in" style="text-align: center; padding: var(--space-3xl);">
+            <!-- Warning Icon -->
+            <div style="font-size: 4rem; margin-bottom: var(--space-lg);">⚠️</div>
+            
+            <!-- Warning Message -->
+            <h2 class="iron-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
+                Are you sure you want to delete this member?
+            </h2>
+
+            <!-- Warning Alert -->
+            <div class="alert alert-danger" style="text-align: left; margin-bottom: var(--space-xl);">
+                <span class="alert-icon">⚠️</span>
+                <div>
+                    <strong>Warning!</strong><br />
+                    This action cannot be undone. All member data will be permanently deleted including:
+                    <ul style="margin: var(--space-sm) 0 0 var(--space-lg); padding: 0;">
+                        <li>Personal information</li>
+                        <li>Health records</li>
+                        <li>Membership history</li>
+                    </ul>
                 </div>
-
-                <form asp-action="Delete" method="post" class="mt-4" asp-route-id="@ViewBag.id">
-                    <div class="buttons d-flex justify-content-between gap-3">
-                        <a asp-controller="Members" asp-action="Index" class="btn-outline flex-fill">NO</a>
-                        <button type="submit" class="btn-fill flex-fill">Yes</button>
-                    </div>
-                </form>
             </div>
+
+            <!-- Action Form -->
+            <form asp-action="Delete" method="post" asp-route-id="@ViewBag.id">
+                @Html.AntiForgeryToken()
+                <div style="display: flex; gap: var(--space-md); justify-content: center;">
+                    <a asp-controller="Members" asp-action="Index" class="btn btn-secondary btn-lg">
+                        No, Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        Yes, Delete
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

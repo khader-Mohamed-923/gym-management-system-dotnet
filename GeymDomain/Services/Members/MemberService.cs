@@ -202,16 +202,13 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
 
         var now = DateTime.Now;
 
-        // بننادي على الريبوزيتوري مباشرة يسأل الداتا بيز
         var hasUpcomingBookings = await memberRepository.HasUpcomingBookingsAsync(id, now, cancellationToken);
 
         if (hasUpcomingBookings)
         {
-            // هيرفض المسح ويرجع الفشل والـ Controller هيستقبله ويعرض الـ Alert الأحمر
             return Result.Failure("Cannot delete member with upcoming bookings.", nameof(id));
         }
 
-        // لو معندوش حجوزات نشطة، هيكمل ويقلب الـ IsDeleted لـ 1
         await memberRepository.SoftDeleteAsync(member, cancellationToken);
         await memberRepository.SaveChangesAsync();
 

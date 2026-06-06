@@ -4,68 +4,208 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" />
+    
+    <!-- Iron UI Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/Lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/iron-ui.css" />
     <link rel="stylesheet" href="~/css/style.css" />
 
-    <title>Power fitness | @(ViewData["Title"] ?? "Home")</title>
+    <title>IronCore Gym | @(ViewData["Title"] ?? "Home")</title>
+
+    <style>
+        /* Global Iron UI Overrides */
+        body {
+            background-color: #080808;
+            color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Background Decorative Orbs */
+        .bg-orb-fire {
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.09) 0%, transparent 65%);
+            top: -250px;
+            right: -200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-orb-ember {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.07) 0%, transparent 65%);
+            bottom: -150px;
+            left: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Iron UI Navbar */
+        .navbar-iron {
+            background: rgba(8, 8, 8, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-iron {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .brand-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-subtitle {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #525252;
+        }
+
+        .nav-link-iron {
+            color: #a3a3a3;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link-iron:hover {
+            color: #f5f5f5;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link-iron.active {
+            color: #f97316;
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.15);
+        }
+
+        .nav-link-iron.disabled {
+            color: #525252;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* Content wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Bootstrap overrides for dark theme */
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1);
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg bg-white my-3">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="~/images/logo.jpg" alt="" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <!-- Background Decorative Orbs -->
+    <div class="bg-orb-fire"></div>
+    <div class="bg-orb-ember"></div>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Members" asp-action="Index">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Trainers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Sessions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" asp-controller="Plans" asp-action="Index">Plans</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">Memberships</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5" aria-current="page" href="#">
-                                Sessions Schedule
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <form href="\Account\Logout" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-link nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative">
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
+    <div class="content-wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-iron">
+                <div class="container">
+                    <a class="navbar-brand-iron" asp-controller="Home" asp-action="Index">
+                        <img src="~/images/logo.jpg" alt="IronCore Logo" style="height: 40px; width: auto; border-radius: 8px;" />
+                        <div>
+                            <span class="brand-text">IRONCORE</span>
+                            <span class="brand-subtitle d-block">GYM SYSTEM</span>
+                        </div>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0" style="gap: 0.25rem;">
+                            <li class="nav-item">
+                                <a class="nav-link-iron" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron disabled" asp-controller="Members" asp-action="Index">
+                                    <i class="bi bi-people"></i> Members
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron disabled" href="#">
+                                    <i class="bi bi-person-badge"></i> Trainers
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron disabled" href="#">
+                                    <i class="bi bi-calendar-event"></i> Sessions
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron active" asp-controller="Plans" asp-action="Index">
+                                    <i class="bi bi-credit-card"></i> Plans
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron disabled" href="#">
+                                    <i class="bi bi-card-list"></i> Memberships
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron disabled" href="#">
+                                    <i class="bi bi-calendar-week"></i> Schedule
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link-iron" style="background: none; border: none; cursor: pointer;">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
@@ -74,5 +214,24 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Active navigation highlighting
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname.toLowerCase();
+            const navLinks = document.querySelectorAll('.nav-link-iron');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href');
+                if (href && href !== '#') {
+                    if (currentPath.includes(href.toLowerCase()) || 
+                        (currentPath === '/' && href.includes('home'))) {
+                        link.classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
