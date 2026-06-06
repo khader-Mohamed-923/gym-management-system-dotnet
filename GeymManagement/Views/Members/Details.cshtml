@@ -1,73 +1,94 @@
 ﻿@model MemberDetailsViewModel
-<div class="container">
-    <main role="main" class="pb-3">
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card card-details border-0 p-2 shadow">
-                        <div class="text-center mt-3">
-                            <img src="~/images/User.jpg" alt="MemberName" class="rounded-circle"
-                                 style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #fff; margin-top: -60px;" />
-                        </div>
-                        <div class="card-body text-center">
-                            <h2 class="mb-1 text-primary-color">@Model.Name</h2>
-                            <h4 class="mb-2 pb-1 border-bottom d-block">@(Model.PlanName ?? "No Plan") </h4>
-                            <div class="mt-4 text-start">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Email</small>
-                                            <strong>@Model.Email</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Phone</small>
-                                            <strong>@Model.Phone</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Gender</small>
-                                            <strong>@Model.Gender</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Date of Birth</small>
-                                            <strong>@Model.DateOfBirth</strong>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-6">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Membership Start Date</small>
-                                            <strong>@Model.MembershipStartDate</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Membership End Date</small>
-                                            <strong>@Model.MembershipEndDate</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="p-3 bg-light rounded">
-                                            <small class="text-muted d-block mb-1">Address</small>
-                                            <strong>@Model.Address</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+@{
+    ViewData["Title"] = $"{Model.Name} - Member Details";
+}
 
-                        <div class="d-flex justify-content-between gap-2 px-3 pb-3">
-                            <a asp-controller="Members" asp-action="Index"  class="btn btn-fill flex-fill">Back to List</a>
-                        </div>
+<!-- Iron UI Styles -->
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <!-- Page Header -->
+    <div class="iron-page-header">
+        <h1 class="iron-title">MEMBER DETAILS</h1>
+        <p class="iron-subtitle">View complete information about this member</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <!-- Header -->
+            <div class="details-header">
+                <div class="member-avatar member-avatar--orange" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto var(--space-lg);">
+                    @(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())
+                </div>
+                <h2 class="iron-title" style="font-size: 2rem; margin-bottom: var(--space-md);">@Model.Name</h2>
+                @if (!string.IsNullOrEmpty(Model.PlanName))
+                {
+                    <span class="plan-badge plan-@Model.PlanName.ToLower()">@Model.PlanName</span>
+                }
+                else
+                {
+                    <span class="plan-badge plan-basic">No Plan</span>
+                }
+            </div>
+
+            <!-- Body -->
+            <div class="details-body">
+                <!-- Contact Information Grid -->
+                <div class="details-grid">
+                    <!-- Email -->
+                    <div class="details-block">
+                        <div class="details-label">📧 Email</div>
+                        <div class="details-value">@Model.Email</div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="details-block">
+                        <div class="details-label">📞 Phone</div>
+                        <div class="details-value">@Model.Phone</div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="details-block">
+                        <div class="details-label">👤 Gender</div>
+                        <div class="details-value">@Model.Gender</div>
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="details-block">
+                        <div class="details-label">📅 Date of Birth</div>
+                        <div class="details-value">@Model.DateOfBirth</div>
+                    </div>
+
+                    <!-- Membership Start -->
+                    <div class="details-block">
+                        <div class="details-label">🏃 Membership Start</div>
+                        <div class="details-value" style="color: var(--lime);">@Model.MembershipStartDate</div>
+                    </div>
+
+                    <!-- Membership End -->
+                    <div class="details-block">
+                        <div class="details-label">⏱️ Membership End</div>
+                        <div class="details-value" style="color: var(--fire);">@Model.MembershipEndDate</div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="details-block details-block-full">
+                        <div class="details-label">📍 Address</div>
+                        <div class="details-value">@Model.Address</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </main>
+            <!-- Footer -->
+            <div class="details-footer">
+                <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
+                    ← Back to List
+                </a>
+                <a asp-controller="Members" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" class="btn btn-primary">
+                    Edit Member
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

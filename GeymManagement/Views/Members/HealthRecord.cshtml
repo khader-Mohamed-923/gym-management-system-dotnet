@@ -1,85 +1,112 @@
 ﻿@model HealthRecordDetailsViewModel
 
+@{
+    ViewData["Title"] = "Health Record";
+}
 
-<div class="container">
-    <main role="main" class="pb-3">
+<!-- Iron UI Styles -->
+<link rel="stylesheet" href="~/css/iron-ui.css" />
 
+<div class="iron-container">
+    <!-- Page Header -->
+    <div class="iron-page-header">
+        <h1 class="iron-title">HEALTH RECORD</h1>
+        <p class="iron-subtitle">Member health metrics and information</p>
+    </div>
 
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary-color text-white text-center py-4">
-                            <h3 class="mb-1">Health Record</h3>
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <!-- Header -->
+            <div class="details-header" style="background: linear-gradient(135deg, rgba(132, 204, 22, 0.1), rgba(56, 189, 248, 0.05));">
+                <div style="font-size: 3rem; margin-bottom: var(--space-md);">🏥</div>
+                <h2 class="iron-title" style="font-size: 1.5rem;">Health Metrics</h2>
+            </div>
+
+            <!-- Body -->
+            <div class="details-body">
+                <div class="details-grid">
+                    <!-- Height -->
+                    <div class="details-block" style="border-left: 4px solid var(--fire);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 48px; height: 48px; background: rgba(249, 115, 22, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.5rem;">📏</span>
+                            </div>
+                            <div class="details-label">Height</div>
                         </div>
+                        <div class="details-value" style="font-size: 2rem; color: var(--fire);">
+                            @Model.Hight <span style="font-size: 1rem; color: var(--text-secondary);">cm</span>
+                        </div>
+                    </div>
 
-                        <div class="card-body p-4">
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <div class="card border-0 bg-light p-4 h-100">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bg-primary-color rounded-circle p-2 me-3"
-                                                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                                                <span class="text-white fw-bold">H</span>
-                                            </div>
-                                            <h6 class="text-muted mb-0">Height</h6>
-                                        </div>
-                                        <h4 class="text-primary-color mb-0">@Model.Hight<small>cm</small></h4>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="card border-0 bg-light p-4 h-100">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bg-primary-color rounded-circle p-2 me-3"
-                                                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                                                <span class="text-white fw-bold">W</span>
-                                            </div>
-                                            <h6 class="text-muted mb-0">Weight</h6>
-                                        </div>
-                                        <h4 class="text-primary-color mb-0">@Model.Weight <small>kg</small></h4>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="card border-0 bg-light p-4 h-100">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bg-danger rounded-circle p-2 me-3"
-                                                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                                                <span class="text-white fw-bold">B</span>
-                                            </div>
-                                            <h6 class="text-muted mb-0">Blood Type</h6>
-                                        </div>
-                                        <h4 class="text-danger mb-0"> @Model.BloodType </h4>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-0 bg-light p-4 h-100">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bg-warning rounded-circle p-2 me-3"
-                                                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                                                <span class="text-white fw-bold">N</span>
-                                            </div>
-                                            <h6 class="text-muted mb-0">Note</h6>
-                                        </div>
-                                        <h4 class="text-danger mb-0">@Model.Note</h4>
-                                    </div>
-                                </div>
+                    <!-- Weight -->
+                    <div class="details-block" style="border-left: 4px solid var(--lime);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 48px; height: 48px; background: rgba(132, 204, 22, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.5rem;">⚖️</span>
                             </div>
+                            <div class="details-label">Weight</div>
+                        </div>
+                        <div class="details-value" style="font-size: 2rem; color: var(--lime);">
+                            @Model.Weight <span style="font-size: 1rem; color: var(--text-secondary);">kg</span>
+                        </div>
+                    </div>
 
-                            <div class="card-footer bg-white border-0 p-4">
-                                <div class="d-flex justify-content-between gap-2">
-                                    <a asp-controller="Members" asp-action="Index" class="btn btn-fill flex-fill">
-                                        Back to
-                                        List
-                                    </a>
-                                </div>
+                    <!-- Blood Type -->
+                    <div class="details-block" style="border-left: 4px solid var(--ember);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.5rem;">🩸</span>
                             </div>
+                            <div class="details-label">Blood Type</div>
+                        </div>
+                        <div class="details-value" style="font-size: 2rem; color: var(--ember);">
+                            @Model.BloodType
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="details-block" style="border-left: 4px solid var(--gold);">
+                        <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-sm);">
+                            <div style="width: 48px; height: 48px; background: rgba(234, 179, 8, 0.15); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 1.5rem;">📝</span>
+                            </div>
+                            <div class="details-label">Notes</div>
+                        </div>
+                        <div class="details-value" style="color: var(--gold);">
+                            @(string.IsNullOrEmpty(Model.Note?.ToString()) ? "No notes" : Model.Note)
                         </div>
                     </div>
                 </div>
+
+                <!-- BMI Calculation -->
+                @{
+                    var heightValue = Model.Hight;
+                    var weightValue = Model.Weight;
+                    
+                    if (heightValue.HasValue && weightValue.HasValue && heightValue > 0 && weightValue > 0)
+                    {
+                        var heightInMeters = (double)heightValue.Value / 100.0;
+                        var bmi = (double)weightValue.Value / (heightInMeters * heightInMeters);
+                        var bmiCategory = bmi < 18.5 ? "Underweight" : bmi < 25 ? "Normal" : bmi < 30 ? "Overweight" : "Obese";
+                        var bmiColor = bmi < 18.5 ? "var(--ice)" : bmi < 25 ? "var(--lime)" : bmi < 30 ? "var(--gold)" : "var(--ember)";
+                        
+                        <div class="glass-card" style="margin-top: var(--space-xl); text-align: center; padding: var(--space-xl);">
+                            <div class="details-label" style="margin-bottom: var(--space-sm);">Calculated BMI</div>
+                            <div class="plan-price" style="font-size: 2.5rem; color: @bmiColor;">@bmi.ToString("F1")</div>
+                            <span class="status-badge status-@(bmi < 18.5 ? "frozen" : bmi < 25 ? "active" : bmi < 30 ? "expiring" : "inactive")">
+                                @bmiCategory
+                            </span>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Footer -->
+            <div class="details-footer">
+                <a asp-controller="Members" asp-action="Index" class="btn btn-secondary btn-block">
+                    ← Back to Members
+                </a>
             </div>
         </div>
-
-    </main>
+    </div>
 </div>
