@@ -23,10 +23,10 @@
                 <div class="details-body">
                     <!-- Tab Navigation -->
                     <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-2xl); border-bottom: 1px solid var(--steel-line);">
-                        <button type="button" class="tab-btn active" onclick="switchTab('member-info')" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-primary); border-bottom: 2px solid var(--fire); cursor: pointer;">
+                        <button type="button" class="tab-btn active" onclick="switchTab('member-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-primary); border-bottom: 2px solid var(--fire); cursor: pointer;">
                             👤 Member Info
                         </button>
-                        <button type="button" class="tab-btn" onclick="switchTab('health-info')" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer;">
+                        <button type="button" class="tab-btn" onclick="switchTab('health-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer;">
                             🏥 Health Data
                         </button>
                     </div>
@@ -150,27 +150,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        function switchTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.style.display = 'none';
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.style.color = 'var(--text-secondary)';
-                btn.style.borderBottom = '2px solid transparent';
-            });
-            
-            // Show selected tab content
-            document.getElementById(tabId).style.display = 'block';
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
-            event.target.style.color = 'var(--text-primary)';
-            event.target.style.borderBottom = '2px solid var(--fire)';
-        }
-    </script>
 }
