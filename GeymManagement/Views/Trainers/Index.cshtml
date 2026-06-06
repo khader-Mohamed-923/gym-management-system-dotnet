@@ -1,6 +1,6 @@
-@model IEnumerable<MemberIndexViewModel>
+@model IEnumerable<TrainerIndexViewModel>
 @{
-    ViewData["Title"] = "Members";
+    ViewData["Title"] = "Trainers";
 }
 
 
@@ -10,12 +10,12 @@
     
     <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
         <div>
-            <h1 class="iron-title">MEMBERS</h1>
-            <p class="iron-subtitle">Manage your gym members and their memberships</p>
+            <h1 class="iron-title">OUR TRAINERS</h1>
+            <p class="iron-subtitle">Professional fitness instructors</p>
         </div>
-        <a asp-controller="Members" asp-action="Create" class="btn btn-primary btn-lg">
+        <a asp-controller="Trainers" asp-action="Create" class="btn btn-primary btn-lg">
             <span style="font-size: 1.25rem; font-weight: 700;">+</span>
-            Add Member
+            Add Trainer
         </a>
     </div>
 
@@ -46,46 +46,34 @@
             <table class="data-table" style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr>
-                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Photo</th>
                         <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Name</th>
                         <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Email</th>
-                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Gender</th>
                         <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Phone</th>
+                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Specialization</th>
                         <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var member in Model)
+                    @foreach (var trainer in Model)
                     {
                         <tr style="transition: background 0.2s ease;">
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-primary); font-weight: 500;">@trainer.Name</td>
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@trainer.Email</td>
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@trainer.Phone</td>
                             <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line);">
-                                <div class="member-avatar member-avatar--orange" style="width: 40px; height: 40px;">
-                                    @if (string.IsNullOrWhiteSpace(member.PhotoPath))
-                                    {
-                                        <span>@(member.Name.Length >= 2 ? member.Name.Substring(0, 2).ToUpper() : member.Name.ToUpper())</span>
-                                    }
-                                    else
-                                    {
-                                        <img src="@member.PhotoPath" alt="@member.Name" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />
-                                    }
-                                </div>
+                                <span class="specialization-badge specialization-@trainer.Specialization.ToLower()">
+                                    @trainer.Specialization
+                                </span>
                             </td>
-                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-primary); font-weight: 500;">@member.Name</td>
-                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@member.Email</td>
-                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@member.Gender</td>
-                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@member.PhoneNumber</td>
                             <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line);">
                                 <div style="display: flex; gap: var(--space-sm);">
-                                    <a asp-controller="Members" asp-action="Details" asp-route-id="@member.Id" class="btn btn-secondary btn-sm" title="View Details">
+                                    <a asp-controller="Trainers" asp-action="Details" asp-route-id="@trainer.Id" class="btn btn-secondary btn-sm" title="View Details">
                                         👁️
                                     </a>
-                                    <a asp-controller="Members" asp-action="HealthRecord" asp-route-id="@member.Id" class="btn btn-secondary btn-sm" title="Health Record">
-                                        🏥
-                                    </a>
-                                    <a asp-controller="Members" asp-action="Edit" asp-route-id="@member.Id" class="btn btn-primary btn-sm" title="Edit">
+                                    <a asp-controller="Trainers" asp-action="Edit" asp-route-id="@trainer.Id" class="btn btn-primary btn-sm" title="Edit">
                                         ✏️
                                     </a>
-                                    <a asp-controller="Members" asp-action="Delete" asp-route-id="@member.Id" class="btn btn-danger btn-sm" title="Delete">
+                                    <a asp-controller="Trainers" asp-action="Delete" asp-route-id="@trainer.Id" class="btn btn-danger btn-sm" title="Delete">
                                         🗑️
                                     </a>
                                 </div>
@@ -100,16 +88,67 @@
     {
         
         <div class="empty-state animate-in">
-            <div class="empty-icon">👥</div>
-            <h2 class="empty-title">No Members Available</h2>
-            <p class="empty-text">Add your first member to get started</p>
-            <a asp-controller="Members" asp-action="Create" class="btn btn-primary btn-lg">
+            <div class="empty-icon">🏋️</div>
+            <h2 class="empty-title">No Trainers Available</h2>
+            <p class="empty-text">Add your first trainer to get started</p>
+            <a asp-controller="Trainers" asp-action="Create" class="btn btn-primary btn-lg">
                 <span style="font-size: 1.25rem; font-weight: 700;">+</span>
-                Add First Member
+                Add First Trainer
             </a>
         </div>
     }
 </div>
+
+<style>
+    
+    .specialization-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-family: var(--font-body);
+    }
+
+    .specialization-cardio {
+        background: rgba(239, 68, 68, 0.12);
+        color: var(--ember);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .specialization-balance {
+        background: rgba(56, 189, 248, 0.12);
+        color: var(--ice);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .specialization-boxing {
+        background: rgba(249, 115, 22, 0.12);
+        color: var(--fire);
+        border: 1px solid rgba(249, 115, 22, 0.25);
+    }
+
+    .specialization-yoga {
+        background: rgba(132, 204, 22, 0.12);
+        color: var(--lime);
+        border: 1px solid rgba(132, 204, 22, 0.25);
+    }
+
+    .specialization-crossfit {
+        background: rgba(234, 179, 8, 0.12);
+        color: var(--gold);
+        border: 1px solid rgba(234, 179, 8, 0.25);
+    }
+
+    .specialization-fitness {
+        background: rgba(168, 85, 247, 0.12);
+        color: #a855f7;
+        border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+</style>
 
 @section Scripts {
     <partial name="_AlertDismissScript"/>

@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace GymManagement.Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class UpdatePlanAndMemberModels : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<DateOnly>(
@@ -21,7 +21,7 @@ namespace GymManagement.Infrastructure.Migrations
                 oldNullable: true);
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<DateTime>(

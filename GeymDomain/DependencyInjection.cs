@@ -1,6 +1,7 @@
 using GeymInfrastructure;
 using GymManagement.Domain.Services;
 using GymManagement.Domain.Services.Members;
+using GymManagement.Domain.Services.Trainers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPlanService, PlanService>();
         services.AddScoped<IMemberService, MemberService>();
+        services.AddScoped<ITrainerService, TrainerService>();
 
         return services;
     }

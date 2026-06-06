@@ -1,0 +1,143 @@
+@model TrainerEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Trainer";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">EDIT TRAINER</h1>
+        <p class="iron-subtitle">Update professional trainer information</p>
+    </div>
+
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <form asp-controller="Trainers" asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Name" />
+                <input type="hidden" asp-for="DateOfBirth" />
+                <input type="hidden" asp-for="Gender" />
+
+                <div class="details-body">
+                    
+                    <div style="text-align: center; margin-bottom: var(--space-2xl);">
+                        <p class="iron-subtitle" style="margin-bottom: var(--space-sm);">Editing Profile For</p>
+                        <h2 class="iron-title" style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--space-md);">@Model.Name</h2>
+                        
+                        <div style="display: flex; justify-content: center; gap: var(--space-lg); color: var(--text-secondary); font-size: 0.875rem;">
+                            <span>🎂 Date of Birth: @Model.DateOfBirth</span>
+                            <span>👤 Gender: @Model.Gender</span>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                        CONTACT INFORMATION
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label form-label-required">Email Address</label>
+                            <input asp-for="Email" class="form-input" placeholder="Enter email address" />
+                            <span asp-validation-for="Email" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Phone" class="form-label form-label-required">Phone Number</label>
+                            <input asp-for="Phone" class="form-input" placeholder="Enter phone number" />
+                            <span asp-validation-for="Phone" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
+                        ADDRESS INFORMATION
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="BuildingNumber" class="form-label form-label-required">Building Number</label>
+                            <input asp-for="BuildingNumber" class="form-input" placeholder="Enter building number" />
+                            <span asp-validation-for="BuildingNumber" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Street" class="form-label form-label-required">Street</label>
+                            <input asp-for="Street" class="form-input" placeholder="Enter street name" />
+                            <span asp-validation-for="Street" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="City" class="form-label form-label-required">City</label>
+                        <input asp-for="City" class="form-input" placeholder="Enter city" />
+                        <span asp-validation-for="City" class="form-error-text"></span>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
+                        PROFESSIONAL INFORMATION
+                    </h3>
+
+                    <div class="form-group">
+                        <label asp-for="Specialty" class="form-label form-label-required">Specialty</label>
+                        <select asp-for="Specialty" class="form-input">
+                            <option value="">Select Specialty</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Balance">Balance</option>
+                            <option value="Boxing">Boxing</option>
+                            <option value="Yoga">Yoga</option>
+                            <option value="CrossFit">CrossFit</option>
+                            <option value="Fitness">Fitness</option>
+                        </select>
+                        <span asp-validation-for="Specialty" class="form-error-text"></span>
+                    </div>
+                </div>
+
+                
+                <div class="details-footer">
+                    <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_AlertDismissScript" />
+}

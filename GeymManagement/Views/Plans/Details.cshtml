@@ -1,14 +1,14 @@
-﻿@model PlanIndexViewModel
+@model PlanIndexViewModel
 
 @{
     ViewData["Title"] = $"{Model.Name} - Plan Details";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header">
         <h1 class="iron-title">PLAN DETAILS</h1>
         <p class="iron-subtitle">View complete information about this membership plan</p>
@@ -16,7 +16,7 @@
 
     <div class="details-container">
         <div class="details-card animate-in">
-            <!-- Header -->
+            
             <div class="details-header">
                 <h2 class="plan-card-title" style="font-size: 2rem; margin-bottom: var(--space-md);">@Model.Name</h2>
                 @if (Model.IsActive)
@@ -29,23 +29,23 @@
                 }
             </div>
 
-            <!-- Body -->
+            
             <div class="details-body">
-                <!-- Price Display -->
+                
                 <div class="plan-price-section" style="margin-bottom: var(--space-2xl);">
                     <span class="plan-price" style="font-size: 4rem;">@Model.Price</span>
                     <span class="plan-currency" style="font-size: 1.25rem;">EGP</span>
                 </div>
 
-                <!-- Details Grid -->
+                
                 <div class="details-grid">
-                    <!-- Duration -->
+                    
                     <div class="details-block">
                         <div class="details-label">Duration</div>
                         <div class="details-value">@Model.DurationInDays Days</div>
                     </div>
 
-                    <!-- Status -->
+                    
                     <div class="details-block">
                         <div class="details-label">Status</div>
                         <div class="details-value" style="color: @(Model.IsActive ? "var(--lime)" : "var(--ember)");">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
 
-                    <!-- Description -->
+                    
                     <div class="details-block details-block-full">
                         <div class="details-label">Description</div>
                         <div class="details-value">@Model.Description</div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <!-- Footer -->
+            
             <div class="details-footer">
                 <a asp-action="Index" class="btn btn-secondary">
                     ← Back to Plans

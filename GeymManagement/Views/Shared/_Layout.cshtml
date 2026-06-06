@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" />
     
-    <!-- Iron UI Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -18,14 +18,14 @@
     <title>IronCore Gym | @(ViewData["Title"] ?? "Home")</title>
 
     <style>
-        /* Global Iron UI Overrides */
+        
         body {
             background-color: #080808;
             color: #f5f5f5;
             font-family: 'Inter', sans-serif;
         }
 
-        /* Background Decorative Orbs */
+        
         .bg-orb-fire {
             position: fixed;
             width: 700px;
@@ -48,7 +48,7 @@
             z-index: 0;
         }
 
-        /* Iron UI Navbar */
+        
         .navbar-iron {
             background: rgba(8, 8, 8, 0.85);
             backdrop-filter: blur(20px);
@@ -115,13 +115,13 @@
             opacity: 0.5;
         }
 
-        /* Content wrapper */
+        
         .content-wrapper {
             position: relative;
             z-index: 1;
         }
 
-        /* Bootstrap overrides for dark theme */
+        
         .navbar-toggler {
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.05);
@@ -133,7 +133,7 @@
     </style>
 </head>
 <body>
-    <!-- Background Decorative Orbs -->
+    
     <div class="bg-orb-fire"></div>
     <div class="bg-orb-ember"></div>
 
@@ -168,7 +168,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-iron disabled" href="#">
+                                <a class="nav-link-iron" asp-controller="Trainers" asp-action="Index">
                                     <i class="bi bi-person-badge"></i> Trainers
                                 </a>
                             </li>
@@ -216,7 +216,7 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
-        // Active navigation highlighting
+        
         document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname.toLowerCase();
             const navLinks = document.querySelectorAll('.nav-link-iron');
