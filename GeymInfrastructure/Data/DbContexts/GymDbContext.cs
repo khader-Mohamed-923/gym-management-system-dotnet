@@ -59,7 +59,7 @@ public class GymDbContext : DbContext
 
     public DbSet<Session> Sessions { get; set; }
 
-    public DbSet<Boking> Bokings { get; set; }
+    public DbSet<Booking> Bokings { get; set; }
 
     public DbSet<MemberShip> MemberShips { get; set; }
 }

@@ -25,7 +25,7 @@ namespace GymManagement.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GymManagement.Infrastructure.Models.Boking", b =>
+            modelBuilder.Entity("GymManagement.Infrastructure.Models.Booking", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -397,7 +397,7 @@ namespace GymManagement.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("Trainer");
                 });
 
-            modelBuilder.Entity("GymManagement.Infrastructure.Models.Boking", b =>
+            modelBuilder.Entity("GymManagement.Infrastructure.Models.Booking", b =>
                 {
                     b.HasOne("GymManagement.Infrastructure.Models.Member", "Member")
                         .WithMany("Bokings")

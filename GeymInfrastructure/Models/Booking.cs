@@ -2,7 +2,7 @@
 
 namespace GymManagement.Infrastructure.Models;
 
-public class Boking : BaseEntity
+public class Booking : BaseEntity
 {
 
     public DateTime Date { get; set; }
