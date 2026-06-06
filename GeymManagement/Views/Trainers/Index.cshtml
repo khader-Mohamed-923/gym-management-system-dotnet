@@ -1,0 +1,155 @@
+@model IEnumerable<TrainerIndexViewModel>
+@{
+    ViewData["Title"] = "Trainers";
+}
+
+<!-- Iron UI Styles -->
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <!-- Page Header -->
+    <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
+        <div>
+            <h1 class="iron-title">OUR TRAINERS</h1>
+            <p class="iron-subtitle">Professional fitness instructors</p>
+        </div>
+        <a asp-controller="Trainers" asp-action="Create" class="btn btn-primary btn-lg">
+            <span style="font-size: 1.25rem; font-weight: 700;">+</span>
+            Add Trainer
+        </a>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <!-- Trainers Table -->
+        <div class="glass-card animate-in" style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Name</th>
+                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Email</th>
+                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Phone</th>
+                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Specialization</th>
+                        <th style="padding: var(--space-lg); text-align: left; border-bottom: 1px solid var(--steel-line); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trainer in Model)
+                    {
+                        <tr style="transition: background 0.2s ease;">
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-primary); font-weight: 500;">@trainer.Name</td>
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@trainer.Email</td>
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line); color: var(--text-secondary);">@trainer.Phone</td>
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line);">
+                                <span class="specialization-badge specialization-@trainer.Specialization.ToLower()">
+                                    @trainer.Specialization
+                                </span>
+                            </td>
+                            <td style="padding: var(--space-lg); border-bottom: 1px solid var(--steel-line);">
+                                <div style="display: flex; gap: var(--space-sm);">
+                                    <a asp-controller="Trainers" asp-action="Details" asp-route-id="@trainer.Id" class="btn btn-secondary btn-sm" title="View Details">
+                                        👁️
+                                    </a>
+                                    <a asp-controller="Trainers" asp-action="Edit" asp-route-id="@trainer.Id" class="btn btn-primary btn-sm" title="Edit">
+                                        ✏️
+                                    </a>
+                                    <a asp-controller="Trainers" asp-action="Delete" asp-route-id="@trainer.Id" class="btn btn-danger btn-sm" title="Delete">
+                                        🗑️
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="empty-state animate-in">
+            <div class="empty-icon">🏋️</div>
+            <h2 class="empty-title">No Trainers Available</h2>
+            <p class="empty-text">Add your first trainer to get started</p>
+            <a asp-controller="Trainers" asp-action="Create" class="btn btn-primary btn-lg">
+                <span style="font-size: 1.25rem; font-weight: 700;">+</span>
+                Add First Trainer
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    /* Specialization Badge Styles */
+    .specialization-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-family: var(--font-body);
+    }
+
+    .specialization-cardio {
+        background: rgba(239, 68, 68, 0.12);
+        color: var(--ember);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .specialization-balance {
+        background: rgba(56, 189, 248, 0.12);
+        color: var(--ice);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .specialization-boxing {
+        background: rgba(249, 115, 22, 0.12);
+        color: var(--fire);
+        border: 1px solid rgba(249, 115, 22, 0.25);
+    }
+
+    .specialization-yoga {
+        background: rgba(132, 204, 22, 0.12);
+        color: var(--lime);
+        border: 1px solid rgba(132, 204, 22, 0.25);
+    }
+
+    .specialization-crossfit {
+        background: rgba(234, 179, 8, 0.12);
+        color: var(--gold);
+        border: 1px solid rgba(234, 179, 8, 0.25);
+    }
+
+    .specialization-fitness {
+        background: rgba(168, 85, 247, 0.12);
+        color: #a855f7;
+        border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+</style>
+
+@section Scripts {
+    <partial name="_AlertDismissScript"/>
+}
