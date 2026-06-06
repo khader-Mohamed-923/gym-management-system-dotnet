@@ -1,0 +1,124 @@
+@model TrainerDetailsViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Name} - Trainer Details";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">TRAINER DETAILS</h1>
+        <p class="iron-subtitle">View complete profile information for this trainer</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            
+            <div class="details-header">
+                <div class="member-avatar member-avatar--orange" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto var(--space-lg);">
+                    @(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())
+                </div>
+                <h2 class="iron-title" style="font-size: 2rem; margin-bottom: var(--space-md);">@Model.Name</h2>
+                <span class="specialization-badge specialization-@Model.Specialization.ToLower()">
+                    @Model.Specialization Trainer
+                </span>
+            </div>
+
+            
+            <div class="details-body">
+                <div class="details-grid">
+                    
+                    <div class="details-block">
+                        <div class="details-label">📧 Email</div>
+                        <div class="details-value">@Model.Email</div>
+                    </div>
+
+                    
+                    <div class="details-block">
+                        <div class="details-label">📞 Phone</div>
+                        <div class="details-value">@Model.Phone</div>
+                    </div>
+
+                    
+                    <div class="details-block">
+                        <div class="details-label">🎂 Date of Birth</div>
+                        <div class="details-value">@Model.DateOfBirth</div>
+                    </div>
+
+                    
+                    <div class="details-block">
+                        <div class="details-label">🏅 Specialization</div>
+                        <div class="details-value">@Model.Specialization</div>
+                    </div>
+
+                    
+                    <div class="details-block details-block-full">
+                        <div class="details-label">🏠 Address</div>
+                        <div class="details-value">@Model.Address</div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="details-footer">
+                <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary">
+                    ← Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    
+    .specialization-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-family: var(--font-body);
+    }
+
+    .specialization-cardio {
+        background: rgba(239, 68, 68, 0.12);
+        color: var(--ember);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .specialization-balance {
+        background: rgba(56, 189, 248, 0.12);
+        color: var(--ice);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .specialization-boxing {
+        background: rgba(249, 115, 22, 0.12);
+        color: var(--fire);
+        border: 1px solid rgba(249, 115, 22, 0.25);
+    }
+
+    .specialization-yoga {
+        background: rgba(132, 204, 22, 0.12);
+        color: var(--lime);
+        border: 1px solid rgba(132, 204, 22, 0.25);
+    }
+
+    .specialization-crossfit {
+        background: rgba(234, 179, 8, 0.12);
+        color: var(--gold);
+        border: 1px solid rgba(234, 179, 8, 0.25);
+    }
+
+    .specialization-fitness {
+        background: rgba(168, 85, 247, 0.12);
+        color: #a855f7;
+        border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+</style>

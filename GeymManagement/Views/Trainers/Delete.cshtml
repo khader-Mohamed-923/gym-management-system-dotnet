@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Delete Trainer";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title" style="background: linear-gradient(135deg, var(--ember), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DELETE TRAINER</h1>
+        <p class="iron-subtitle">Confirm trainer removal</p>
+    </div>
+
+    <div class="details-container" style="max-width: 500px;">
+        <div class="glass-card glow-card-red animate-in" style="text-align: center; padding: var(--space-3xl);">
+            
+            <div style="font-size: 4rem; margin-bottom: var(--space-lg);">⚠️</div>
+            
+            
+            <h2 class="iron-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
+                Are you sure you want to remove this trainer?
+            </h2>
+
+            
+            <div style="text-align: left; margin-bottom: var(--space-xl); padding: var(--space-lg); background: rgba(255,255,255,0.03); border-radius: var(--radius-lg); border: 1px solid var(--steel-line);">
+                <div style="margin-bottom: var(--space-md);">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;">Name</span>
+                    <div style="color: var(--text-primary); font-weight: 500;">@Model.Name</div>
+                </div>
+                <div style="margin-bottom: var(--space-md);">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;">Email</span>
+                    <div style="color: var(--text-secondary);">@Model.Email</div>
+                </div>
+                <div style="margin-bottom: var(--space-md);">
+                    <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;">Phone</span>
+                    <div style="color: var(--text-secondary);">@Model.Phone</div>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em;">Specialty</span>
+                    <div style="color: var(--text-secondary);">@Model.Specialty Trainer</div>
+                </div>
+            </div>
+
+            
+            <div class="alert alert-danger" style="text-align: left; margin-bottom: var(--space-xl);">
+                <span class="alert-icon">⚠️</span>
+                <div>
+                    <strong>Please confirm</strong><br />
+                    This trainer will be removed from the system and will no longer appear in active lists.
+                </div>
+            </div>
+
+            
+            <form asp-action="Delete" method="post" asp-route-id="@ViewBag.id">
+                @Html.AntiForgeryToken()
+                <div style="display: flex; gap: var(--space-md); justify-content: center;">
+                    <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary btn-lg">
+                        No, Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        Yes, Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
