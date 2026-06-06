@@ -4,18 +4,18 @@
     ViewData["Title"] = "Edit Plan";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header">
         <h1 class="iron-title">PLAN — EDIT PAGE</h1>
         
 
     </div>
 
-    <!-- Alert Messages -->
+    
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
@@ -36,7 +36,7 @@
     }
 
     <div class="details-container">
-        <!-- Edit Form -->
+        
         <div class="details-card animate-in">
             <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
                 @Html.AntiForgeryToken()
@@ -44,7 +44,7 @@
                 <input type="hidden" asp-for="PlanName" />
 
                 <div class="details-body">
-                    <!-- Plan Name (Locked) -->
+                    
                     <div class="form-group">
                         <label class="form-label">
                             🔒 PLAN NAME (LOCKED)
@@ -60,13 +60,13 @@
 
                     <hr class="divider" />
 
-                    <!-- Editable Fields Section -->
+                    
                     <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary);">
                         EDITABLE FIELDS
                     </h3>
 
                     <div class="form-row">
-                        <!-- Duration -->
+                        
                         <div class="form-group">
                             <label asp-for="DurationInDays" class="form-label form-label-required">
                                 DURATION (DAYS)
@@ -79,7 +79,7 @@
                             <span asp-validation-for="DurationInDays" class="form-error-text"></span>
                         </div>
 
-                        <!-- Price -->
+                        
                         <div class="form-group">
                             <label asp-for="Price" class="form-label form-label-required">
                                 PRICE (EGP)
@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    <!-- Description -->
+                    
                     <div class="form-group">
                         <label asp-for="Description" class="form-label form-label-required">
                             DESCRIPTION
@@ -107,7 +107,7 @@
                     </div>
                 </div>
 
-                <!-- Footer Actions -->
+                
                 <div class="details-footer">
                     <a asp-action="Index" class="btn btn-secondary">
                         Cancel

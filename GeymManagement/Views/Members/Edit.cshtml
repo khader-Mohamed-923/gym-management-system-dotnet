@@ -1,20 +1,20 @@
-﻿@model MemberEditViewModel
+@model MemberEditViewModel
 
 @{
     ViewData["Title"] = "Edit Member";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header">
         <h1 class="iron-title">EDIT MEMBER</h1>
         <p class="iron-subtitle">Update member information</p>
     </div>
 
-    <!-- Alert Messages -->
+    
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
@@ -43,7 +43,7 @@
                 <input type="hidden" asp-for="Photo" />
 
                 <div class="details-body">
-                    <!-- Member Avatar -->
+                    
                     <div style="text-align: center; margin-bottom: var(--space-2xl);">
                         <div class="member-avatar member-avatar--orange" style="width: 80px; height: 80px; font-size: 1.5rem; margin: 0 auto var(--space-md);">
                             @{
@@ -57,7 +57,7 @@
 
                     <hr class="divider" />
 
-                    <!-- Editable Fields -->
+                    
                     <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
                         EDITABLE INFORMATION
                     </h3>
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <!-- Footer Actions -->
+                
                 <div class="details-footer">
                     <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
                         Cancel

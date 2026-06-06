@@ -1,30 +1,30 @@
-﻿@{
+@{
     ViewData["Title"] = "Error";
     var requestId = Context.TraceIdentifier;
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container" style="text-align: center; padding-top: 100px;">
     <div class="animate-in">
-        <!-- Error Icon -->
+        
         <div style="font-size: 6rem; margin-bottom: var(--space-xl); animation: shake 0.5s infinite alternate;">
             ⚠️
         </div>
 
-        <!-- Error Title -->
+        
         <h1 class="iron-title" style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
             OOPS! SOMETHING WENT WRONG
         </h1>
 
-        <!-- Error Message -->
+        
         <p class="iron-subtitle" style="font-size: 1.125rem; max-width: 600px; margin: 0 auto var(--space-xl); color: var(--text-secondary);">
             We are experiencing a temporary technical issue with the Gym System. 
             Our technical team has been notified automatically and is working to resolve it.
         </p>
 
-        <!-- Request ID -->
+        
         @if (!string.IsNullOrEmpty(requestId))
         {
             <div class="glass-card" style="display: inline-block; padding: var(--space-lg); margin-bottom: var(--space-xl);">
@@ -35,7 +35,7 @@
             </div>
         }
 
-        <!-- Action Button -->
+        
         <div>
             <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
                 ← Back to Home Page
