@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace GymManagement.Infrastructure.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class ConvertGenderEnumToString : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
@@ -19,7 +19,7 @@ namespace GymManagement.Infrastructure.Migrations
                 oldType: "int");
         }
 
-        /// <inheritdoc />
+        
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
