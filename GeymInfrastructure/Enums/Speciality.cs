@@ -4,7 +4,6 @@ namespace GymManagement.Infrastructure.Enums;
 
 public enum Speciality
 {
-
     Cardio = 1,
     Balance = 2,
     Boxing = 3,
