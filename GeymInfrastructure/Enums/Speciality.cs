@@ -1,4 +1,4 @@
-﻿
+
 
 namespace GymManagement.Infrastructure.Enums;
 
