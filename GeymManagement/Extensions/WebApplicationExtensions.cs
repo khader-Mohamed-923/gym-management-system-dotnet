@@ -1,4 +1,4 @@
-﻿using GeymManagement.DbContexts;
+﻿using GymManagement.Infrastructure.Data.DbContexts;
 using GymManagement.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -10,8 +10,6 @@ public static class WebApplicationExtensions
     public static async Task ApplyMigrationsAndSeedAsync(this WebApplication app)
     {
         if (!app.Environment.IsDevelopment()) return;
-
-        app.UseDeveloperExceptionPage();
 
         await using var scope = app.Services.CreateAsyncScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContext>();
@@ -33,7 +31,11 @@ public static class WebApplicationExtensions
 
     public static WebApplication ConfigureRequestPipeline(this WebApplication app)
     {
-        if (!app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
         {
             app.UseExceptionHandler("/Home/Error");
             app.UseHsts();
