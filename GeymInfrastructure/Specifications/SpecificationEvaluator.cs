@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GymManagement.Domain.Specifications;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.Infrastructure.Specifications;
 

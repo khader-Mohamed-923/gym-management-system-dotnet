@@ -1,9 +1,10 @@
 using GeymInfrastructure.Repositories;
 using GeymInfrastructure.Data.Interceptors;
-using GeymManagement.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using GymManagement.Domain.Repositories;
 using GymManagement.Infrastructure.Repositories;
 
 namespace GeymInfrastructure;
@@ -26,6 +27,8 @@ public static class DependencyInjection
         });
 
         services.AddScoped(typeof(IMemberRepository<>), typeof(Repository<>));
+        services.AddScoped<IMemberRepository, MemberRepository>();
+        services.AddScoped<ITrainerRepository, TrainerRepository>();
 
         return services;
     }

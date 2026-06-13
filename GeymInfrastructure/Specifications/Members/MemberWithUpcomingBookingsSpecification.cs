@@ -1,6 +1,5 @@
-﻿
-
-using GymManagement.Infrastructure.Models;
+﻿using GymManagement.Domain.Entities;
+using GymManagement.Domain.Specifications;
 
 namespace GymManagement.Infrastructure.Specifications.Members;
 

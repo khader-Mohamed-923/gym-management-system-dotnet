@@ -1,7 +1,9 @@
 ﻿using GymManagement.Domain.Common;
 using GymManagement.Domain.Services;
-using GymManagement.Domain.ViewModels.Plan;
+using GymManagement.Domain.DTOs.Plans.Requests;
+using GymManagement.Presentation.ViewModels.Plan;
 using Microsoft.AspNetCore.Mvc;
+using Mapster;
 
 namespace GymManagement.Presentation.Controllers
 {
@@ -9,53 +11,58 @@ namespace GymManagement.Presentation.Controllers
     {
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var viewModel = await planService.GetAllPlansAsync(cancellationToken);
-            return View(viewModel);
+            var responses = await planService.GetAllPlansAsync(cancellationToken);
+            var viewModels = responses.Adapt<IEnumerable<PlanIndexViewModel>>();
+            return View(viewModels);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
         {
-            var viewModel = await planService.GetPlanByIdAsync(id, cancellationToken);
+            var response = await planService.GetPlanByIdAsync(id, cancellationToken);
 
-            if (viewModel == null)
+            if (response == null)
             {
                 return NotFound();
             }
 
+            var viewModel = response.Adapt<PlanIndexViewModel>();
             return View(viewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
         {
-            var viewModel = await planService.GetPlanForEditAsync(id, cancellationToken);
+            var response = await planService.GetPlanForEditAsync(id, cancellationToken);
 
-            if (viewModel == null)
+            if (response == null)
             {
                 TempData["ErrorMessage"] = "Plan not found.";
                 return RedirectToAction(nameof(Index));
             }
 
+            var viewModel = response.Adapt<EditPlanViewModel>();
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EditPlanViewModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(int id, EditPlanViewModel viewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(viewModel);
             }
 
-            var result = await planService.UpdatePlanAsync(id, model, cancellationToken);
+            var request = viewModel.Adapt<UpdatePlanRequest>();
+
+            var result = await planService.UpdatePlanAsync(id, request, cancellationToken);
 
             if (result.IsFailure)
             {
                 ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
                 TempData["ErrorMessage"] = "Cannot update plan: " + result.Error;
-                return View(model);
+                return View(viewModel);
             }
 
             TempData["SuccessMessage"] = "Plan updated successfully.";

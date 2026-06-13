@@ -21,4 +21,8 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\GeymDomain\GymManagement.Domain.csproj" />
+	</ItemGroup>
+
 </Project>

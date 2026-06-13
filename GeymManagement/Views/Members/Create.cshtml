@@ -1,14 +1,14 @@
-﻿@model MemberCreateViewModel
+@model MemberCreateViewModel
 
 @{
     ViewData["Title"] = "Add Member";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header">
         <h1 class="iron-title">ADD NEW MEMBER</h1>
         <p class="iron-subtitle">Create a new gym member with personal and health information</p>
@@ -21,7 +21,7 @@
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
 
                 <div class="details-body">
-                    <!-- Tab Navigation -->
+                    
                     <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-2xl); border-bottom: 1px solid var(--steel-line);">
                         <button type="button" class="tab-btn active" onclick="switchTab('member-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-primary); border-bottom: 2px solid var(--fire); cursor: pointer;">
                             👤 Member Info
@@ -31,7 +31,7 @@
                         </button>
                     </div>
 
-                    <!-- Member Info Tab -->
+                    
                     <div id="member-info" class="tab-content">
                         <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
                             PERSONAL INFORMATION
@@ -97,7 +97,7 @@
                         </div>
                     </div>
 
-                    <!-- Health Info Tab -->
+                    
                     <div id="health-info" class="tab-content" style="display: none;">
                         <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
                             HEALTH METRICS
@@ -133,7 +133,7 @@
                     </div>
                 </div>
 
-                <!-- Footer Actions -->
+                
                 <div class="details-footer">
                     <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
                         ← Back to List

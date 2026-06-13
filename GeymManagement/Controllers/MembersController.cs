@@ -1,9 +1,10 @@
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Members;
-using GymManagement.Domain.ViewModels.Member;
-using GymManagement.Infrastructure.Specifications;
-using GymManagement.Infrastructure.Specifications.Members;
+using GymManagement.Domain.DTOs.Members.Requests;
+using GymManagement.Presentation.ViewModels.Member;
+using GymManagement.Presentation.ViewModels.HealthRecord;
 using Microsoft.AspNetCore.Mvc;
+using Mapster;
 
 namespace GymManagement.Presentation.Controllers;
 
@@ -15,61 +16,59 @@ public class MembersController(IMemberService members) : Controller
 
         if (result.IsSuccess)
         {
-            return View(result.Value);
+            var viewModels = result.Value.Adapt<IEnumerable<MemberIndexViewModel>>();
+            return View(viewModels);
         }
-
 
         TempData["ErrorMessage"] = result.Error ?? "Failed to load members.";
         return View(new List<MemberIndexViewModel>());
     }
 
     [HttpGet]
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(MemberCreateViewModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(MemberCreateViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(viewModel);
         }
 
-        var result = await members.CreateAsync(model, cancellationToken);
+        var request = viewModel.Adapt<CreateMemberRequest>();
+
+        var result = await members.CreateAsync(request, cancellationToken);
 
         if (result.IsFailure)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
-
             TempData["ErrorMessage"] = "Member Failed To Create. " + result.Error;
-            return View(model);
+            return View(viewModel);
         }
 
         TempData["SuccessMessage"] = "Member Created Successfully";
         return RedirectToAction(nameof(Index));
     }
 
-
-
     [HttpGet]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var member = await members.GetDetailsAsync(id, cancellationToken);
+        var response = await members.GetDetailsAsync(id, cancellationToken);
 
-        if (member == null)
+        if (response == null)
         {
             TempData["ErrorMessage"] = "Member not found.";
             return RedirectToAction(nameof(Index));
         }
 
-        return View(member);
+        var viewModel = response.Adapt<MemberDetailsViewModel>();
+        return View(viewModel);
     }
 
-
     [HttpGet]
-
     public async Task<IActionResult> HealthRecord(int id, CancellationToken cancellationToken)
     {
         var healthRecord = await members.GetHealthRecordAsync(id, cancellationToken);
@@ -78,59 +77,64 @@ public class MembersController(IMemberService members) : Controller
             TempData["ErrorMessage"] = "Health record not found.";
             return RedirectToAction(nameof(Index));
         }
-        return View(healthRecord);
+
+        var viewModel = healthRecord.Adapt<HealthRecordDetailsViewModel>();
+        return View(viewModel);
     }
 
     [HttpGet]
-
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-        var member = await members.GetForEditAsync(id, cancellationToken);
-        if (member == null)
+        var response = await members.GetForEditAsync(id, cancellationToken);
+        
+        if (response == null)
         {
             TempData["ErrorMessage"] = "Member not found.";
             return RedirectToAction(nameof(Index));
         }
-        return View(member);
+
+        var viewModel = response.Adapt<MemberEditViewModel>();
+        return View(viewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit([FromRoute] int id, MemberEditViewModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> Edit([FromRoute] int id, MemberEditViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(viewModel);
         }
 
-        var result = await members.UpdateAsync(id, model, cancellationToken);
+        var request = viewModel.Adapt<UpdateMemberRequest>();
+
+        var result = await members.UpdateAsync(id, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error!);
-
             TempData["ErrorMessage"] = "Cannot Update a Member: " + result.Error;
-            return View(model);
+            return View(viewModel);
         }
 
         TempData["SuccessMessage"] = "Member Updated Successfully";
         return RedirectToAction(nameof(Index));
     }
 
-
-
     [HttpGet]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var model = await members.GetForEditAsync(id, cancellationToken);
+        var response = await members.GetForEditAsync(id, cancellationToken);
 
-        if (model == null)
+        if (response == null)
         {
             TempData["ErrorMessage"] = "Member not found.";
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.id = model.Id;
-        return View(model);
+
+        var viewModel = response.Adapt<MemberEditViewModel>();
+        ViewBag.id = viewModel.Id;
+        return View(viewModel);
     }
 
     [HttpPost]

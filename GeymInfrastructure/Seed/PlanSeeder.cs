@@ -1,5 +1,5 @@
-using GeymManagement.DbContexts;
-using GymManagement.Infrastructure.Models;
+using GymManagement.Infrastructure.Data.DbContexts;
+using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagement.Infrastructure.Seed;

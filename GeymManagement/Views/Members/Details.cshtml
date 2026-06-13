@@ -1,14 +1,14 @@
-﻿@model MemberDetailsViewModel
+@model MemberDetailsViewModel
 
 @{
     ViewData["Title"] = $"{Model.Name} - Member Details";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header">
         <h1 class="iron-title">MEMBER DETAILS</h1>
         <p class="iron-subtitle">View complete information about this member</p>
@@ -16,7 +16,7 @@
 
     <div class="details-container">
         <div class="details-card animate-in">
-            <!-- Header -->
+            
             <div class="details-header">
                 <div class="member-avatar member-avatar--orange" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto var(--space-lg);">
                     @(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())
@@ -32,47 +32,47 @@
                 }
             </div>
 
-            <!-- Body -->
+            
             <div class="details-body">
-                <!-- Contact Information Grid -->
+                
                 <div class="details-grid">
-                    <!-- Email -->
+                    
                     <div class="details-block">
                         <div class="details-label">📧 Email</div>
                         <div class="details-value">@Model.Email</div>
                     </div>
 
-                    <!-- Phone -->
+                    
                     <div class="details-block">
                         <div class="details-label">📞 Phone</div>
                         <div class="details-value">@Model.Phone</div>
                     </div>
 
-                    <!-- Gender -->
+                    
                     <div class="details-block">
                         <div class="details-label">👤 Gender</div>
                         <div class="details-value">@Model.Gender</div>
                     </div>
 
-                    <!-- Date of Birth -->
+                    
                     <div class="details-block">
                         <div class="details-label">📅 Date of Birth</div>
                         <div class="details-value">@Model.DateOfBirth</div>
                     </div>
 
-                    <!-- Membership Start -->
+                    
                     <div class="details-block">
                         <div class="details-label">🏃 Membership Start</div>
                         <div class="details-value" style="color: var(--lime);">@Model.MembershipStartDate</div>
                     </div>
 
-                    <!-- Membership End -->
+                    
                     <div class="details-block">
                         <div class="details-label">⏱️ Membership End</div>
                         <div class="details-value" style="color: var(--fire);">@Model.MembershipEndDate</div>
                     </div>
 
-                    <!-- Address -->
+                    
                     <div class="details-block details-block-full">
                         <div class="details-label">📍 Address</div>
                         <div class="details-value">@Model.Address</div>
@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <!-- Footer -->
+            
             <div class="details-footer">
                 <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
                     ← Back to List

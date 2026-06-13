@@ -1,9 +1,9 @@
 ﻿using GymManagement.Domain.Common;
-using GymManagement.Domain.ViewModels.Plan;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
-using GymManagement.Infrastructure.Specifications;
-using Microsoft.EntityFrameworkCore;
+using GymManagement.Domain.DTOs.Plans.Requests;
+using GymManagement.Domain.DTOs.Plans.Responses;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
+using GymManagement.Domain.Specifications;
 
 namespace GymManagement.Domain.Services
 {
@@ -20,11 +20,11 @@ namespace GymManagement.Domain.Services
             _membershipRepository = membershipRepository;
         }
 
-        public async Task<IEnumerable<PlanIndexViewModel>> GetAllPlansAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<PlanResponse>> GetAllPlansAsync(CancellationToken cancellationToken)
         {
             var plans = await _planRepository.GetAllAsync(cancellationToken);
 
-            return plans.Select(p => new PlanIndexViewModel
+            return plans.Select(p => new PlanResponse
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -35,15 +35,14 @@ namespace GymManagement.Domain.Services
             }).ToList();
         }
 
-        public async Task<PlanIndexViewModel?> GetPlanByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<PlanResponse?> GetPlanByIdAsync(int id, CancellationToken cancellationToken)
         {
             var spec = new BaseSpecification<Plan>(p => p.Id == id);
-
             var plan = await _planRepository.GetEntityWithSpecAsync(spec, cancellationToken);
 
             if (plan == null) return null;
 
-            return new PlanIndexViewModel
+            return new PlanResponse
             {
                 Id = plan.Id,
                 Name = plan.Name,
@@ -54,24 +53,25 @@ namespace GymManagement.Domain.Services
             };
         }
 
-        public async Task<EditPlanViewModel?> GetPlanForEditAsync(int id, CancellationToken cancellationToken)
+        public async Task<PlanResponse?> GetPlanForEditAsync(int id, CancellationToken cancellationToken)
         {
             var spec = new BaseSpecification<Plan>(p => p.Id == id);
             var plan = await _planRepository.GetEntityWithSpecAsync(spec, cancellationToken);
 
             if (plan == null) return null;
 
-            return new EditPlanViewModel
+            return new PlanResponse
             {
                 Id = plan.Id,
-                PlanName = plan.Name,
+                Name = plan.Name,
                 DurationInDays = plan.DurationInDays,
                 Price = plan.Price,
-                Description = plan.Description
+                Description = plan.Description,
+                IsActive = plan.IsActive
             };
         }
 
-        public async Task<Result> UpdatePlanAsync(int id, EditPlanViewModel model, CancellationToken cancellationToken)
+        public async Task<Result> UpdatePlanAsync(int id, UpdatePlanRequest request, CancellationToken cancellationToken)
         {
             var spec = new BaseSpecification<Plan>(p => p.Id == id);
             var plan = await _planRepository.GetEntityWithSpecAsync(spec, cancellationToken);
@@ -81,9 +81,9 @@ namespace GymManagement.Domain.Services
                 return Result.Failure("Plan not found.", nameof(id));
             }
 
-            if (!string.Equals(plan.Name, model.PlanName, StringComparison.Ordinal))
+            if (!string.Equals(plan.Name, request.PlanName, StringComparison.Ordinal))
             {
-                return Result.Failure("Plan name cannot be modified.", nameof(model.PlanName));
+                return Result.Failure("Plan name cannot be modified.", nameof(request.PlanName));
             }
 
             var hasActiveMemberships = await HasActiveMembershipsAsync(id, cancellationToken);
@@ -92,9 +92,9 @@ namespace GymManagement.Domain.Services
                 return Result.Failure("Cannot update a plan that has active memberships.", nameof(id));
             }
 
-            plan.DurationInDays = model.DurationInDays;
-            plan.Price = model.Price;
-            plan.Description = model.Description;
+            plan.DurationInDays = request.DurationInDays;
+            plan.Price = request.Price;
+            plan.Description = request.Description;
 
             await _planRepository.UpdateAsync(plan);
             await _planRepository.SaveChangesAsync();

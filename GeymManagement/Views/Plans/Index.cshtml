@@ -1,14 +1,14 @@
-﻿@model IEnumerable<PlanIndexViewModel>
+@model IEnumerable<PlanIndexViewModel>
 
 @{
     ViewData["Title"] = "Membership Plans";
 }
 
-<!-- Iron UI Styles -->
+
 <link rel="stylesheet" href="~/css/iron-ui.css" />
 
 <div class="iron-container">
-    <!-- Page Header -->
+    
     <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
         <div>
             <h1 class="iron-title">MEMBERSHIP PLANS</h1>
@@ -18,7 +18,7 @@
 
 
 
-    <!-- Alert Messages -->
+    
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
@@ -44,7 +44,7 @@
             @foreach (var plan in Model)
             {
                 <div class="plan-card animate-in @(!plan.IsActive ? "inactive" : "")">
-                    <!-- Card Header -->
+                    
                     <div class="plan-card-header" style="@(plan.IsActive ? "" : "background: rgba(163, 163, 163, 0.1);")">
                         <h3 class="plan-card-title" style="@(plan.IsActive ? "" : "color: var(--text-secondary);")">@plan.Name</h3>
                         @if (plan.IsActive)
@@ -57,22 +57,22 @@
                         }
                     </div>
 
-                    <!-- Card Body -->
+                    
                     <div class="plan-card-body">
-                        <!-- Price Section -->
+                        
                         <div class="plan-price-section">
                             <span class="plan-price" style="@(plan.IsActive ? "" : "color: var(--text-secondary);")">@plan.Price</span>
                             <span class="plan-currency">EGP</span>
                             <div class="plan-period">/ @plan.DurationInDays days</div>
                         </div>
 
-                        <!-- Features List -->
+                        
                         <ul class="plan-features">
                             <li>Duration: @plan.DurationInDays days</li>
                             <li>@plan.Description</li>
                         </ul>
 
-                        <!-- Actions -->
+                        
                         <div class="plan-card-actions">
                             <a asp-action="Details" asp-route-id="@plan.Id" class="btn btn-secondary" style="flex: 1;">
                                 View Details
@@ -104,7 +104,7 @@
     }
     else
     {
-        <!-- Empty State -->
+        
         <div class="empty-state animate-in">
             <div class="empty-icon">📋</div>
             <h2 class="empty-title">No Plans Available</h2>

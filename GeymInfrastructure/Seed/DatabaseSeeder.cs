@@ -1,6 +1,4 @@
-﻿
-
-using GeymManagement.DbContexts;
+﻿using GymManagement.Infrastructure.Data.DbContexts;
 
 namespace GymManagement.Infrastructure.Seed;
 
