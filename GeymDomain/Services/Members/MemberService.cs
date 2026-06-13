@@ -1,22 +1,23 @@
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Members;
-using GymManagement.Domain.ViewModels.HealthRecord;
-using GymManagement.Domain.ViewModels.Member;
+using GymManagement.Domain.DTOs.Members.Requests;
+using GymManagement.Domain.DTOs.Members.Responses;
 using GymManagement.Domain.Enums;
 using GymManagement.Domain.Entities;
 using GymManagement.Domain.Repositories;
 using GymManagement.Domain.ValueObjects;
-using GymManagement.Domain.Specifications.Members; 
+using GymManagement.Domain.Specifications.Members;
+using Mapster;
 
 namespace GymManagement.Domain.Services;
 
 public class MemberService(IMemberRepository memberRepository) : IMemberService
 {
-    public async Task<Result<IEnumerable<MemberIndexViewModel>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<MemberResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
         var members = await memberRepository.GetAllAsync(cancellationToken);
 
-        var viewModels = members.Select(m => new MemberIndexViewModel
+        var responses = members.Select(m => new MemberResponse
         {
             Id = m.Id,
             Name = m.Name,
@@ -27,53 +28,53 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
             Gender = m.Gender.ToString()
         });
 
-        return Result<IEnumerable<MemberIndexViewModel>>.Success(viewModels);
+        return Result<IEnumerable<MemberResponse>>.Success(responses);
     }
 
-    public async Task<Result> CreateAsync(MemberCreateViewModel model, CancellationToken cancellationToken)
+    public async Task<Result> CreateAsync(CreateMemberRequest request, CancellationToken cancellationToken)
     {
-        if (await memberRepository.ExistAsyc(e => e.Email == model.Email, cancellationToken))
+        if (await memberRepository.ExistAsyc(e => e.Email == request.Email, cancellationToken))
         {
-            return Result.Failure("Email already exists.", nameof(model.Email));
+            return Result.Failure("Email already exists.", nameof(request.Email));
         }
 
-        if (await memberRepository.ExistAsyc(e => e.Phone == model.Phone, cancellationToken))
+        if (await memberRepository.ExistAsyc(e => e.Phone == request.Phone, cancellationToken))
         {
-            return Result.Failure("Phone number already exists.", nameof(model.Phone));
+            return Result.Failure("Phone number already exists.", nameof(request.Phone));
         }
 
-        if (!Enum.TryParse<Gender>(model.Gender, true, out var gender))
+        if (!Enum.TryParse<Gender>(request.Gender, true, out var gender))
         {
-            return Result.Failure("Invalid gender.", nameof(model.Gender));
+            return Result.Failure("Invalid gender.", nameof(request.Gender));
         }
 
-        if (model.HealthRecord == null || !Enum.TryParse<BloodType>(model.HealthRecord.BloodType, true, out var bloodType))
+        if (!Enum.TryParse<BloodType>(request.HealthRecord.BloodType, true, out var bloodType))
         {
             return Result.Failure("Invalid blood type.", "HealthRecord.BloodType");
         }
 
         var member = new Member
         {
-            Name = model.Name,
-            Email = model.Email,
-            Phone = model.Phone,
-            DateOfBirth = model.DateOfBirth,
+            Name = request.Name,
+            Email = request.Email,
+            Phone = request.Phone,
+            DateOfBirth = request.DateOfBirth,
             Gender = gender,
             JoinDate = DateOnly.FromDateTime(DateTime.UtcNow),
             Address = new Address
             {
-                Street = model.Street,
-                City = model.City,
-                BuildingNumber = model.BuildingNumber
+                Street = request.Street,
+                City = request.City,
+                BuildingNumber = request.BuildingNumber
             }
         };
 
         var healthRecord = new HealthRecord
         {
-            Hight = model.HealthRecord.Height ?? 0,
-            Weight = model.HealthRecord.Weight ?? 0,
+            Hight = request.HealthRecord.Height,
+            Weight = request.HealthRecord.Weight,
             BloodType = bloodType,
-            Notes = model.HealthRecord.Note
+            Notes = request.HealthRecord.Note
         };
 
         member.HealthRecord = healthRecord;
@@ -84,17 +85,16 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
         return Result.Success();
     }
 
-    public async Task<MemberDetailsViewModel?> GetDetailsAsync(int id, CancellationToken cancellationToken)
+    public async Task<MemberDetailsResponse?> GetDetailsAsync(int id, CancellationToken cancellationToken)
     {
         var spec = new MemberDetailsWithPlanSpecification(id);
-
         var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
 
         if (member is null) return null;
 
         var activeMembership = member.MemberShips.FirstOrDefault(m => m.EndDate >= DateTime.Today);
 
-        return new MemberDetailsViewModel
+        return new MemberDetailsResponse
         {
             Id = member.Id,
             Name = member.Name,
@@ -104,52 +104,52 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
             Gender = member.Gender.ToString(),
             DateOfBirth = member.DateOfBirth.ToShortDateString(),
             Address = $"{member.Address.Street}, {member.Address.BuildingNumber}, {member.Address.City}",
-            PlanName = activeMembership?.Plan?.Name ?? "No Active Membership", 
+            PlanName = activeMembership?.Plan?.Name ?? "No Active Membership",
             MembershipStartDate = activeMembership?.StartDate.ToShortDateString() ?? "N/A",
             MembershipEndDate = activeMembership?.EndDate.ToShortDateString() ?? "N/A"
         };
     }
 
-    public async Task<HealthRecordDetailsViewModel?> GetHealthRecordAsync(int id, CancellationToken cancellationToken)
+    public async Task<HealthRecordResponse?> GetHealthRecordAsync(int id, CancellationToken cancellationToken)
     {
         var spec = new MemberHealthRecordSpecification(id);
         var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
 
         if (member?.HealthRecord == null) return null;
 
-        return new HealthRecordDetailsViewModel
+        return new HealthRecordResponse
         {
-            Hight = member.HealthRecord.Hight, 
+            Hight = member.HealthRecord.Hight,
             Weight = member.HealthRecord.Weight,
             BloodType = member.HealthRecord.BloodType.ToString(),
             Note = member.HealthRecord.Notes
         };
     }
 
-    public async Task<MemberEditViewModel?> GetForEditAsync(int id, CancellationToken cancellationToken)
+    public async Task<MemberEditResponse?> GetForEditAsync(int id, CancellationToken cancellationToken)
     {
         var spec = new MemberByIdSpecification(id);
         var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
 
         if (member == null) return null;
 
-        return new MemberEditViewModel
+        return new MemberEditResponse
         {
-            Id= member.Id,
+            Id = member.Id,
             Name = member.Name,
             Email = member.Email,
             Phone = member.Phone,
-            Photo = member.Photo, 
+            Photo = member.Photo,
             BuildingNumber = member.Address?.BuildingNumber ?? 0,
             City = member.Address?.City ?? string.Empty,
             Street = member.Address?.Street ?? string.Empty
         };
     }
 
-    public async Task<Result> UpdateAsync( int id,MemberEditViewModel model, CancellationToken cancellationToken)
+    public async Task<Result> UpdateAsync(int id, UpdateMemberRequest request, CancellationToken cancellationToken)
     {
-        var normalizedEmail = model.Email.Trim().ToLower();
-        var normalizedPhone = model.Phone.Trim();
+        var normalizedEmail = request.Email.Trim().ToLower();
+        var normalizedPhone = request.Phone.Trim();
         var spec = new MemberByIdSpecification(id);
         var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
 
@@ -158,31 +158,24 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
             return Result.Failure("Member not found.", nameof(id));
         }
 
-        if(member.Name != model.Name)
-            Result.Failure("Name cannot be changed.", nameof(model.Name));
-
-
-
-        if (await memberRepository.IsEmailTakenAsync(model.Email, model.Id, cancellationToken))
+        if (await memberRepository.IsEmailTakenAsync(request.Email, id, cancellationToken))
         {
-            return Result.Failure("Email is already taken by another member.", nameof(model.Email));
+            return Result.Failure("Email is already taken by another member.", nameof(request.Email));
         }
 
-        if (await memberRepository.IsPhoneTakenAsync(model.Phone, model.Id , cancellationToken))
+        if (await memberRepository.IsPhoneTakenAsync(request.Phone, id, cancellationToken))
         {
-            return Result.Failure("Phone number is already taken by another member.", nameof(model.Phone));
+            return Result.Failure("Phone number is already taken by another member.", nameof(request.Phone));
         }
 
         member.Email = normalizedEmail;
         member.Phone = normalizedPhone;
-
         member.Address = new Address
         {
-            Street = model.Street,
-            City = model.City,
-            BuildingNumber = model.BuildingNumber
+            Street = request.Street,
+            City = request.City,
+            BuildingNumber = request.BuildingNumber
         };
-
 
         await memberRepository.SaveChangesAsync();
 
@@ -200,7 +193,6 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
         }
 
         var now = DateTime.Now;
-
         var hasUpcomingBookings = await memberRepository.HasUpcomingBookingsAsync(id, now, cancellationToken);
 
         if (hasUpcomingBookings)
