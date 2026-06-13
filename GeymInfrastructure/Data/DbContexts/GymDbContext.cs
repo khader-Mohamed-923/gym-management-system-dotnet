@@ -1,9 +1,7 @@
 ﻿using GymManagement.Domain.Entities;
-
 using Microsoft.EntityFrameworkCore;
 
-
-namespace GeymManagement.DbContexts;
+namespace GymManagement.Infrastructure.Data.DbContexts;
 
 public class GymDbContext : DbContext
 {
