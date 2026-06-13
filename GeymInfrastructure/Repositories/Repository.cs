@@ -1,5 +1,7 @@
 ﻿using GeymManagement.DbContexts;
-using GymManagement.Infrastructure.Models;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
+using GymManagement.Domain.Specifications;
 using GymManagement.Infrastructure.Specifications;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

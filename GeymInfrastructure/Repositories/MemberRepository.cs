@@ -1,5 +1,6 @@
 ﻿using GeymManagement.DbContexts;
-using GymManagement.Infrastructure.Models;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
 using GymManagement.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 

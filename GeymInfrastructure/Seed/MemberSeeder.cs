@@ -1,7 +1,7 @@
 ﻿using GeymManagement.DbContexts;
-using GymManagement.Infrastructure.Enums;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.ValueObjects;
+using GymManagement.Domain.Enums;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
