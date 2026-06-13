@@ -1,4 +1,4 @@
-﻿using GeymManagement.DbContexts;
+﻿using GymManagement.Infrastructure.Data.DbContexts;
 using GymManagement.Domain.Enums;
 using GymManagement.Domain.Entities;
 using GymManagement.Domain.ValueObjects;

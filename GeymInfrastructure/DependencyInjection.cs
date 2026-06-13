@@ -1,6 +1,6 @@
 using GeymInfrastructure.Repositories;
 using GeymInfrastructure.Data.Interceptors;
-using GeymManagement.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

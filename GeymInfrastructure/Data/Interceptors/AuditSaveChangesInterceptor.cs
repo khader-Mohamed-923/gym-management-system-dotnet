@@ -1,4 +1,4 @@
-using GeymManagement.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
 using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
