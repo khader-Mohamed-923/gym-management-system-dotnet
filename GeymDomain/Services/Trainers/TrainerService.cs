@@ -1,17 +1,14 @@
-using GeymManagement.DbContexts;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.ViewModels.Trainer;
-using GymManagement.Infrastructure.Enums;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
-using GymManagement.Infrastructure.ValueObjects;
-using Microsoft.EntityFrameworkCore;
+using GymManagement.Domain.Enums;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
+using GymManagement.Domain.ValueObjects;
 
 namespace GymManagement.Domain.Services.Trainers;
 
 public class TrainerService(
-    IMemberRepository<Trainer> trainerRepository,
-    GymDbContext dbContext) : ITrainerService
+    ITrainerRepository trainerRepository) : ITrainerService
 {
     public async Task<Result<IEnumerable<TrainerIndexViewModel>>> GetAllAsync(CancellationToken cancellationToken)
     {
@@ -32,12 +29,12 @@ public class TrainerService(
     public async Task<Result> CreateAsync(TrainerCreateViewModel model, CancellationToken cancellationToken)
     {
         
-        if (await dbContext.Users.AnyAsync(u => u.Email == model.Email, cancellationToken))
+        if (await trainerRepository.IsEmailTakenAsync(model.Email, null, cancellationToken))
         {
             return Result.Failure("Email already exists.", nameof(model.Email));
         }
 
-        if (await dbContext.Users.AnyAsync(u => u.Phone == model.Phone, cancellationToken))
+        if (await trainerRepository.IsPhoneTakenAsync(model.Phone, null, cancellationToken))
         {
             return Result.Failure("Phone number already exists.", nameof(model.Phone));
         }
@@ -126,12 +123,12 @@ public class TrainerService(
             return Result.Failure("Trainer not found.", nameof(id));
         }
 
-        if (await dbContext.Users.AnyAsync(u => u.Email == normalizedEmail && u.Id != id, cancellationToken))
+        if (await trainerRepository.IsEmailTakenAsync(normalizedEmail, id, cancellationToken))
         {
             return Result.Failure("Email is already taken by another user.", nameof(model.Email));
         }
 
-        if (await dbContext.Users.AnyAsync(u => u.Phone == normalizedPhone && u.Id != id, cancellationToken))
+        if (await trainerRepository.IsPhoneTakenAsync(normalizedPhone, id, cancellationToken))
         {
             return Result.Failure("Phone number is already taken by another user.", nameof(model.Phone));
         }

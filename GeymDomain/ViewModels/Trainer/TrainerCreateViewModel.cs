@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using GymManagement.Infrastructure.Enums;
 
 namespace GymManagement.Domain.ViewModels.Trainer;
 

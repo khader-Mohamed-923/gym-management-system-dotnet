@@ -1,7 +1,4 @@
-
-
 using GymManagement.Domain.ViewModels.HealthRecord;
-using GymManagement.Infrastructure.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace GymManagement.Domain.ViewModels.Member;
@@ -47,4 +44,3 @@ public class MemberCreateViewModel
     [Required(ErrorMessage = "Health record is required")]
     public HealthRecordCreateViewModel HealthRecord{ get; set; } = default!;
 }
-

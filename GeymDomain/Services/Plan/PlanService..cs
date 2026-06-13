@@ -1,9 +1,8 @@
 ﻿using GymManagement.Domain.Common;
 using GymManagement.Domain.ViewModels.Plan;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
-using GymManagement.Infrastructure.Specifications;
-using Microsoft.EntityFrameworkCore;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
+using GymManagement.Domain.Specifications;
 
 namespace GymManagement.Domain.Services
 {

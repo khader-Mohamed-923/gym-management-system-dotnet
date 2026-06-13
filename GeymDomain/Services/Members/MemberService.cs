@@ -1,13 +1,12 @@
-using GeymInfrastructure.Repositories;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Members;
 using GymManagement.Domain.ViewModels.HealthRecord;
 using GymManagement.Domain.ViewModels.Member;
-using GymManagement.Infrastructure.Enums;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
-using GymManagement.Infrastructure.Specifications.Members; 
-using GymManagement.Infrastructure.ValueObjects;
+using GymManagement.Domain.Enums;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
+using GymManagement.Domain.ValueObjects;
+using GymManagement.Domain.Specifications.Members; 
 
 namespace GymManagement.Domain.Services;
 
