@@ -1,8 +1,6 @@
-﻿
+﻿using GymManagement.Domain.Enums;
 
-using GymManagement.Infrastructure.Enums;
-
-namespace GymManagement.Infrastructure.Models;
+namespace GymManagement.Domain.Entities;
 
 public class Trainer : User
 {

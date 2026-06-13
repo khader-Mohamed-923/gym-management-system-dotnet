@@ -1,8 +1,8 @@
-﻿using GymManagement.Infrastructure.Enums;
-using GymManagement.Infrastructure.ValueObjects;
+﻿using GymManagement.Domain.Enums;
+using GymManagement.Domain.ValueObjects;
 
 
-namespace GymManagement.Infrastructure.Models;
+namespace GymManagement.Domain.Entities;
 
 public class User :BaseEntity
 {

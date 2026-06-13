@@ -1,5 +1,4 @@
-﻿
-namespace GymManagement.Infrastructure.ValueObjects;
+﻿namespace GymManagement.Domain.ValueObjects;
 
 public class Address
 {

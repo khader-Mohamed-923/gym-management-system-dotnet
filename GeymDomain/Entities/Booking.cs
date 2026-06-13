@@ -1,6 +1,4 @@
-﻿
-
-namespace GymManagement.Infrastructure.Models;
+﻿namespace GymManagement.Domain.Entities;
 
 public class Booking : BaseEntity
 {
