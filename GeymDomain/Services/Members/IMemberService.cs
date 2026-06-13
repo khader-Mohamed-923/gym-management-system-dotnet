@@ -1,23 +1,16 @@
 using GymManagement.Domain.Common;
-using GymManagement.Domain.ViewModels.HealthRecord;
-using GymManagement.Domain.ViewModels.Member;
+using GymManagement.Domain.DTOs.Members.Requests;
+using GymManagement.Domain.DTOs.Members.Responses;
 
 namespace GymManagement.Domain.Services.Members;
 
 public interface IMemberService
 {
-    public Task<Result<IEnumerable<MemberIndexViewModel>>> GetAllAsync(CancellationToken cancellationToken);
-    public Task<Result> CreateAsync(MemberCreateViewModel model, CancellationToken cancellationToken);
-
-    public Task<MemberDetailsViewModel?> GetDetailsAsync(int id, CancellationToken cancellationToken);
-
-    public Task<HealthRecordDetailsViewModel?> GetHealthRecordAsync(int Id, CancellationToken cancellationToken);
-
-
-    public Task<MemberEditViewModel?> GetForEditAsync(int id, CancellationToken cancellationToken);
-
-
-    public Task<Result> UpdateAsync(int id,MemberEditViewModel model, CancellationToken cancellationToken);
-
-    public Task<Result> DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<Result<IEnumerable<MemberResponse>>> GetAllAsync(CancellationToken cancellationToken);
+    Task<Result> CreateAsync(CreateMemberRequest request, CancellationToken cancellationToken);
+    Task<MemberDetailsResponse?> GetDetailsAsync(int id, CancellationToken cancellationToken);
+    Task<HealthRecordResponse?> GetHealthRecordAsync(int Id, CancellationToken cancellationToken);
+    Task<MemberEditResponse?> GetForEditAsync(int id, CancellationToken cancellationToken);
+    Task<Result> UpdateAsync(int id, UpdateMemberRequest request, CancellationToken cancellationToken);
+    Task<Result> DeleteAsync(int id, CancellationToken cancellationToken);
 }

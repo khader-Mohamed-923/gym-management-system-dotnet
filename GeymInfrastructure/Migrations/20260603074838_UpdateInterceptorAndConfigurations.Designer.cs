@@ -1,6 +1,6 @@
 
 using System;
-using GeymManagement.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;

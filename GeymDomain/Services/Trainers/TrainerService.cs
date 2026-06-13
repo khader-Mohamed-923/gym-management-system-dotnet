@@ -1,23 +1,20 @@
-using GeymManagement.DbContexts;
 using GymManagement.Domain.Common;
-using GymManagement.Domain.ViewModels.Trainer;
-using GymManagement.Infrastructure.Enums;
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
-using GymManagement.Infrastructure.ValueObjects;
-using Microsoft.EntityFrameworkCore;
+using GymManagement.Domain.DTOs.Trainers.Requests;
+using GymManagement.Domain.DTOs.Trainers.Responses;
+using GymManagement.Domain.Enums;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
+using GymManagement.Domain.ValueObjects;
 
 namespace GymManagement.Domain.Services.Trainers;
 
-public class TrainerService(
-    IMemberRepository<Trainer> trainerRepository,
-    GymDbContext dbContext) : ITrainerService
+public class TrainerService(ITrainerRepository trainerRepository) : ITrainerService
 {
-    public async Task<Result<IEnumerable<TrainerIndexViewModel>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<TrainerResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
         var trainers = await trainerRepository.GetAllAsync(cancellationToken);
 
-        var viewModels = trainers.Select(t => new TrainerIndexViewModel
+        var responses = trainers.Select(t => new TrainerResponse
         {
             Id = t.Id,
             Name = t.Name,
@@ -26,46 +23,45 @@ public class TrainerService(
             Specialization = t.Speciality.ToString()
         });
 
-        return Result<IEnumerable<TrainerIndexViewModel>>.Success(viewModels);
+        return Result<IEnumerable<TrainerResponse>>.Success(responses);
     }
 
-    public async Task<Result> CreateAsync(TrainerCreateViewModel model, CancellationToken cancellationToken)
+    public async Task<Result> CreateAsync(CreateTrainerRequest request, CancellationToken cancellationToken)
     {
-        
-        if (await dbContext.Users.AnyAsync(u => u.Email == model.Email, cancellationToken))
+        if (await trainerRepository.IsEmailTakenAsync(request.Email, null, cancellationToken))
         {
-            return Result.Failure("Email already exists.", nameof(model.Email));
+            return Result.Failure("Email already exists.", nameof(request.Email));
         }
 
-        if (await dbContext.Users.AnyAsync(u => u.Phone == model.Phone, cancellationToken))
+        if (await trainerRepository.IsPhoneTakenAsync(request.Phone, null, cancellationToken))
         {
-            return Result.Failure("Phone number already exists.", nameof(model.Phone));
+            return Result.Failure("Phone number already exists.", nameof(request.Phone));
         }
 
-        if (!Enum.TryParse<Gender>(model.Gender, true, out var gender))
+        if (!Enum.TryParse<Gender>(request.Gender, true, out var gender))
         {
-            return Result.Failure("Invalid gender.", nameof(model.Gender));
+            return Result.Failure("Invalid gender.", nameof(request.Gender));
         }
 
-        if (!Enum.TryParse<Speciality>(model.Specialty, true, out var speciality))
+        if (!Enum.TryParse<Speciality>(request.Specialty, true, out var speciality))
         {
-            return Result.Failure("Invalid specialty.", nameof(model.Specialty));
+            return Result.Failure("Invalid specialty.", nameof(request.Specialty));
         }
 
         var trainer = new Trainer
         {
-            Name = model.Name,
-            Email = model.Email,
-            Phone = model.Phone,
-            DateOfBirth = model.DateOfBirth,
+            Name = request.Name,
+            Email = request.Email,
+            Phone = request.Phone,
+            DateOfBirth = request.DateOfBirth,
             Gender = gender,
             Speciality = speciality,
             HireDate = DateTime.UtcNow,
             Address = new Address
             {
-                Street = model.Street,
-                City = model.City,
-                BuildingNumber = model.BuildingNumber
+                Street = request.Street,
+                City = request.City,
+                BuildingNumber = request.BuildingNumber
             }
         };
 
@@ -75,13 +71,13 @@ public class TrainerService(
         return Result.Success();
     }
 
-    public async Task<TrainerDetailsViewModel?> GetDetailsAsync(int id, CancellationToken cancellationToken)
+    public async Task<TrainerDetailsResponse?> GetDetailsAsync(int id, CancellationToken cancellationToken)
     {
         var trainer = await trainerRepository.GetByIdIncludedDeletedAsync(id, cancellationToken);
 
         if (trainer is null) return null;
 
-        return new TrainerDetailsViewModel
+        return new TrainerDetailsResponse
         {
             Id = trainer.Id,
             Name = trainer.Name,
@@ -93,13 +89,13 @@ public class TrainerService(
         };
     }
 
-    public async Task<TrainerEditViewModel?> GetForEditAsync(int id, CancellationToken cancellationToken)
+    public async Task<TrainerEditResponse?> GetForEditAsync(int id, CancellationToken cancellationToken)
     {
         var trainer = await trainerRepository.GetByIdIncludedDeletedAsync(id, cancellationToken);
 
         if (trainer == null) return null;
 
-        return new TrainerEditViewModel
+        return new TrainerEditResponse
         {
             Id = trainer.Id,
             Name = trainer.Name,
@@ -114,10 +110,10 @@ public class TrainerService(
         };
     }
 
-    public async Task<Result> UpdateAsync(int id, TrainerEditViewModel model, CancellationToken cancellationToken)
+    public async Task<Result> UpdateAsync(int id, UpdateTrainerRequest request, CancellationToken cancellationToken)
     {
-        var normalizedEmail = model.Email.Trim().ToLower();
-        var normalizedPhone = model.Phone.Trim();
+        var normalizedEmail = request.Email.Trim().ToLower();
+        var normalizedPhone = request.Phone.Trim();
 
         var trainer = await trainerRepository.GetByIdIncludedDeletedAsync(id, cancellationToken);
 
@@ -126,19 +122,19 @@ public class TrainerService(
             return Result.Failure("Trainer not found.", nameof(id));
         }
 
-        if (await dbContext.Users.AnyAsync(u => u.Email == normalizedEmail && u.Id != id, cancellationToken))
+        if (await trainerRepository.IsEmailTakenAsync(normalizedEmail, id, cancellationToken))
         {
-            return Result.Failure("Email is already taken by another user.", nameof(model.Email));
+            return Result.Failure("Email is already taken by another user.", nameof(request.Email));
         }
 
-        if (await dbContext.Users.AnyAsync(u => u.Phone == normalizedPhone && u.Id != id, cancellationToken))
+        if (await trainerRepository.IsPhoneTakenAsync(normalizedPhone, id, cancellationToken))
         {
-            return Result.Failure("Phone number is already taken by another user.", nameof(model.Phone));
+            return Result.Failure("Phone number is already taken by another user.", nameof(request.Phone));
         }
 
-        if (!Enum.TryParse<Speciality>(model.Specialty, true, out var speciality))
+        if (!Enum.TryParse<Speciality>(request.Specialty, true, out var speciality))
         {
-            return Result.Failure("Invalid specialty.", nameof(model.Specialty));
+            return Result.Failure("Invalid specialty.", nameof(request.Specialty));
         }
 
         trainer.Email = normalizedEmail;
@@ -146,9 +142,9 @@ public class TrainerService(
         trainer.Speciality = speciality;
         trainer.Address = new Address
         {
-            Street = model.Street,
-            City = model.City,
-            BuildingNumber = model.BuildingNumber
+            Street = request.Street,
+            City = request.City,
+            BuildingNumber = request.BuildingNumber
         };
 
         await trainerRepository.SaveChangesAsync();

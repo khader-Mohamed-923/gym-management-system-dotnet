@@ -1,7 +1,9 @@
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Trainers;
-using GymManagement.Domain.ViewModels.Trainer;
+using GymManagement.Domain.DTOs.Trainers.Requests;
+using GymManagement.Presentation.ViewModels.Trainer;
 using Microsoft.AspNetCore.Mvc;
+using Mapster;
 
 namespace GymManagement.Presentation.Controllers;
 
@@ -13,7 +15,8 @@ public class TrainersController(ITrainerService trainers) : Controller
 
         if (result.IsSuccess)
         {
-            return View(result.Value);
+            var viewModels = result.Value.Adapt<IEnumerable<TrainerIndexViewModel>>();
+            return View(viewModels);
         }
 
         TempData["ErrorMessage"] = result.Error ?? "Failed to load trainers.";
@@ -23,15 +26,16 @@ public class TrainersController(ITrainerService trainers) : Controller
     [HttpGet]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var trainer = await trainers.GetDetailsAsync(id, cancellationToken);
+        var response = await trainers.GetDetailsAsync(id, cancellationToken);
 
-        if (trainer == null)
+        if (response == null)
         {
             TempData["ErrorMessage"] = "Trainer not found.";
             return RedirectToAction(nameof(Index));
         }
 
-        return View(trainer);
+        var viewModel = response.Adapt<TrainerDetailsViewModel>();
+        return View(viewModel);
     }
 
     [HttpGet]
@@ -42,20 +46,22 @@ public class TrainersController(ITrainerService trainers) : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(TrainerCreateViewModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(TrainerCreateViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(viewModel);
         }
 
-        var result = await trainers.CreateAsync(model, cancellationToken);
+        var request = viewModel.Adapt<CreateTrainerRequest>();
+
+        var result = await trainers.CreateAsync(request, cancellationToken);
 
         if (result.IsFailure)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
             TempData["ErrorMessage"] = "Trainer Failed To Create. " + result.Error;
-            return View(model);
+            return View(viewModel);
         }
 
         TempData["SuccessMessage"] = "Trainer Created Successfully";
@@ -65,31 +71,35 @@ public class TrainersController(ITrainerService trainers) : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-        var trainer = await trainers.GetForEditAsync(id, cancellationToken);
-        if (trainer == null)
+        var response = await trainers.GetForEditAsync(id, cancellationToken);
+        if (response == null)
         {
             TempData["ErrorMessage"] = "Trainer not found.";
             return RedirectToAction(nameof(Index));
         }
-        return View(trainer);
+
+        var viewModel = response.Adapt<TrainerEditViewModel>();
+        return View(viewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit([FromRoute] int id, TrainerEditViewModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> Edit([FromRoute] int id, TrainerEditViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(viewModel);
         }
 
-        var result = await trainers.UpdateAsync(id, model, cancellationToken);
+        var request = viewModel.Adapt<UpdateTrainerRequest>();
+
+        var result = await trainers.UpdateAsync(id, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error!);
             TempData["ErrorMessage"] = "Cannot Update a Trainer: " + result.Error;
-            return View(model);
+            return View(viewModel);
         }
 
         TempData["SuccessMessage"] = "Trainer Updated Successfully";
@@ -99,15 +109,17 @@ public class TrainersController(ITrainerService trainers) : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var model = await trainers.GetForEditAsync(id, cancellationToken);
+        var response = await trainers.GetForEditAsync(id, cancellationToken);
 
-        if (model == null)
+        if (response == null)
         {
             TempData["ErrorMessage"] = "Trainer not found.";
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.id = model.Id;
-        return View(model);
+
+        var viewModel = response.Adapt<TrainerEditViewModel>();
+        ViewBag.id = viewModel.Id;
+        return View(viewModel);
     }
 
     [HttpPost]

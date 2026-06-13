@@ -1,4 +1,3 @@
-using GeymInfrastructure;
 using GymManagement.Domain.Services;
 using GymManagement.Domain.Services.Members;
 using GymManagement.Domain.Services.Trainers;
@@ -13,8 +12,6 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddInfrastructure(configuration);
-
         services.AddScoped<IPlanService, PlanService>();
         services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<ITrainerService, TrainerService>();

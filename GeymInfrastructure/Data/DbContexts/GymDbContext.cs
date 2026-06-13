@@ -1,9 +1,7 @@
-﻿using GymManagement.Infrastructure.Models;
-
+﻿using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace GeymManagement.DbContexts;
+namespace GymManagement.Infrastructure.Data.DbContexts;
 
 public class GymDbContext : DbContext
 {
@@ -63,3 +61,4 @@ public class GymDbContext : DbContext
 
     public DbSet<MemberShip> MemberShips { get; set; }
 }
+

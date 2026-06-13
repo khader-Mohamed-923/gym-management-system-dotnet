@@ -1,9 +1,11 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GeymDomain;
+using GeymInfrastructure;
 using GymManagement.Infrastructure.IoC;
 using GymManagement.Presentation;
-using GymManagement.Presentation.Extensions; 
+using GymManagement.Presentation.Extensions;
+using GymManagement.Presentation.Configurations;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,8 +25,11 @@ try
         containerBuilder.RegisterModule(new InfrastructureModule());
     });
 
+    builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddDomain(builder.Configuration);
     builder.Services.AddPresentation();
+
+    MapsterConfiguration.RegisterMappings();
 
     var app = builder.Build();
 
