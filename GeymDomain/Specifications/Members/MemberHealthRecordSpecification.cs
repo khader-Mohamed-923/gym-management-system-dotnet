@@ -1,8 +1,6 @@
-﻿
+﻿using GymManagement.Domain.Entities;
 
-using GymManagement.Infrastructure.Models;
-
-namespace GymManagement.Infrastructure.Specifications.Members;
+namespace GymManagement.Domain.Specifications.Members;
 
 public class MemberHealthRecordSpecification : BaseSpecification<Member>
 {

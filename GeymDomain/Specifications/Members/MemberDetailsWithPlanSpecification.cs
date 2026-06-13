@@ -1,6 +1,6 @@
-﻿using GymManagement.Infrastructure.Models;
+﻿using GymManagement.Domain.Entities;
 
-namespace GymManagement.Infrastructure.Specifications.Members;
+namespace GymManagement.Domain.Specifications.Members;
 
 public class MemberDetailsWithPlanSpecification : BaseSpecification<Member>
 {

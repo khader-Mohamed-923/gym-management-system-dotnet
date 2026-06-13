@@ -1,7 +1,7 @@
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Repositories;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.Repositories;
 
-namespace GeymInfrastructure.Repositories;
+namespace GymManagement.Domain.Repositories;
 
 public interface IMemberRepository : IMemberRepository<Member>
 {

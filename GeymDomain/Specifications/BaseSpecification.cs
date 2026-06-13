@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace GymManagement.Infrastructure.Specifications;
+namespace GymManagement.Domain.Specifications;
 
 public class BaseSpecification<TEntity> : ISpecification<TEntity>
 {

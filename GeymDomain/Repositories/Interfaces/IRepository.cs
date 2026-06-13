@@ -1,8 +1,8 @@
-﻿using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.Specifications;
+﻿using GymManagement.Domain.Entities;
+using GymManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
-namespace GymManagement.Infrastructure.Repositories;
+namespace GymManagement.Domain.Repositories;
 
 public interface IMemberRepository<TEntity> where TEntity : BaseEntity
 {
