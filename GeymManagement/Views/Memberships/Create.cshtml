@@ -1,0 +1,83 @@
+@model GymManagement.Presentation.ViewModels.Membership.MembershipCreateViewModel
+
+@{
+    ViewData["Title"] = "New Membership";
+}
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header">
+        <h1 class="iron-title">ASSIGN MEMBERSHIP</h1>
+        <p class="iron-subtitle">Assign a training plan to a gym member</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
+
+                <div class="details-body">
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                        MEMBERSHIP DETAILS
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="MemberId" class="form-label form-label-required">Member</label>
+                            <select asp-for="MemberId" class="form-input">
+                                <option value="">Select Member</option>
+                                @if (ViewBag.Members != null)
+                                {
+                                    foreach (var member in ViewBag.Members)
+                                    {
+                                        <option value="@member.Id">@member.Name</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="MemberId" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PlanId" class="form-label form-label-required">Plan</label>
+                            <select asp-for="PlanId" class="form-input">
+                                <option value="">Select Active Plan</option>
+                                @if (ViewBag.Plans != null)
+                                {
+                                    foreach (var plan in ViewBag.Plans)
+                                    {
+                                        <option value="@plan.Id">@plan.Name</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="PlanId" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="form-label form-label-required">Start Date</label>
+                        <input asp-for="StartDate" type="date" class="form-input" />
+                        <span asp-validation-for="StartDate" class="form-error-text"></span>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            End date will be calculated automatically based on the selected plan's duration.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-footer">
+                    <a asp-controller="Memberships" asp-action="Index" class="btn btn-secondary">
+                        ← Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span style="margin-right: var(--space-sm);">+</span>
+                        Assign Membership
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

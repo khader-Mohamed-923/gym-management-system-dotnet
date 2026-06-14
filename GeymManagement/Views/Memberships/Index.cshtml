@@ -1,0 +1,112 @@
+@model IEnumerable<GymManagement.Presentation.ViewModels.Membership.MembershipIndexViewModel>
+
+@{
+    ViewData["Title"] = "Memberships";
+}
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
+        <div>
+            <h1 class="iron-title">MEMBERSHIPS</h1>
+            <p class="iron-subtitle">Manage member subscriptions and active plans</p>
+        </div>
+        <a asp-controller="Memberships" asp-action="Create" class="btn btn-primary btn-lg">
+            <span style="font-size: 1.25rem; font-weight: 700;">+</span>
+            New Membership
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="details-card animate-in" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+                <table class="table iron-table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>Member Name</th>
+                            <th>Plan Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var membership in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 500;">@membership.MemberName</div>
+                                </td>
+                                <td>
+                                    <span class="session-category-badge">@membership.PlanName</span>
+                                </td>
+                                <td>
+                                    <span style="color: var(--text-secondary);">@membership.StartDate.ToString("MMM dd, yyyy")</span>
+                                </td>
+                                <td>
+                                    <span style="color: var(--text-secondary);">@membership.EndDate.ToString("MMM dd, yyyy")</span>
+                                </td>
+                                <td>
+                                    @if (membership.Status == "Active")
+                                    {
+                                        <span class="status-badge status-active">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge status-inactive">Expired</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <form asp-action="Cancel" asp-route-id="@membership.Id" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to cancel this membership?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.1); color: var(--fire); border: 1px solid rgba(239, 68, 68, 0.2);">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state animate-in">
+            <div class="empty-icon">🎟️</div>
+            <h2 class="empty-title">No Memberships Found</h2>
+            <p class="empty-text">Assign a membership plan to a member to get started</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">
+                <span style="font-size: 1.25rem; font-weight: 700;">+</span>
+                Assign First Membership
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_AlertDismissScript" />
+}
