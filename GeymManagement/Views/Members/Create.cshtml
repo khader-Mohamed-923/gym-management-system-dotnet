@@ -1,0 +1,153 @@
+@model MemberCreateViewModel
+
+@{
+    ViewData["Title"] = "Add Member";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">ADD NEW MEMBER</h1>
+        <p class="iron-subtitle">Create a new gym member with personal and health information</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
+
+                <div class="details-body">
+                    
+                    <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-2xl); border-bottom: 1px solid var(--steel-line);">
+                        <button type="button" class="tab-btn active" onclick="switchTab('member-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-primary); border-bottom: 2px solid var(--fire); cursor: pointer;">
+                            👤 Member Info
+                        </button>
+                        <button type="button" class="tab-btn" onclick="switchTab('health-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer;">
+                            🏥 Health Data
+                        </button>
+                    </div>
+
+                    
+                    <div id="member-info" class="tab-content">
+                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                            PERSONAL INFORMATION
+                        </h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="Name" class="form-label form-label-required">Name</label>
+                                <input asp-for="Name" type="text" class="form-input" placeholder="Enter member name" />
+                                <span asp-validation-for="Name" class="form-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email" class="form-label form-label-required">Email</label>
+                                <input asp-for="Email" type="email" class="form-input" placeholder="Enter email address" />
+                                <span asp-validation-for="Email" class="form-error-text"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="Phone" class="form-label form-label-required">Phone</label>
+                                <input asp-for="Phone" type="tel" class="form-input" placeholder="Enter phone number" />
+                                <span asp-validation-for="Phone" class="form-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DateOfBirth" class="form-label form-label-required">Date of Birth</label>
+                                <input asp-for="DateOfBirth" type="date" class="form-input" />
+                                <span asp-validation-for="DateOfBirth" class="form-error-text"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Gender" class="form-label form-label-required">Gender</label>
+                            <select asp-for="Gender" class="form-input" asp-items="Html.GetEnumSelectList<Gender>()">
+                                <option value="">Select Gender</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="form-error-text"></span>
+                        </div>
+
+                        <hr class="divider" />
+
+                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
+                            ADDRESS INFORMATION
+                        </h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="BuildingNumber" class="form-label">Building Number</label>
+                                <input asp-for="BuildingNumber" class="form-input" placeholder="Enter building number" />
+                                <span asp-validation-for="BuildingNumber" class="form-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Street" class="form-label">Street</label>
+                                <input asp-for="Street" class="form-input" placeholder="Enter street name" />
+                                <span asp-validation-for="Street" class="form-error-text"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="City" class="form-label">City</label>
+                            <input asp-for="City" class="form-input" placeholder="Enter city" />
+                            <span asp-validation-for="City" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    
+                    <div id="health-info" class="tab-content" style="display: none;">
+                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
+                            HEALTH METRICS
+                        </h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="HealthRecord.Height" class="form-label">Height (cm)</label>
+                                <input asp-for="HealthRecord.Height" class="form-input" placeholder="Enter height" />
+                                <span asp-validation-for="HealthRecord.Height" class="form-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="HealthRecord.Weight" class="form-label">Weight (kg)</label>
+                                <input asp-for="HealthRecord.Weight" class="form-input" placeholder="Enter weight" />
+                                <span asp-validation-for="HealthRecord.Weight" class="form-error-text"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label asp-for="HealthRecord.BloodType" class="form-label">Blood Type</label>
+                                <select asp-for="HealthRecord.BloodType" class="form-input" asp-items="Html.GetEnumSelectList<BloodType>()">
+                                    <option value="">Select Blood Type</option>
+                                </select>
+                                <span asp-validation-for="HealthRecord.BloodType" class="form-error-text"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="HealthRecord.Note" class="form-label">Notes</label>
+                                <input asp-for="HealthRecord.Note" class="form-input" placeholder="Any health notes" />
+                                <span asp-validation-for="HealthRecord.Note" class="form-error-text"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="details-footer">
+                    <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
+                        ← Back to List
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span style="margin-right: var(--space-sm);">+</span>
+                        Add Member
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

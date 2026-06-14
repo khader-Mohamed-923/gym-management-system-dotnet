@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using GeymInfrastructure.Repositories;
+using GymManagement.Domain.Repositories;
 using GymManagement.Infrastructure.BackgroundJobs;
 using Microsoft.Extensions.Hosting;
 
@@ -9,9 +10,13 @@ public class InfrastructureModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        
-        builder.RegisterType<PlanRepository>()
-               .As<IPlanRepository>()
+
+        builder.RegisterType<MemberRepository>()
+               .As<IMemberRepository>()
+               .InstancePerLifetimeScope();
+
+        builder.RegisterType<TrainerRepository>()
+               .As<ITrainerRepository>()
                .InstancePerLifetimeScope();
 
         builder.RegisterType<DataCleanupJob>()

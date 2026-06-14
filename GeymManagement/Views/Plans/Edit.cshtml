@@ -1,0 +1,127 @@
+@model EditPlanViewModel
+
+@{
+    ViewData["Title"] = "Edit Plan";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">PLAN — EDIT PAGE</h1>
+        
+
+    </div>
+
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    <div class="details-container">
+        
+        <div class="details-card animate-in">
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="PlanName" />
+
+                <div class="details-body">
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            🔒 PLAN NAME (LOCKED)
+                        </label>
+                        <div class="form-input form-input-locked" style="display: flex; align-items: center; gap: var(--space-sm);">
+                            <span style="color: var(--text-muted);">🏷️</span>
+                            @Model.PlanName
+                        </div>
+                        <span class="form-help-text">
+                            Plan name cannot be modified to maintain data integrity and member references.
+                        </span>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary);">
+                        EDITABLE FIELDS
+                    </h3>
+
+                    <div class="form-row">
+                        
+                        <div class="form-group">
+                            <label asp-for="DurationInDays" class="form-label form-label-required">
+                                DURATION (DAYS)
+                            </label>
+                            <input asp-for="DurationInDays" 
+                                   class="form-input" 
+                                   type="number"
+                                   min="1"
+                                   placeholder="Enter duration in days" />
+                            <span asp-validation-for="DurationInDays" class="form-error-text"></span>
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <label asp-for="Price" class="form-label form-label-required">
+                                PRICE (EGP)
+                            </label>
+                            <input asp-for="Price" 
+                                   class="form-input" 
+                                   type="number"
+                                   step="0.01"
+                                   min="0.01"
+                                   placeholder="Enter price in EGP" />
+                            <span asp-validation-for="Price" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label form-label-required">
+                            DESCRIPTION
+                        </label>
+                        <textarea asp-for="Description" 
+                                  class="form-textarea" 
+                                  rows="4"
+                                  placeholder="Enter plan description"></textarea>
+                        <span asp-validation-for="Description" class="form-error-text"></span>
+                    </div>
+                </div>
+
+                
+                <div class="details-footer">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Update Plan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

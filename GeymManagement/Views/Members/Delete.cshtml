@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Delete Member";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title" style="background: linear-gradient(135deg, var(--ember), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DELETE MEMBER</h1>
+        <p class="iron-subtitle">Confirm member removal</p>
+    </div>
+
+    <div class="details-container" style="max-width: 500px;">
+        <div class="glass-card glow-card-red animate-in" style="text-align: center; padding: var(--space-3xl);">
+            
+            <div style="font-size: 4rem; margin-bottom: var(--space-lg);">⚠️</div>
+            
+            
+            <h2 class="iron-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
+                Are you sure you want to remove this member?
+            </h2>
+
+            
+            <div class="alert alert-danger" style="text-align: left; margin-bottom: var(--space-xl);">
+                <span class="alert-icon">⚠️</span>
+                <div>
+                    <strong>Please confirm</strong><br />
+                    This member will be removed from the system and will no longer appear in active lists.
+                </div>
+            </div>
+
+            
+            <form asp-action="Delete" method="post" asp-route-id="@ViewBag.id">
+                @Html.AntiForgeryToken()
+                <div style="display: flex; gap: var(--space-md); justify-content: center;">
+                    <a asp-controller="Members" asp-action="Index" class="btn btn-secondary btn-lg">
+                        No, Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        Yes, Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

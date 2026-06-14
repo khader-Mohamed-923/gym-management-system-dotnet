@@ -1,102 +1,118 @@
-﻿@model IEnumerable<GymManagement.Infrastructure.Models.Plan>
+@model IEnumerable<PlanIndexViewModel>
+
+@{
+    ViewData["Title"] = "Membership Plans";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
+        <div>
+            <h1 class="iron-title">MEMBERSHIP PLANS</h1>
+            <p class="iron-subtitle">Configure and manage your gym membership packages</p>
+        </div>
+    </div>
 
 
 
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
 
-<div class="container">
-    <main role="main" class="pb-3">
-        <div class="container">
-            <header class="d-flex justify-content-between mt-5 mb-4 align-items-center">
-                <div>
-                    <h2 class="text-primary-color mb-0">Membership Plans</h2>
-                    <p class="text-muted">Manage your gym membership packages</p>
-                </div>
-            </header>
-            @if (Model.Any())
+    @if (Model.Any())
+    {
+        <div class="plans-grid">
+            @foreach (var plan in Model)
             {
-                <div class="row g-4">
-                    @foreach (var plan in Model)
-                    {
-                        @* Loop Through Plans and Display Each Plan in a Card *@
+                <div class="plan-card animate-in @(!plan.IsActive ? "inactive" : "")">
+                    
+                    <div class="plan-card-header" style="@(plan.IsActive ? "" : "background: rgba(163, 163, 163, 0.1);")">
+                        <h3 class="plan-card-title" style="@(plan.IsActive ? "" : "color: var(--text-secondary);")">@plan.Name</h3>
+                        @if (plan.IsActive)
+                        {
+                            <span class="status-badge status-active">Active</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-inactive">Inactive</span>
+                        }
+                    </div>
 
-                        @* @foreach *@
-                        <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100 shadow-sm border-0 plan-card">
-
-
-
-                                @* If Plan is Active put class bg-primary-color if not bg-secondary *@
-                                <div class="card-header text-white text-center py-4 @(plan.IsActive ? "bg-primary-color" : "bg-secondary")">
-                                    <h4 class="mb-0">@plan.Name</h4>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <div class="text-center mb-4">
-                                        <div class="display-4 fw-bold text-primary-color">@plan.Price</div>
-                                        <small class="text-muted">EGP</small>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <p class="text-muted mb-2">
-                                            <i class="bi bi-calendar-check text-primary-color me-2"></i>
-                                            <strong>Duration:</strong> @plan.DurationInDays
-                                        </p>
-                                        <p class="text-muted mb-3">
-                                            <i class="bi bi-file-text text-primary-color me-2"></i>
-                                            <strong>Description:</strong>
-                                        </p>
-                                        <p class="small">@plan.Description</p>
-                                    </div>
-
-                                    <div class="mt-auto">
-                                        <div class="d-grid gap-2">
-
-                                            <a asp-action="Details" asp-route-id="@plan.Id" class="btn btn-outline btn-sm">
-                                                <i class="bi bi-eye me-1"></i>View Details
-                                            </a>
-
-                                            <div class="d-flex gap-2">
-                                                <a asp-action="Edit" asp-route-id="@plan.Id" class="btn btn-outline btn-sm flex-fill">
-                                                    <i class="bi bi-pencil me-1"></i>Edit
-                                                </a>
-                                                <form asp-action="Activate" asp-route-id="@plan.Id" method="post" class="flex-fill">
-                                                    @* If Plan is Active put class text-danger if not text-success *@
-                                                    <button type="submit" class="btn btn-outline btn-sm w-100 @(plan.IsActive ? "text-danger" : "text-success")">
-                                                        @* Display If No Plan is inactive*@
-                                                        @if (plan.IsActive)
-                                                        {
-
-                                                            <i class="bi bi-x-circle me-1"> Deactivate </i>
-                                                        }
-                                                        else
-                                                        {
-                                                            @* Display If No Plan is Active*@
-
-                                                            <i class="bi bi-check-circle me-1"> Activate </i>
-                                                        }
-
-
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    
+                    <div class="plan-card-body">
+                        
+                        <div class="plan-price-section">
+                            <span class="plan-price" style="@(plan.IsActive ? "" : "color: var(--text-secondary);")">@plan.Price</span>
+                            <span class="plan-currency">EGP</span>
+                            <div class="plan-period">/ @plan.DurationInDays days</div>
                         </div>
-                    }
-                </div>
-            }
-            else
-            {
 
-                @* Display This Div If No Plans Are Available *@
-                <div class="text-center py-5">
-                    <i class="bi bi-inbox display-1 text-muted"></i>
-                    <h4 class="mt-3 text-muted">No Plans Available</h4>
+                        
+                        <ul class="plan-features">
+                            <li>Duration: @plan.DurationInDays days</li>
+                            <li>@plan.Description</li>
+                        </ul>
+
+                        
+                        <div class="plan-card-actions">
+                            <a asp-action="Details" asp-route-id="@plan.Id" class="btn btn-secondary" style="flex: 1;">
+                                View Details
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@plan.Id" class="btn btn-primary" style="flex: 1;">
+                                Edit
+                            </a>
+                        </div>
+
+                        <form asp-action="Activate" asp-route-id="@plan.Id" method="post" style="margin-top: var(--space-sm);">
+                            @Html.AntiForgeryToken()
+                            @if (plan.IsActive)
+                            {
+                                <button type="submit" class="btn btn-danger btn-block">
+                                    Deactivate Plan
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success btn-block">
+                                    Activate Plan
+                                </button>
+                            }
+                        </form>
+                    </div>
                 </div>
             }
         </div>
-    </main>
+    }
+    else
+    {
+        
+        <div class="empty-state animate-in">
+            <div class="empty-icon">📋</div>
+            <h2 class="empty-title">No Plans Available</h2>
+            <p class="empty-text">Get started by creating your first membership plan</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">
+                <span style="font-size: 1.25rem; font-weight: 700;">+</span>
+                Create First Plan
+            </a>
+        </div>
+    }
 </div>
-
- 

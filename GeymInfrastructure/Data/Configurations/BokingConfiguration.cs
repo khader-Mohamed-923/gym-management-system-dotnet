@@ -1,14 +1,12 @@
-﻿
-
-using GymManagement.Infrastructure.Models;
+﻿using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManagement.Infrastructure.Data.Configurations;
 
-internal class BokingConfiguration : IEntityTypeConfiguration<Boking>
+internal class BokingConfiguration : IEntityTypeConfiguration<Booking>
 {
-    public void Configure(EntityTypeBuilder<Boking> builder)
+    public void Configure(EntityTypeBuilder<Booking> builder)
     {
 
 
@@ -27,7 +25,7 @@ internal class BokingConfiguration : IEntityTypeConfiguration<Boking>
         builder.HasQueryFilter(b => !b.IsDeleted);
 
         builder.HasOne(b => b.Member)
-                .WithMany(s => s.Bokings)
+                .WithMany(s => s.Bookings)
                 .HasForeignKey(b => b.MemberId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,0 +1,115 @@
+@model MemberEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Member";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">EDIT MEMBER</h1>
+        <p class="iron-subtitle">Update member information</p>
+    </div>
+
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <form asp-controller="Members" asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Name" />
+                <input type="hidden" asp-for="Photo" />
+
+                <div class="details-body">
+                    
+                    <div style="text-align: center; margin-bottom: var(--space-2xl);">
+                        <div class="member-avatar member-avatar--orange" style="width: 80px; height: 80px; font-size: 1.5rem; margin: 0 auto var(--space-md);">
+                            @{
+                                var memberName = Model.Name ?? "";
+                                var initials = memberName.Length >= 2 ? memberName.Substring(0, 2).ToUpper() : memberName.ToUpper();
+                            }
+                            @initials
+                        </div>
+                        <h2 class="iron-title" style="font-size: 1.5rem;">@Model.Name</h2>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                        EDITABLE INFORMATION
+                    </h3>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-label form-label-required">📧 Email</label>
+                        <input asp-for="Email" class="form-input" placeholder="Enter email address" />
+                        <span asp-validation-for="Email" class="form-error-text"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="Phone" class="form-label form-label-required">📞 Phone</label>
+                            <input asp-for="Phone" class="form-input" placeholder="Enter phone number" />
+                            <span asp-validation-for="Phone" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BuildingNumber" class="form-label">🏠 Building Number</label>
+                            <input asp-for="BuildingNumber" class="form-input" placeholder="Enter building number" />
+                            <span asp-validation-for="BuildingNumber" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="City" class="form-label">🏙️ City</label>
+                            <input asp-for="City" class="form-input" placeholder="Enter city" />
+                            <span asp-validation-for="City" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Street" class="form-label">🛣️ Street</label>
+                            <input asp-for="Street" class="form-input" placeholder="Enter street name" />
+                            <span asp-validation-for="Street" class="form-error-text"></span>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="details-footer">
+                    <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_AlertDismissScript" />
+}

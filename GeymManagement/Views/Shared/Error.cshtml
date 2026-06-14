@@ -1,26 +1,52 @@
-﻿@{
+@{
     ViewData["Title"] = "Error";
     var requestId = Context.TraceIdentifier;
 }
 
-<div class="text-center" style="margin-top: 80px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-    <div style="font-size: 100px; color: #dc3545; animation: shake 0.5s infinite alternate;">⚠️</div>
 
-    <h1 class="text-danger font-weight-bold" style="margin-top: 20px;">Oops! Something went wrong.</h1>
-    <p class="lead text-muted" style="max-width: 600px; margin: 20px auto;">
-        We are experiencing a temporary technical issue with the Gym System. Our technical team has been notified automatically and is working to resolve it.
-    </p>
+<link rel="stylesheet" href="~/css/iron-ui.css" />
 
-    @if (!string.IsNullOrEmpty(requestId))
-    {
-        <div class="alert alert-light d-inline-block" style="border: 1px dashed #ccc; padding: 10px 20px;">
-            <strong>Error Tracking ID (Ticket ID):</strong> <code class="text-secondary">@requestId</code>
+<div class="iron-container" style="text-align: center; padding-top: 100px;">
+    <div class="animate-in">
+        
+        <div style="font-size: 6rem; margin-bottom: var(--space-xl); animation: shake 0.5s infinite alternate;">
+            ⚠️
         </div>
-    }
 
-    <div class="mt-4">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg style-btn" style="padding: 10px 30px; border-radius: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            Back to Home Page
-        </a>
+        
+        <h1 class="iron-title" style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
+            OOPS! SOMETHING WENT WRONG
+        </h1>
+
+        
+        <p class="iron-subtitle" style="font-size: 1.125rem; max-width: 600px; margin: 0 auto var(--space-xl); color: var(--text-secondary);">
+            We are experiencing a temporary technical issue with the Gym System. 
+            Our technical team has been notified automatically and is working to resolve it.
+        </p>
+
+        
+        @if (!string.IsNullOrEmpty(requestId))
+        {
+            <div class="glass-card" style="display: inline-block; padding: var(--space-lg); margin-bottom: var(--space-xl);">
+                <span class="details-label">Error Tracking ID (Ticket ID)</span>
+                <code style="display: block; margin-top: var(--space-sm); color: var(--ice); font-size: 1rem;">
+                    @requestId
+                </code>
+            </div>
+        }
+
+        
+        <div>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
+                ← Back to Home Page
+            </a>
+        </div>
     </div>
 </div>
+
+<style>
+    @@keyframes shake {
+        from { transform: rotate(-5deg); }
+        to { transform: rotate(5deg); }
+    }
+</style>

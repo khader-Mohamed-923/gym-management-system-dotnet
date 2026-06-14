@@ -1,6 +1,62 @@
-﻿@{
+@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">PRIVACY POLICY</h1>
+        <p class="iron-subtitle">Your privacy matters to us</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <div class="details-body">
+                <h2 class="iron-title" style="font-size: 1.5rem; margin-bottom: var(--space-xl);">
+                    Data Protection at IronCore Gym
+                </h2>
+
+                <div class="glass-card" style="margin-bottom: var(--space-xl); padding: var(--space-xl);">
+                    <h3 class="iron-subtitle" style="color: var(--fire); margin-bottom: var(--space-md);">🔒 Information We Collect</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        We collect personal information that you provide directly to us, including name, email address, 
+                        phone number, and health-related data for fitness tracking purposes.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="margin-bottom: var(--space-xl); padding: var(--space-xl);">
+                    <h3 class="iron-subtitle" style="color: var(--lime); margin-bottom: var(--space-md);">💪 How We Use Your Data</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Your information is used to provide and improve our services, process memberships, 
+                        track fitness progress, and communicate with you about your membership.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="margin-bottom: var(--space-xl); padding: var(--space-xl);">
+                    <h3 class="iron-subtitle" style="color: var(--ice); margin-bottom: var(--space-md);">🛡️ Data Security</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        We implement appropriate security measures to protect your personal information against 
+                        unauthorized access, alteration, disclosure, or destruction.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="padding: var(--space-xl);">
+                    <h3 class="iron-subtitle" style="color: var(--gold); margin-bottom: var(--space-md);">📧 Contact Us</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        If you have any questions about this Privacy Policy, please contact us at 
+                        <span style="color: var(--fire);">privacy@ironcoregym.com</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="details-footer">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

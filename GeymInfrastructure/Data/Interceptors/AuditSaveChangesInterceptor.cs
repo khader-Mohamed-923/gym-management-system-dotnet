@@ -1,20 +1,18 @@
-using GymManagement.Infrastructure.Models;
-using GeymManagement.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
+using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace GeymManagement.Data.Interceptors;
+namespace GeymInfrastructure.Data.Interceptors;
 
-public class AuditSaveChangesInterceptor : SaveChangesInterceptor
+public class AuditColumnsInterceptor : SaveChangesInterceptor
 {
     private static void UpdateAuditProperties(DbContext? context)
     {
-        if (context == null)
-            return;
+        if (context == null) return;
 
         var gymContext = context as GymDbContext;
         var allowHardDelete = gymContext?.AllowHardDelete ?? false;
-
         var now = DateTime.UtcNow;
 
         var entries = context.ChangeTracker
@@ -27,36 +25,23 @@ public class AuditSaveChangesInterceptor : SaveChangesInterceptor
             switch (entry.State)
             {
                 case EntityState.Added:
-
                     entry.Entity.CreatedAt = now;
                     entry.Entity.IsDeleted = false;
-
                     break;
 
                 case EntityState.Modified:
-
                     entry.Entity.UpdatedAt = now;
-
-             
                     entry.Property(x => x.CreatedAt).IsModified = false;
-
                     break;
 
                 case EntityState.Deleted:
-
-                    if (allowHardDelete)
-                    {
-                        break;
-                    }
+                    if (allowHardDelete) break;
 
                     entry.State = EntityState.Modified;
-
                     entry.Entity.IsDeleted = true;
                     entry.Entity.DeletedAt = now;
                     entry.Entity.UpdatedAt = now;
-
                     entry.Property(x => x.CreatedAt).IsModified = false;
-
                     break;
             }
         }
@@ -67,7 +52,6 @@ public class AuditSaveChangesInterceptor : SaveChangesInterceptor
         InterceptionResult<int> result)
     {
         UpdateAuditProperties(eventData.Context);
-
         return base.SavingChanges(eventData, result);
     }
 
@@ -77,7 +61,6 @@ public class AuditSaveChangesInterceptor : SaveChangesInterceptor
         CancellationToken cancellationToken = default)
     {
         UpdateAuditProperties(eventData.Context);
-
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }

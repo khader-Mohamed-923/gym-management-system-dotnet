@@ -1,4 +1,4 @@
-﻿using GymManagement.Infrastructure.Models;
+﻿using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,7 +21,7 @@ internal class HealthRecordConfiguration : IEntityTypeConfiguration<HealthRecord
 
         builder.Property(hr => hr.BloodType)
             .HasConversion<string>()
-            .HasMaxLength(10);
+            .HasMaxLength(40);
 
 
         builder.HasQueryFilter(h => !h.IsDeleted);

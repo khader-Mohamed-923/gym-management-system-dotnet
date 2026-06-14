@@ -1,6 +1,6 @@
-using GeymInfrastructure;
-using GeymManagement.DbContexts;
-using GymManagement.Infrastructure.Seed;
+using GymManagement.Domain.Services;
+using GymManagement.Domain.Services.Members;
+using GymManagement.Domain.Services.Trainers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,25 +12,9 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddInfrastructure(configuration);
-
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        using (var scope = serviceProvider.CreateScope())
-        {
-            try
-            {
-              
-                var context = scope.ServiceProvider.GetRequiredService<GymDbContext>();
-
-                DatabaseSeeder.Seed(context).GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Seeding Failed: {ex.Message}");
-            }
-        }
+        services.AddScoped<IPlanService, PlanService>();
+        services.AddScoped<IMemberService, MemberService>();
+        services.AddScoped<ITrainerService, TrainerService>();
 
         return services;
     }

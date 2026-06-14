@@ -1,0 +1,130 @@
+@model TrainerCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Trainer";
+}
+
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    
+    <div class="iron-page-header">
+        <h1 class="iron-title">CREATE TRAINER</h1>
+        <p class="iron-subtitle">Add a new professional trainer to the system</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
+
+                <div class="details-body">
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                        PERSONAL INFORMATION
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label form-label-required">Name</label>
+                            <input asp-for="Name" type="text" class="form-input" placeholder="Enter trainer name" />
+                            <span asp-validation-for="Name" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label form-label-required">Email</label>
+                            <input asp-for="Email" type="email" class="form-input" placeholder="Enter email address" />
+                            <span asp-validation-for="Email" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="Phone" class="form-label form-label-required">Phone</label>
+                            <input asp-for="Phone" type="tel" class="form-input" placeholder="Enter phone number" />
+                            <span asp-validation-for="Phone" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DateOfBirth" class="form-label form-label-required">Date of Birth</label>
+                            <input asp-for="DateOfBirth" type="date" class="form-input" />
+                            <span asp-validation-for="DateOfBirth" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Gender" class="form-label form-label-required">Gender</label>
+                        <select asp-for="Gender" class="form-input">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="form-error-text"></span>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
+                        ADDRESS INFORMATION
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="BuildingNumber" class="form-label form-label-required">Building Number</label>
+                            <input asp-for="BuildingNumber" class="form-input" placeholder="Enter building number" />
+                            <span asp-validation-for="BuildingNumber" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Street" class="form-label form-label-required">Street</label>
+                            <input asp-for="Street" class="form-input" placeholder="Enter street name" />
+                            <span asp-validation-for="Street" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="City" class="form-label form-label-required">City</label>
+                        <input asp-for="City" class="form-input" placeholder="Enter city" />
+                        <span asp-validation-for="City" class="form-error-text"></span>
+                    </div>
+
+                    <hr class="divider" />
+
+                    
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
+                        PROFESSIONAL INFORMATION
+                    </h3>
+
+                    <div class="form-group">
+                        <label asp-for="Specialty" class="form-label form-label-required">Specialty</label>
+                        <select asp-for="Specialty" class="form-input">
+                            <option value="">Select Specialty</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Balance">Balance</option>
+                            <option value="Boxing">Boxing</option>
+                            <option value="Yoga">Yoga</option>
+                            <option value="CrossFit">CrossFit</option>
+                            <option value="Fitness">Fitness</option>
+                        </select>
+                        <span asp-validation-for="Specialty" class="form-error-text"></span>
+                    </div>
+                </div>
+
+                
+                <div class="details-footer">
+                    <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary">
+                        ← Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span style="margin-right: var(--space-sm);">+</span>
+                        Create Trainer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

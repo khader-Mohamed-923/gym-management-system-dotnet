@@ -1,19 +1,15 @@
-﻿
-
-using GymManagement.Infrastructure.Models;
-using GymManagement.Infrastructure.ValueObjects;
+using GymManagement.Domain.Entities;
+using GymManagement.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GymManagement.Infrastructure.Data.Configurations;
 
-public class UserConfiguration<T> : IEntityTypeConfiguration<T> where T : User
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-  
-   
-
-    public virtual void Configure(EntityTypeBuilder<T> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
+
         builder.Property(u => u.Name)
             .HasMaxLength(40);
 
@@ -23,7 +19,7 @@ public class UserConfiguration<T> : IEntityTypeConfiguration<T> where T : User
         builder.Property(u => u.Phone)
             .HasMaxLength(20);
 
-        // Address as Owned Entity (Value Object)
+
         builder.OwnsOne(u => u.Address, a =>
         {
             a.Property(ad => ad.Street)
@@ -38,6 +34,7 @@ public class UserConfiguration<T> : IEntityTypeConfiguration<T> where T : User
                 .HasColumnName(nameof(Address.BuildingNumber));
         });
 
+
         builder.HasIndex(u => u.Email)
             .IsUnique();
 
@@ -48,5 +45,12 @@ public class UserConfiguration<T> : IEntityTypeConfiguration<T> where T : User
         {
             t.HasCheckConstraint("CK_User_Role", "LEN(Phone)=11 AND Phone LIKE '01[0125]%'");
         });
+
+        builder.HasDiscriminator<string>("UserType")
+            .HasValue<Member>("Member")
+            .HasValue<Trainer>("Trainer");
+
+
+        builder.HasQueryFilter(u => !u.IsDeleted);
     }
 }
