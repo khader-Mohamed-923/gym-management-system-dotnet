@@ -11,6 +11,9 @@ using GymManagement.Presentation.ViewModels.HealthRecord;
 using GymManagement.Presentation.ViewModels.Trainer;
 using GymManagement.Presentation.ViewModels.Plan;
 using GymManagement.Presentation.ViewModels.Session;
+using GymManagement.Presentation.ViewModels.Membership;
+using GymManagement.Domain.DTOs.Memberships.Requests;
+using GymManagement.Domain.DTOs.Memberships.Responses;
 using Mapster;
 
 namespace GymManagement.Presentation.Configurations;
@@ -65,6 +68,16 @@ public static class MapsterConfiguration
 
         TypeAdapterConfig<SessionDetailsResponse, SessionDetailsViewModel>.NewConfig()
             .Map(dest => dest.Status, src => ComputeStatus(src.StartDate, src.EndDate));
+
+        TypeAdapterConfig<MembershipResponse, MembershipIndexViewModel>.NewConfig()
+            .Map(dest => dest.Status, src => ComputeMembershipStatus(src.EndDate));
+
+        TypeAdapterConfig<MembershipCreateViewModel, CreateMembershipRequest>.NewConfig();
+    }
+
+    private static string ComputeMembershipStatus(DateTime endDate)
+    {
+        return DateTime.Now > endDate ? "Expired" : "Active";
     }
 
     private static string ComputeStatus(DateTime startDate, DateTime endDate)
