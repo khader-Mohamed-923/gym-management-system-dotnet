@@ -158,32 +158,32 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0" style="gap: 0.25rem;">
                             <li class="nav-item">
-                                <a class="nav-link-iron" asp-controller="Home" asp-action="Index">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">
                                     <i class="bi bi-house"></i> Home
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-iron disabled" asp-controller="Members" asp-action="Index">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Members" ? "active" : "")" asp-controller="Members" asp-action="Index">
                                     <i class="bi bi-people"></i> Members
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-iron" asp-controller="Trainers" asp-action="Index">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Trainers" ? "active" : "")" asp-controller="Trainers" asp-action="Index">
                                     <i class="bi bi-person-badge"></i> Trainers
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-iron" asp-controller="Sessions" asp-action="Index">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Sessions" ? "active" : "")" asp-controller="Sessions" asp-action="Index">
                                     <i class="bi bi-calendar-event"></i> Sessions
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-iron active" asp-controller="Plans" asp-action="Index">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Plans" ? "active" : "")" asp-controller="Plans" asp-action="Index">
                                     <i class="bi bi-credit-card"></i> Plans
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-iron disabled" href="#">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Memberships" ? "active" : "")" asp-controller="Memberships" asp-action="Index">
                                     <i class="bi bi-card-list"></i> Memberships
                                 </a>
                             </li>
@@ -215,23 +215,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    <script>
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname.toLowerCase();
-            const navLinks = document.querySelectorAll('.nav-link-iron');
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                const href = link.getAttribute('href');
-                if (href && href !== '#') {
-                    if (currentPath.includes(href.toLowerCase()) || 
-                        (currentPath === '/' && href.includes('home'))) {
-                        link.classList.add('active');
-                    }
-                }
-            });
-        });
-    </script>
 </body>
 </html>
