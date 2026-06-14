@@ -1,0 +1,67 @@
+@model GymManagement.Presentation.ViewModels.Session.SessionEditViewModel
+
+@{
+    ViewData["Title"] = "Delete Session";
+}
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header">
+        <h1 class="iron-title">DELETE SESSION</h1>
+        <p class="iron-subtitle">Confirm session deletion</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <div class="details-header" style="background: rgba(239, 68, 68, 0.08); border-bottom: 1px solid rgba(239, 68, 68, 0.2);">
+                <div style="font-size: 3rem; margin-bottom: var(--space-md);">⚠️</div>
+                <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin: 0; color: var(--ember);">
+                    ARE YOU SURE YOU WANT TO DELETE THIS SESSION?
+                </h2>
+                <p style="color: var(--text-secondary); margin-top: var(--space-md);">
+                    This action cannot be undone. The session will be permanently removed.
+                </p>
+            </div>
+
+            <div class="details-body">
+                <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                    SESSION DETAILS
+                </h3>
+
+                <div class="details-grid">
+                    <div class="details-block">
+                        <div class="details-label">Description</div>
+                        <div class="details-value">@Model.Description</div>
+                    </div>
+                    <div class="details-block">
+                        <div class="details-label">Capacity</div>
+                        <div class="details-value">@Model.Capacity</div>
+                    </div>
+                    <div class="details-block">
+                        <div class="details-label">Start Date</div>
+                        <div class="details-value">@Model.StartDate?.ToString("MMM dd, yyyy HH:mm")</div>
+                    </div>
+                    <div class="details-block">
+                        <div class="details-label">End Date</div>
+                        <div class="details-value">@Model.EndDate?.ToString("MMM dd, yyyy HH:mm")</div>
+                    </div>
+                </div>
+
+                <form method="post" style="margin-top: var(--space-2xl);">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    
+                    <div class="details-footer" style="border-top: none; padding-top: 0;">
+                        <a asp-controller="Sessions" asp-action="Index" class="btn btn-secondary">
+                            ← Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            🗑️ Delete Session
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

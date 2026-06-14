@@ -1,0 +1,111 @@
+@model GymManagement.Presentation.ViewModels.Session.SessionCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Session";
+}
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header">
+        <h1 class="iron-title">CREATE SESSION</h1>
+        <p class="iron-subtitle">Schedule a new training session</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card animate-in">
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
+
+                <div class="details-body">
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                        SESSION INFORMATION
+                    </h3>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="form-label form-label-required">Description</label>
+                        <input asp-for="Description" type="text" class="form-input" placeholder="Enter session description" />
+                        <span asp-validation-for="Description" class="form-error-text"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Capacity" class="form-label form-label-required">Capacity</label>
+                        <input asp-for="Capacity" type="number" class="form-input" placeholder="Enter max capacity (1-25)" />
+                        <span asp-validation-for="Capacity" class="form-error-text"></span>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
+                        SCHEDULE
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="StartDate" class="form-label form-label-required">Start Date & Time</label>
+                            <input asp-for="StartDate" type="datetime-local" class="form-input" />
+                            <span asp-validation-for="StartDate" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="EndDate" class="form-label form-label-required">End Date & Time</label>
+                            <input asp-for="EndDate" type="datetime-local" class="form-input" />
+                            <span asp-validation-for="EndDate" class="form-error-text"></span>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
+                        ASSIGNMENT
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="form-label form-label-required">Category</label>
+                            <select asp-for="CategoryId" class="form-input">
+                                <option value="">Select Category</option>
+                                @if (ViewBag.Categories != null)
+                                {
+                                    foreach (var category in ViewBag.Categories)
+                                    {
+                                        <option value="@category.Id">@category.Name</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="CategoryId" class="form-error-text"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TrainerId" class="form-label form-label-required">Trainer</label>
+                            <select asp-for="TrainerId" class="form-input">
+                                <option value="">Select Trainer</option>
+                                @if (ViewBag.Trainers != null)
+                                {
+                                    foreach (var trainer in ViewBag.Trainers)
+                                    {
+                                        <option value="@trainer.Id">@trainer.Name</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="TrainerId" class="form-error-text"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-footer">
+                    <a asp-controller="Sessions" asp-action="Index" class="btn btn-secondary">
+                        ← Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span style="margin-right: var(--space-sm);">+</span>
+                        Create Session
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
