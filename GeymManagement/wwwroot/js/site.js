@@ -1,4 +1,4 @@
-
+﻿
 
 
 
@@ -70,4 +70,18 @@ function switchTab(tabId, evt) {
 
 
 
-
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPath = window.location.pathname.toLowerCase();
+    const navLinks = document.querySelectorAll('.nav-link-iron');
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href && href !== '#') {
+            if (currentPath.includes(href.toLowerCase()) || 
+                (currentPath === '/' && href.includes('Home'))) {
+                link.classList.add('active');
+            }
+        }
+    });
+});

@@ -19,10 +19,6 @@ public class InfrastructureModule : Module
                .As<ITrainerRepository>()
                .InstancePerLifetimeScope();
 
-        builder.RegisterType<SessionRepository>()
-               .As<ISessionRepository>()
-               .InstancePerLifetimeScope();
-
         builder.RegisterType<DataCleanupJob>()
        .As<IHostedService>()
        .InstancePerDependency();
