@@ -50,28 +50,46 @@ The Gym Management System is an enterprise-level web application designed to str
 
 The application follows a strict **3-layer architecture** with clear separation of concerns:
 
+```mermaid
+graph TD
+    classDef pres fill:#512BD4,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef infra fill:#00ADD8,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef domain fill:#0080FF,stroke:#fff,stroke-width:2px,color:#fff;
+
+    Presentation[Presentation Layer<br/>Controllers, Views, Exception Handlers]:::pres
+    Domain[Domain Layer<br/>Services, DTOs, Entities, Result Pattern]:::domain
+    Infrastructure[Infrastructure Layer<br/>DbContext, Repositories, Jobs]:::infra
+
+    Presentation -->|Depends on| Domain
+    Presentation -->|Depends on| Infrastructure
+    Infrastructure -->|Depends on| Domain
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Presentation Layer                        │
-│              (ASP.NET Core MVC - Port 5000)                  │
-│  Controllers │ Views │ ViewModels │ Exception Handlers       │
-└────────────────────────┬────────────────────────────────────┘
-                         │ depends on
-                         ↓
-┌─────────────────────────────────────────────────────────────┐
-│                   Infrastructure Layer                       │
-│         (Data Access, External Services, Jobs)               │
-│  DbContext │ Repositories │ Configurations │ Interceptors    │
-│  Background Jobs │ Migrations │ Seeding                      │
-└────────────────────────┬────────────────────────────────────┘
-                         │ depends on
-                         ↓
-┌─────────────────────────────────────────────────────────────┐
-│                      Domain Layer                            │
-│              (Business Logic & Entities)                     │
-│  Entities │ Value Objects │ Enums │ Repository Interfaces    │
-│  (Currently integrated with Infrastructure)                  │
-└─────────────────────────────────────────────────────────────┘
+
+### Request Flow
+
+The system employs a clear request flow leveraging the Result pattern for robust operation outcomes:
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller as Presentation Layer
+    participant Service as Domain Service
+    participant Repo as Infrastructure Repository
+    participant DB as SQL Server
+
+    Client->>Controller: HTTP Request
+    Controller->>Service: Execute Logic (DTOs)
+    Service->>Repo: Fetch Data
+    Repo->>DB: EF Core Query
+    DB-->>Repo: Data
+    Repo-->>Service: Domain Entity
+    Service->>Service: Apply Business Rules / Map Result
+    Service->>Repo: Save Changes
+    Repo->>DB: Execute Update
+    DB-->>Repo: Success
+    Repo-->>Service: Result<T>.Success()
+    Service-->>Controller: Return Result
+    Controller-->>Client: HTTP Response (View/JSON)
 ```
 
 ### Layer Responsibilities
@@ -90,11 +108,13 @@ The application follows a strict **3-layer architecture** with clear separation 
 - Background services for scheduled tasks
 - Autofac IoC container modules
 
-#### **Domain Layer** (`GymManagement.Domain`)
-- Domain entities and business models
-- Value objects and enumerations
-- Repository interfaces (contracts)
-- Domain service orchestration
+#### **Domain Layer** (`GeymDomain`)
+- Domain entities and business models (`Entities`)
+- Value objects and enumerations (`ValueObjects`, `Enums`)
+- Repository interfaces (`Repositories`)
+- Domain service implementations and application logic (`Services`)
+- Data Transfer Objects (`DTOs`) for structured input/output
+- Robust result pattern (`Common/Result.cs`) for handling operation outcomes
 
 ---
 
@@ -163,72 +183,44 @@ The application follows a strict **3-layer architecture** with clear separation 
 
 ## 📁 Project Structure
 
-```
+```text
 GeymManagement/
 │
 ├── GeymManagement/                          # Presentation Layer
-│   ├── Controllers/
-│   │   ├── HomeController.cs
-│   │   └── PlansController.cs
-│   ├── Views/
-│   │   ├── Home/
-│   │   ├── Plans/
-│   │   └── Shared/
-│   ├── ExceptionHandlers/
-│   │   └── CustomExceptionHandler.cs
+│   ├── Controllers/                         # MVC API & Web Controllers
+│   ├── Views/                               # Razor Views
+│   ├── ViewModels/                          # View Models
+│   ├── ExceptionHandlers/                   # Global exception handling
+│   ├── Configurations/                      # Mapster & Pipeline configs
+│   ├── Extensions/                          # Request pipeline extensions
 │   ├── wwwroot/                             # Static files
 │   ├── Program.cs                           # Application entry point
 │   ├── appsettings.json                     # Configuration
-│   └── appsettings.Development.json
+│   └── DependencyInjection.cs               # Presentation DI setup
 │
 ├── GeymInfrastructure/                      # Infrastructure Layer
 │   ├── Data/
-│   │   ├── DbContexts/
-│   │   │   └── GymDbContext.cs              # EF Core DbContext
-│   │   ├── Configurations/                  # Fluent API configurations
-│   │   │   ├── PlanConfiguration.cs
-│   │   │   ├── CategoryConfiguration.cs
-│   │   │   ├── UserConfiguration.cs
-│   │   │   ├── MemberConfiguration.cs
-│   │   │   ├── TrainerConfiguration.cs
-│   │   │   ├── SessionConfiguration.cs
-│   │   │   ├── BokingConfiguration.cs
-│   │   │   ├── MemberShipConfiguration.cs
-│   │   │   └── HealthRecordConfiguration.cs
-│   │   └── Interceptors/
-│   │       └── AuditSaveChangesInterceptor.cs
-│   ├── Models/                              # Domain entities
-│   │   ├── BaseEntity.cs
-│   │   ├── Plan.cs
-│   │   ├── Category.cs
-│   │   ├── User.cs
-│   │   ├── Member.cs
-│   │   ├── Trainer.cs
-│   │   ├── Session.cs
-│   │   ├── Boking.cs
-│   │   ├── MemberShip.cs
-│   │   └── HealthRecord.cs
-│   ├── Enums/
-│   │   ├── Gender.cs
-│   │   ├── BloodType.cs
-│   │   └── Speciality.cs
-│   ├── ValueObjects/
-│   │   └── Address.cs
-│   ├── Repositories/
-│   │   ├── IPlanRepository.cs
-│   │   └── PlanRepository.cs
-│   ├── BackgroundJobs/
-│   │   └── DataCleanupJob.cs                # Periodic cleanup service
-│   ├── IOC/
-│   │   └── InfrastructureModule.cs          # Autofac module
+│   │   ├── DbContexts/                      # GymDbContext
+│   │   ├── Configurations/                  # Fluent API Entity configurations
+│   │   └── Interceptors/                    # e.g., AuditColumnsInterceptor
+│   ├── Repositories/                        # EF Core Repository Implementations
+│   ├── BackgroundJobs/                      # Periodic DataCleanupJob
+│   ├── IOC/                                 # Autofac Module (InfrastructureModule)
 │   ├── Migrations/                          # EF Core migrations
-│   ├── Seed/
-│   │   └── DatabaseSeeder.cs
-│   └── DependencyInjection.cs
+│   ├── Seed/                                # DatabaseSeeder
+│   ├── Specifications/                      # Query Specifications
+│   └── DependencyInjection.cs               # Infrastructure DI setup
 │
 ├── GeymDomain/                              # Domain Layer
-│   ├── Repositories/                        # Repository interfaces
-│   └── DependencyInjection.cs
+│   ├── Entities/                            # BaseEntity, User, Plan, Member, etc.
+│   ├── Enums/                               # Gender, BloodType, Speciality
+│   ├── ValueObjects/                        # Address
+│   ├── DTOs/                                # Request & Response data structures
+│   ├── Repositories/                        # Repository Interfaces
+│   ├── Services/                            # Business logic (TrainerService, etc.)
+│   ├── Common/                              # Result Pattern
+│   ├── Specifications/                      # Base specifications
+│   └── DependencyInjection.cs               # Domain DI setup
 │
 ├── Directory.Build.props                    # Shared MSBuild properties
 ├── Directory.Packages.props                 # Central Package Management
@@ -267,20 +259,23 @@ GeymManagement/
 
 #### Dependency Flow
 - Presentation depends on Domain and Infrastructure
-- Infrastructure contains data access implementations
-- Domain defines contracts and business entities
+- Infrastructure contains data access implementations and Autofac bindings
+- Domain defines contracts, business entities, and core service logic
 
 ---
 
-### 2. Autofac Dependency Injection
+### 2. Hybrid Dependency Injection (Microsoft DI & Autofac)
 
 #### Configuration in Program.cs
 
 ```csharp
-// Replace default DI container with Autofac
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+// Use Microsoft DI for structured layer setups
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddDomain(builder.Configuration);
+builder.Services.AddPresentation();
 
-// Register Autofac modules
+// Replace default DI container with Autofac for advanced binding
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterModule(new InfrastructureModule());
@@ -295,8 +290,8 @@ public class InfrastructureModule : Module
     protected override void Load(ContainerBuilder builder)
     {
         // Register repositories with scoped lifetime
-        builder.RegisterType<PlanRepository>()
-               .As<IPlanRepository>()
+        builder.RegisterType<MemberRepository>()
+               .As<IMemberRepository>()
                .InstancePerLifetimeScope();
 
         // Register background services
@@ -383,7 +378,7 @@ public override Task<int> SaveChangesAsync(CancellationToken cancellationToken =
 #### Tier 4: EF Core Interceptor for Audit Timestamps
 
 ```csharp
-public class AuditSaveChangesInterceptor : SaveChangesInterceptor
+public class AuditColumnsInterceptor : SaveChangesInterceptor
 {
     private static void UpdateAuditProperties(DbContext? context)
     {
@@ -432,7 +427,7 @@ public class AuditSaveChangesInterceptor : SaveChangesInterceptor
 services.AddDbContext<GymDbContext>((sp, options) =>
 {
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-    options.AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>());
+    options.AddInterceptors(sp.GetRequiredService<AuditColumnsInterceptor>());
 });
 ```
 
@@ -647,50 +642,62 @@ _logger.LogInformation("Removed {Count} soft-deleted Plans.", deletedPlans.Count
 
 ### Core Entities
 
-#### **Plan**
-- Membership plans with pricing and duration
-- Soft delete enabled
-- Check constraint: `DurationInDays BETWEEN 1 AND 365`
+```mermaid
+erDiagram
+    USER ||--o| MEMBER : "TPH Inheritance"
+    USER ||--o| TRAINER : "TPH Inheritance"
+    
+    MEMBER ||--|| HEALTHRECORD : "1:1 (has)"
+    MEMBER ||--o{ MEMBERSHIP : "1:N (has)"
+    MEMBER ||--o{ BOKING : "1:N (makes)"
+    
+    PLAN ||--o{ MEMBERSHIP : "1:N (includes)"
+    
+    TRAINER ||--o{ SESSION : "1:N (leads)"
+    CATEGORY ||--o{ SESSION : "1:N (categorizes)"
+    
+    SESSION ||--o{ BOKING : "1:N (receives)"
 
-#### **Category**
-- Session and trainer categorization
-- Soft delete enabled
-
-#### **User** (Abstract - TPH Inheritance)
-- Base class for Member and Trainer
-- Discriminator column: `UserType`
-- Owned entity: `Address` (Value Object)
-- Unique constraints: Email, Phone
-- Check constraint: Phone validation (11 digits, Egyptian format)
-
-#### **Member** : User
-- Gym member profile
-- One-to-One: `HealthRecord`
-- One-to-Many: `MemberShips`, `Bokings`
-
-#### **Trainer** : User
-- Trainer profile with specialization
-- One-to-Many: `Sessions`
-
-#### **Session**
-- Training sessions with capacity and pricing
-- Many-to-One: `Trainer`, `Category`
-- One-to-Many: `Bokings`
-
-#### **Boking** (Booking)
-- Session reservations
-- Many-to-One: `Member`, `Session`
-- Tracks attendance status
-
-#### **MemberShip**
-- Active memberships linking members to plans
-- Many-to-One: `Member`, `Plan`
-- Tracks start/end dates and payment status
-
-#### **HealthRecord**
-- Member health information
-- One-to-One: `Member`
-- Stores blood type, weight, height, medical conditions
+    USER {
+        string UserType "Discriminator"
+        Address Address "Owned Entity"
+        string Email "Unique Constraint"
+        string Phone "Unique Constraint (11 digits)"
+    }
+    PLAN {
+        decimal Pricing ""
+        int DurationInDays "Check: 1-365"
+        bool IsDeleted "Soft Delete Enabled"
+    }
+    CATEGORY {
+        string Name ""
+        bool IsDeleted "Soft Delete Enabled"
+    }
+    MEMBER {
+        string ProfileData ""
+    }
+    TRAINER {
+        string Specialization ""
+    }
+    SESSION {
+        int Capacity ""
+        decimal Pricing ""
+    }
+    BOKING {
+        bool AttendanceStatus ""
+    }
+    MEMBERSHIP {
+        date StartDate ""
+        date EndDate ""
+        string PaymentStatus ""
+    }
+    HEALTHRECORD {
+        string BloodType ""
+        float Weight ""
+        float Height ""
+        string MedicalConditions ""
+    }
+```
 
 ---
 
@@ -884,18 +891,6 @@ feat(soft-delete): implement global query filters for all entities
 
 Closes #123
 ```
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-## 👥 Authors
-
-- **Development Team** - Initial work and architecture
 
 ---
 
