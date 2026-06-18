@@ -10,7 +10,9 @@ public class CreateMemberRequest
     public int BuildingNumber { get; set; }
     public string City { get; set; } = default!;
     public string Street { get; set; } = default!;
+    public string? PhotoUrl { get; set; }
     public CreateHealthRecordDto HealthRecord { get; set; } = default!;
+    
 }
 
 public class CreateHealthRecordDto
