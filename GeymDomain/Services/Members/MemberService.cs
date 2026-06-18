@@ -60,6 +60,7 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
             Phone = request.Phone,
             DateOfBirth = request.DateOfBirth,
             Gender = gender,
+            Photo = request.PhotoUrl,
             JoinDate = DateOnly.FromDateTime(DateTime.UtcNow),
             Address = new Address
             {
