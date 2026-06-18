@@ -16,7 +16,7 @@
 
     <div class="details-container">
         <div class="details-card animate-in">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
 
@@ -94,6 +94,19 @@
                             <label asp-for="City" class="form-label">City</label>
                             <input asp-for="City" class="form-input" placeholder="Enter city" />
                             <span asp-validation-for="City" class="form-error-text"></span>
+                        </div>
+
+                        <hr class="divider" />
+
+                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
+                            PROFILE PHOTO
+                        </h3>
+
+                        <div class="form-group">
+                            <label asp-for="Photo" class="form-label">Photo</label>
+                            <input asp-for="Photo" type="file" class="form-input" accept=".jpg,.jpeg,.png,.webp" />
+                            <span asp-validation-for="Photo" class="form-error-text"></span>
+                            <small style="color: var(--text-secondary); margin-top: var(--space-xs); display: block;">Accepted formats: JPG, JPEG, PNG, WEBP. Max size: 5 MB.</small>
                         </div>
                     </div>
 

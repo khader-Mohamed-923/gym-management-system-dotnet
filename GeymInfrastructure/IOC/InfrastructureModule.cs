@@ -1,7 +1,9 @@
-﻿using Autofac;
+using Autofac;
 using GeymInfrastructure.Repositories;
 using GymManagement.Domain.Repositories;
+using GymManagement.Domain.Services.Members;
 using GymManagement.Infrastructure.BackgroundJobs;
+using GymManagement.Infrastructure.Services.Media;
 using Microsoft.Extensions.Hosting;
 
 namespace GymManagement.Infrastructure.IoC;
@@ -26,6 +28,10 @@ public class InfrastructureModule : Module
         builder.RegisterType<DataCleanupJob>()
        .As<IHostedService>()
        .InstancePerDependency();
+
+        builder.RegisterType<CloudinaryService>()
+               .As<IImageService>()
+               .InstancePerLifetimeScope();
 
     }
 }

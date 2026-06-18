@@ -8,7 +8,7 @@ using Mapster;
 
 namespace GymManagement.Presentation.Controllers;
 
-public class MembersController(IMemberService members) : Controller
+public class MembersController(IMemberService members, IImageService imageService) : Controller
 {
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
@@ -38,7 +38,25 @@ public class MembersController(IMemberService members) : Controller
             return View(viewModel);
         }
 
+        string? photoUrl = null;
+
+        if (viewModel.Photo is not null && viewModel.Photo.Length > 0)
+        {
+            await using var stream = viewModel.Photo.OpenReadStream();
+            var uploadResult = await imageService.UploadAsync(
+                stream, viewModel.Photo.FileName, "members");
+
+            if (uploadResult.IsFailure)
+            {
+                ModelState.AddModelError(uploadResult.ErrorKey, uploadResult.Error);
+                return View(viewModel);
+            }
+
+            photoUrl = uploadResult.Value;
+        }
+
         var request = viewModel.Adapt<CreateMemberRequest>();
+        request.PhotoUrl = photoUrl;
 
         var result = await members.CreateAsync(request, cancellationToken);
 
