@@ -43,4 +43,6 @@ public class MemberCreateViewModel
 
     [Required(ErrorMessage = "Health record is required")]
     public HealthRecordCreateViewModel HealthRecord{ get; set; } = default!;
+
+     public IFormFile? Photo { get; set; }
 }
