@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Trainer Dashboard";
+    Layout = "~/Views/Shared/_TrainerLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="mb-5">
+        <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">TRAINER DASHBOARD</h1>
+        <p class="text-muted mt-1 mb-0">Manage your schedule and assigned sessions.</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.2);">
+                        <i class="bi bi-calendar-event fs-3" style="color: #f97316;"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Today's Sessions</p>
+                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: #ffffff;">4</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2);">
+                        <i class="bi bi-people fs-3" style="color: #ef4444;"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Total Trainees</p>
+                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: #ffffff;">128</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.2);">
+                        <i class="bi bi-star fs-3" style="color: #f97316;"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Avg Rating</p>
+                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: #ffffff;">4.9</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+        <div class="card-body p-5">
+            <h5 class="fw-bold mb-4" style="font-family: 'Oswald', sans-serif; color: #ffffff;">UPCOMING SESSIONS</h5>
+            
+            <div class="d-flex flex-column gap-3">
+                <div class="p-4 rounded" style="background: rgba(0,0,0,0.4); border-left: 4px solid #f97316;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold mb-1" style="color: #ffffff;">HIIT Cardio Burn</h5>
+                            <p class="mb-0" style="color: #6b7280;"><i class="bi bi-clock me-2"></i> 10:00 AM - 11:00 AM &bull; Studio A</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-warning bg-opacity-25 text-warning px-3 py-2 rounded-pill mb-2">Starting Soon</span>
+                            <div class="small" style="color: #ffffff;">15/20 Registered</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded" style="background: rgba(0,0,0,0.4); border-left: 4px solid #ef4444;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold mb-1" style="color: #ffffff;">Strength & Conditioning</h5>
+                            <p class="mb-0" style="color: #6b7280;"><i class="bi bi-clock me-2"></i> 02:00 PM - 03:30 PM &bull; Main Floor</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="small" style="color: #ffffff;">12/15 Registered</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

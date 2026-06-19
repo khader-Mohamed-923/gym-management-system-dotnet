@@ -46,14 +46,13 @@ public class MembershipService : IMembershipService
 
     public async Task<Result> CreateAsync(CreateMembershipRequest request, CancellationToken cancellationToken = default)
     {
-        // Rule #1: Member can have only one active membership
+
         var hasActive = await _membershipRepository.HasActiveMembershipAsync(request.MemberId, cancellationToken);
         if (hasActive)
         {
             return Result.Failure("A member can only have one active membership.", nameof(request.MemberId));
         }
 
-        // Rule #2: Only active plans can be assigned
         var spec = new BaseSpecification<Plan>(p => p.Id == request.PlanId);
         var plan = await _planRepository.GetEntityWithSpecAsync(spec, cancellationToken);
         
@@ -67,7 +66,6 @@ public class MembershipService : IMembershipService
             return Result.Failure("Only active plans can be assigned.", nameof(request.PlanId));
         }
 
-        // Rule #3: EndDate = StartDate + Plan.Duration
         var membership = new MemberShip
         {
             MemberId = request.MemberId,
@@ -93,7 +91,6 @@ public class MembershipService : IMembershipService
             return Result.Failure("Membership not found.", nameof(id));
         }
 
-        // Rule #5: Cancellation deletes the record
         await _membershipRepository.SoftDeleteAsync(membership, cancellationToken);
         await _membershipRepository.SaveChangesAsync();
 

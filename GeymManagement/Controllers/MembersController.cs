@@ -5,9 +5,12 @@ using GymManagement.Presentation.ViewModels.Member;
 using GymManagement.Presentation.ViewModels.HealthRecord;
 using Microsoft.AspNetCore.Mvc;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
+using GymManagement.Domain.Enums;
 
 namespace GymManagement.Presentation.Controllers;
 
+[Authorize(Roles = nameof(Role.Admin))]
 public class MembersController(IMemberService members, IImageService imageService) : Controller
 {
     public async Task<IActionResult> Index(CancellationToken cancellationToken)

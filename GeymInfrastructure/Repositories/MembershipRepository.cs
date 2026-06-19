@@ -32,4 +32,10 @@ public class MembershipRepository : Repository<MemberShip>, IMembershipRepositor
             !m.IsDeleted && 
             m.EndDate >= now, cancellationToken);
     }
+
+    public new async Task<IReadOnlyList<MemberShip>> GetAllAsync(CancellationToken cancellationToken = default)
+        => await _dbContext.Set<MemberShip>()
+            .Include(m => m.Plan)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 }

@@ -1,0 +1,82 @@
+@model GymManagement.Domain.DTOs.Members.Requests.UpdateMemberProfileRequest
+@{
+    ViewData["Title"] = "Complete Profile";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="mb-5">
+        <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">COMPLETE PROFILE</h1>
+        <p class="text-muted mt-1 mb-0">Update your address and health information.</p>
+    </div>
+
+    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px; max-width: 800px;">
+        <div class="card-body p-5">
+            <form asp-action="CompleteProfile" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+                <h5 class="fw-bold mb-4 pb-2 border-bottom" style="font-family: 'Oswald', sans-serif; color: #ffffff; border-color: rgba(255,255,255,0.1) !important;">ADDRESS</h5>
+                
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <label asp-for="BuildingNumber" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">Building No.</label>
+                        <input asp-for="BuildingNumber" type="number" class="form-control text-white border-0" style="background: rgba(0,0,0,0.4);" />
+                        <span asp-validation-for="BuildingNumber" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-8">
+                        <label asp-for="Street" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">Street</label>
+                        <input asp-for="Street" class="form-control text-white border-0" style="background: rgba(0,0,0,0.4);" />
+                        <span asp-validation-for="Street" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label asp-for="City" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">City</label>
+                        <input asp-for="City" class="form-control text-white border-0" style="background: rgba(0,0,0,0.4);" />
+                        <span asp-validation-for="City" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-4 pb-2 border-bottom" style="font-family: 'Oswald', sans-serif; color: #ffffff; border-color: rgba(255,255,255,0.1) !important;">HEALTH RECORD</h5>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <label asp-for="Height" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">Height (cm)</label>
+                        <input asp-for="Height" type="number" step="0.1" class="form-control text-white border-0" style="background: rgba(0,0,0,0.4);" />
+                        <span asp-validation-for="Height" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Weight" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">Weight (kg)</label>
+                        <input asp-for="Weight" type="number" step="0.1" class="form-control text-white border-0" style="background: rgba(0,0,0,0.4);" />
+                        <span asp-validation-for="Weight" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="BloodType" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">Blood Type</label>
+                        <select asp-for="BloodType" class="form-select text-white border-0" style="background: rgba(0,0,0,0.4);">
+                            <option value="Unknown" style="background: #111;">Unknown</option>
+                            <option value="A_Positive" style="background: #111;">A+</option>
+                            <option value="A_Negative" style="background: #111;">A-</option>
+                            <option value="B_Positive" style="background: #111;">B+</option>
+                            <option value="B_Negative" style="background: #111;">B-</option>
+                            <option value="AB_Positive" style="background: #111;">AB+</option>
+                            <option value="AB_Negative" style="background: #111;">AB-</option>
+                            <option value="O_Positive" style="background: #111;">O+</option>
+                            <option value="O_Negative" style="background: #111;">O-</option>
+                        </select>
+                        <span asp-validation-for="BloodType" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label asp-for="Notes" class="small text-uppercase fw-bold letter-spacing-1 mb-2" style="color: #9ca3af;">Medical Notes / Conditions</label>
+                        <textarea asp-for="Notes" rows="3" class="form-control text-white border-0" style="background: rgba(0,0,0,0.4);"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 mt-5">
+                    <a asp-action="Profile" class="btn fw-bold px-4 py-2" style="background: rgba(255,255,255,0.05); color: #e5e7eb; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">Cancel</a>
+                    <button type="submit" class="btn fw-bold px-4 py-2" style="background: linear-gradient(135deg, #f97316, #ef4444); border: none; color: white; border-radius: 8px;">
+                        Save Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

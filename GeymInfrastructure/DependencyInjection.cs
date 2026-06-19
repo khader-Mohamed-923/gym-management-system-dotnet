@@ -5,7 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GymManagement.Domain.Repositories;
+using Microsoft.AspNetCore.Identity;
 using GymManagement.Infrastructure.Repositories;
+using GymManagement.Infrastructure.Data.Identity;
+using GymManagement.Domain.Services.Admin;
+using GymManagement.Infrastructure.Services.Admin;
+using Microsoft.AspNetCore.Http;
+
 
 namespace GeymInfrastructure;
 
@@ -30,7 +36,30 @@ public static class DependencyInjection
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<ITrainerRepository, TrainerRepository>();
         services.AddScoped<IMembershipRepository, MembershipRepository>();
+        services.AddScoped<GymManagement.Domain.Services.Auth.IAuthService, GymManagement.Infrastructure.Services.Auth.AuthService>();
+        services.AddScoped<GymManagement.Domain.Services.Auth.IUserIdentityService, GymManagement.Infrastructure.Services.Auth.UserIdentityService>();
+        services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
+        }   )
+            .AddEntityFrameworkStores<GymDbContext>()
+            .AddDefaultTokenProviders();
+
+           services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.HttpOnly  = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.ExpireTimeSpan   = TimeSpan.FromDays(7);
+            options.LoginPath        = "/Auth/Login";
+            options.LogoutPath       = "/Auth/Logout";
+            options.AccessDeniedPath = "/Auth/AccessDenied";
+            options.SlidingExpiration = true;
+        });
         return services;
     }
 }

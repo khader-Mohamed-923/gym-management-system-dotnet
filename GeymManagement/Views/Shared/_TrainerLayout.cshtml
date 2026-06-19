@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/Lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/iron-ui.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+
+    <title>IronCore Trainer | @(ViewData["Title"] ?? "Dashboard")</title>
+
+    <style>
+        body {
+            background-color: #080808;
+            color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-orb-fire {
+            position: fixed;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.09) 0%, transparent 65%);
+            top: -250px;
+            right: -200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-orb-ember {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.07) 0%, transparent 65%);
+            bottom: -150px;
+            left: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar-iron {
+            background: rgba(8, 8, 8, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-iron {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .brand-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-subtitle {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #525252;
+        }
+
+        .nav-link-iron {
+            color: #a3a3a3;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link-iron:hover {
+            color: #f5f5f5;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link-iron.active {
+            color: #f97316;
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.15);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb-fire"></div>
+    <div class="bg-orb-ember"></div>
+
+    <div class="content-wrapper">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-iron">
+                <div class="container">
+                    <a class="navbar-brand-iron" asp-controller="Trainer" asp-action="Dashboard">
+                        <img src="~/images/logo.jpg" alt="IronCore Logo" style="height: 40px; width: auto; border-radius: 8px;" />
+                        <div>
+                            <span class="brand-text">IRONCORE</span>
+                            <span class="brand-subtitle d-block">TRAINER PORTAL</span>
+                        </div>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0" style="gap: 0.25rem;">
+                            <li class="nav-item">
+                                <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Trainer" ? "active" : "")" asp-controller="Trainer" asp-action="Dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron" href="#">
+                                    <i class="bi bi-calendar-week"></i> Schedule
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-iron" href="#">
+                                    <i class="bi bi-person-lines-fill"></i> My Sessions
+                                </a>
+                            </li>
+                            <partial name="_LogoutPartial" />
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

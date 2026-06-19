@@ -1,4 +1,4 @@
-﻿using GymManagement.Domain.Entities;
+using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +11,7 @@ internal class HealthRecordConfiguration : IEntityTypeConfiguration<HealthRecord
     {
 
 
-        builder.Property(hr => hr.Hight)
+        builder.Property(hr => hr.Height)
             .HasPrecision(5, 2)
             .IsRequired();
 
