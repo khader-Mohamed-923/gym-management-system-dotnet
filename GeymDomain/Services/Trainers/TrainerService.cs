@@ -6,9 +6,11 @@ using GymManagement.Domain.Entities;
 using GymManagement.Domain.Repositories;
 using GymManagement.Domain.ValueObjects;
 
+using GymManagement.Domain.Services.Auth;
+
 namespace GymManagement.Domain.Services.Trainers;
 
-public class TrainerService(ITrainerRepository trainerRepository) : ITrainerService
+public class TrainerService(ITrainerRepository trainerRepository, IUserIdentityService userIdentityService) : ITrainerService
 {
     public async Task<Result<IEnumerable<TrainerResponse>>> GetAllAsync(CancellationToken cancellationToken)
     {
@@ -48,6 +50,22 @@ public class TrainerService(ITrainerRepository trainerRepository) : ITrainerServ
             return Result.Failure("Invalid specialty.", nameof(request.Specialty));
         }
 
+        var nameParts = request.Name.Split(' ', 2);
+        var firstName = nameParts[0];
+        var lastName = nameParts.Length > 1 ? nameParts[1] : string.Empty;
+
+        var identityResult = await userIdentityService.CreateUserAsync(
+            request.Email,
+            "Trainer123!",
+            nameof(Role.Trainer),
+            firstName,
+            lastName);
+
+        if (identityResult.IsFailure)
+        {
+            return Result.Failure(identityResult.Error!, identityResult.ErrorKey);
+        }
+
         var trainer = new Trainer
         {
             Name = request.Name,
@@ -57,6 +75,7 @@ public class TrainerService(ITrainerRepository trainerRepository) : ITrainerServ
             Gender = gender,
             Speciality = speciality,
             HireDate = DateTime.UtcNow,
+            ApplicationUserId = identityResult.Value,
             Address = new Address
             {
                 Street = request.Street,
