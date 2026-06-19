@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -9,6 +9,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Autofac" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,7 +21,12 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
-		<PackageReference Include="CloudinaryDotNet"/>
+		<PackageReference Include="CloudinaryDotNet" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
