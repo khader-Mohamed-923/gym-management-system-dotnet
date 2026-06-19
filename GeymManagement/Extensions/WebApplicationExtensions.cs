@@ -1,4 +1,4 @@
-﻿using GymManagement.Infrastructure.Data.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
 using GymManagement.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -20,7 +20,7 @@ public static class WebApplicationExtensions
             await dbContext.Database.MigrateAsync();
 
             Log.Information("Seeding Database Data... 🌱");
-            await DatabaseSeeder.Seed(dbContext);
+            await DatabaseSeeder.Seed(scope.ServiceProvider);
         }
         catch (Exception ex)
         {
@@ -44,6 +44,7 @@ public static class WebApplicationExtensions
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapStaticAssets();
