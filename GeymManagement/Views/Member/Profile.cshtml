@@ -1,4 +1,4 @@
-@model GymManagement.Domain.DTOs.Members.Responses.MemberProfileResponse
+@model MemberProfileResponse
 @{
     ViewData["Title"] = "My Profile";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -19,7 +19,7 @@
 
             <div class="text-end" style="min-width: 250px;">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="small text-uppercase fw-bold" style="color: #9ca3af;">Profile Completion</span>
+                    <span class="small text-uppercase fw-bold" style="color: var(--text-body);">Profile Completion</span>
                     <span class="small fw-bold" style="color: @(progress == 100 ? "#10b981" : "#f97316");">@progress%</span>
                 </div>
                 <div class="progress" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px;">
@@ -27,7 +27,7 @@
                 </div>
                 @if (progress < 100)
                 {
-                    <a asp-action="CompleteProfile" class="btn btn-sm mt-3 fw-bold w-100" style="background: rgba(249, 115, 22, 0.1); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.2); border-radius: 6px;">
+                    <a asp-action="CompleteProfile" class="btn btn-sm mt-3 fw-bold w-100" style="background: rgba(249, 115, 22, 0.1); color: var(--text-accent); border: 1px solid rgba(249, 115, 22, 0.2); border-radius: 6px;">
                         <i class="bi bi-pencil-square me-1"></i> Complete Profile
                     </a>
                 }
@@ -57,8 +57,8 @@
                             </div>
                         }
                     </div>
-                    <h3 class="fw-bold mb-1" style="font-family: 'Oswald', sans-serif; color: #ffffff;">@Model.Name</h3>
-                    <p class="mb-0" style="color: #6b7280;">Member since @Model.JoinDate</p>
+                    <h3 class="fw-bold mb-1" style="font-family: 'Oswald', sans-serif; color: var(--text-primary);">@Model.Name</h3>
+                    <p class="mb-0" style="color: var(--text-body);">Member since @Model.JoinDate</p>
                 </div>
             </div>
         </div>
@@ -70,24 +70,24 @@
                     
                     <div class="row g-3">
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Email</label>
-                            <p class="fs-5 mb-0" style="color: #ffffff;">@Model.Email</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Email</label>
+                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.Email</p>
                         </div>
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Phone</label>
-                            <p class="fs-5 mb-0" style="color: #ffffff;">@(string.IsNullOrEmpty(Model.Phone) ? "N/A" : Model.Phone)</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Phone</label>
+                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@(string.IsNullOrEmpty(Model.Phone) ? "N/A" : Model.Phone)</p>
                         </div>
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Gender</label>
-                            <p class="fs-5 mb-0" style="color: #ffffff;">@Model.Gender</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Gender</label>
+                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.Gender</p>
                         </div>
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Date of Birth</label>
-                            <p class="fs-5 mb-0" style="color: #ffffff;">@Model.DateOfBirth</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Date of Birth</label>
+                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.DateOfBirth</p>
                         </div>
                         <div class="col-12">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Address</label>
-                            <p class="fs-5 mb-0" style="color: #ffffff;">@Model.Address</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Address</label>
+                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.Address</p>
                         </div>
                     </div>
                 </div>
@@ -99,19 +99,19 @@
                     
                     <div class="row g-3">
                         <div class="col-sm-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Height (cm)</label>
-                            <p class="fs-4 mb-0 fw-bold" style="color: #ffffff !important;">@(Model.HealthRecord.Height > 0 ? Model.HealthRecord.Height.ToString() : "Not updated yet")</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Height (cm)</label>
+                            <p class="fs-4 mb-0 fw-bold" style="color: var(--text-primary); !important;">@(Model.HealthRecord.Height > 0 ? Model.HealthRecord.Height.ToString() : "Not updated yet")</p>
                         </div>
                         <div class="col-sm-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Weight (kg)</label>
-                            <p class="fs-4 mb-0 fw-bold" style="color: #ffffff !important;">@(Model.HealthRecord.Weight > 0 ? Model.HealthRecord.Weight.ToString() : "Not updated yet")</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Weight (kg)</label>
+                            <p class="fs-4 mb-0 fw-bold" style="color: var(--text-primary); !important;">@(Model.HealthRecord.Weight > 0 ? Model.HealthRecord.Weight.ToString() : "Not updated yet")</p>
                         </div>
                         <div class="col-sm-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Blood Type</label>
-                            <p class="fs-4 mb-0 fw-bold" style="color: #ffffff;">@(Model.HealthRecord.BloodType == "Unknown" ? "Not updated yet" : Model.HealthRecord.BloodType)</p>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Blood Type</label>
+                            <p class="fs-4 mb-0 fw-bold" style="color: var(--text-primary);">@(Model.HealthRecord.BloodType == "Unknown" ? "Not updated yet" : Model.HealthRecord.BloodType)</p>
                         </div>
                         <div class="col-12 mt-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: #9ca3af;">Medical Notes</label>
+                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Medical Notes</label>
                             <p class="mb-0" style="color: #e5e7eb;">@(string.IsNullOrEmpty(Model.HealthRecord.Note) ? "No medical conditions reported." : Model.HealthRecord.Note)</p>
                         </div>
                     </div>

@@ -1,72 +1,222 @@
-@model IEnumerable<GymManagement.Domain.DTOs.Members.Responses.MemberBookingResponse>
+@model IEnumerable<MemberBookingResponse>
 @{
     ViewData["Title"] = "My Bookings";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
 }
 
-<div class="container py-5">
-    <div class="mb-5">
-        <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">MY BOOKINGS</h1>
-        <p class="text-muted mt-1 mb-0">View your class and session history.</p>
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header">
+        <h1 class="iron-title">MY BOOKINGS</h1>
+        <p class="iron-subtitle">View your class and session history</p>
     </div>
 
-    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-        <div class="card-body p-4 p-md-5">
-            @if (!Model.Any())
+    @if (!Model.Any())
+    {
+        <div class="empty-state animate-in">
+            <div class="empty-icon">📅</div>
+            <h3 class="empty-title">No Bookings Yet</h3>
+            <p class="empty-text">You haven't booked any sessions yet. Check the schedule to get started!</p>
+            <a asp-controller="Booking" asp-action="Schedule" class="btn btn-primary mt-3">
+                <i class="bi bi-calendar-event me-1"></i>View Schedule
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="bookings-grid">
+            @foreach (var booking in Model)
             {
-                <div class="text-center py-5">
-                    <i class="bi bi-calendar-x text-secondary" style="font-size: 4rem;"></i>
-                    <h4 class="text-white mt-3">No bookings found</h4>
-                    <p class="text-muted">You haven't booked any sessions yet.</p>
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-dark table-hover mb-0" style="background: transparent;">
-                        <thead>
-                            <tr>
-                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Session</th>
-                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Trainer</th>
-                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Date & Time</th>
-                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var booking in Model)
-                            {
-                                <tr>
-                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        <h6 class="text-white fw-bold mb-0">@booking.SessionName</h6>
-                                    </td>
-                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        <span class="text-light">@booking.TrainerName</span>
-                                    </td>
-                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-calendar-event me-2 text-warning"></i>
-                                            <div>
-                                                <span class="d-block text-white">@booking.Date</span>
-                                                <small class="text-muted">@booking.Time</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
-                                        @if (booking.Status == "Upcoming")
-                                        {
-                                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">@booking.Status</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary px-3 py-2 rounded-pill">@booking.Status</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                var isUpcoming = booking.Status == "Upcoming";
+                
+                <div class="booking-card animate-in @(!isUpcoming ? "past-session" : "")">
+                    <div class="booking-card-header">
+                        <div class="session-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+                        <div class="booking-info">
+                            <h3 class="booking-title" title="@booking.SessionName">@booking.SessionName</h3>
+                            <div class="booking-meta">
+                                <span class="status-badge @(isUpcoming ? "status-upcoming" : "status-completed")">@booking.Status</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="booking-card-body">
+                        <div class="info-row">
+                            <i class="bi bi-person-badge"></i>
+                            <span class="info-label">Trainer:</span>
+                            <span class="info-value">@booking.TrainerName</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="bi bi-calendar3"></i>
+                            <span class="info-label">Date:</span>
+                            <span class="info-value">@booking.Date</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="bi bi-clock"></i>
+                            <span class="info-label">Time:</span>
+                            <span class="info-value">@booking.Time</span>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
-    </div>
+    }
 </div>
+
+<style>
+    .bookings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--space-lg);
+        margin-top: var(--space-xl);
+    }
+
+    .booking-card {
+        background: var(--glass-fill);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .booking-card.past-session {
+        opacity: 0.7;
+    }
+
+    .booking-card:hover {
+        background: var(--glass-hover);
+        border-color: rgba(255, 255, 255, 0.12);
+        transform: translateY(-4px);
+    }
+
+    .booking-card-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        padding: var(--space-lg);
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--steel-line);
+    }
+
+    .session-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2));
+        color: var(--fire);
+        flex-shrink: 0;
+    }
+
+    .booking-info {
+        flex: 1;
+        min-width: 0; /* Enables text truncation inside flexbox */
+    }
+
+    .booking-title {
+        font-family: var(--font-display);
+        font-size: 1.125rem;
+        font-weight: 400;
+        color: var(--text-primary);
+        margin: 0 0 var(--space-xs) 0;
+        
+        /* Handling long text elegantly */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+    }
+
+    .booking-meta {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .status-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-upcoming {
+        background: rgba(249, 115, 22, 0.12);
+        color: var(--fire);
+        border: 1px solid rgba(249, 115, 22, 0.25);
+    }
+
+    .status-completed {
+        background: rgba(163, 163, 163, 0.12);
+        color: var(--text-secondary);
+        border: 1px solid rgba(163, 163, 163, 0.25);
+    }
+
+    .booking-card-body {
+        padding: var(--space-lg);
+        flex-grow: 1;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        padding: var(--space-sm) 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-row i {
+        width: 20px;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    .info-label {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .info-value {
+        color: var(--text-primary);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-left: auto;
+    }
+
+    @@media (max-width: 768px) {
+        .bookings-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
