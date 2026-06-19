@@ -1,0 +1,72 @@
+@model IEnumerable<GymManagement.Domain.DTOs.Members.Responses.MemberBookingResponse>
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="mb-5">
+        <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">MY BOOKINGS</h1>
+        <p class="text-muted mt-1 mb-0">View your class and session history.</p>
+    </div>
+
+    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+        <div class="card-body p-4 p-md-5">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-calendar-x text-secondary" style="font-size: 4rem;"></i>
+                    <h4 class="text-white mt-3">No bookings found</h4>
+                    <p class="text-muted">You haven't booked any sessions yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0" style="background: transparent;">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Session</th>
+                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Trainer</th>
+                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Date & Time</th>
+                                <th class="border-bottom border-secondary text-muted text-uppercase small fw-bold letter-spacing-1">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model)
+                            {
+                                <tr>
+                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
+                                        <h6 class="text-white fw-bold mb-0">@booking.SessionName</h6>
+                                    </td>
+                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
+                                        <span class="text-light">@booking.TrainerName</span>
+                                    </td>
+                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-calendar-event me-2 text-warning"></i>
+                                            <div>
+                                                <span class="d-block text-white">@booking.Date</span>
+                                                <small class="text-muted">@booking.Time</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle py-3 border-bottom border-secondary" style="border-color: rgba(255,255,255,0.05) !important;">
+                                        @if (booking.Status == "Upcoming")
+                                        {
+                                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">@booking.Status</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary px-3 py-2 rounded-pill">@booking.Status</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

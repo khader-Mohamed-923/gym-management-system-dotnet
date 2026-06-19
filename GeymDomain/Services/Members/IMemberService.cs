@@ -13,4 +13,9 @@ public interface IMemberService
     Task<MemberEditResponse?> GetForEditAsync(int id, CancellationToken cancellationToken);
     Task<Result> UpdateAsync(int id, UpdateMemberRequest request, CancellationToken cancellationToken);
     Task<Result> DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<int?> GetIdByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+    Task<MemberProfileResponse?> GetProfileAsync(string userId, CancellationToken cancellationToken = default);
+    Task<Result> UpdateProfileAsync(string userId, UpdateMemberProfileRequest request, CancellationToken cancellationToken = default);
+    Task<IEnumerable<MemberBookingResponse>> GetBookingsAsync(string userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<MemberMembershipResponse>> GetMembershipsAsync(string userId, CancellationToken cancellationToken = default);
 }

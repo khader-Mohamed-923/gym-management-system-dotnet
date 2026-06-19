@@ -192,13 +192,7 @@
                                     <i class="bi bi-calendar-week"></i> Schedule
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="nav-link-iron" style="background: none; border: none; cursor: pointer;">
-                                        <i class="bi bi-box-arrow-right"></i> Logout
-                                    </button>
-                                </form>
-                            </li>
+                            <partial name="_LogoutPartial" />
                         </ul>
                     </div>
                 </div>

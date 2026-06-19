@@ -2,13 +2,23 @@ using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Trainers;
 using GymManagement.Domain.DTOs.Trainers.Requests;
 using GymManagement.Presentation.ViewModels.Trainer;
+using GymManagement.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mapster;
 
 namespace GymManagement.Presentation.Controllers;
 
+[Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.Trainer)}")]
 public class TrainersController(ITrainerService trainers) : Controller
 {
+    [Authorize(Roles = nameof(Role.Trainer))]
+    public IActionResult Dashboard()
+    {
+        return View();
+    }
+
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var result = await trainers.GetAllAsync(cancellationToken);
@@ -24,6 +34,7 @@ public class TrainersController(ITrainerService trainers) : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
         var response = await trainers.GetDetailsAsync(id, cancellationToken);
@@ -39,6 +50,7 @@ public class TrainersController(ITrainerService trainers) : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = nameof(Role.Admin))]
     public IActionResult Create()
     {
         return View();
@@ -46,6 +58,7 @@ public class TrainersController(ITrainerService trainers) : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Create(TrainerCreateViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
@@ -69,6 +82,7 @@ public class TrainersController(ITrainerService trainers) : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var response = await trainers.GetForEditAsync(id, cancellationToken);
@@ -84,6 +98,7 @@ public class TrainersController(ITrainerService trainers) : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Edit([FromRoute] int id, TrainerEditViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
@@ -107,6 +122,7 @@ public class TrainersController(ITrainerService trainers) : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var response = await trainers.GetForEditAsync(id, cancellationToken);
@@ -125,6 +141,7 @@ public class TrainersController(ITrainerService trainers) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [ActionName("Delete")]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
         var result = await trainers.DeleteAsync(id, cancellationToken);

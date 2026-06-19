@@ -72,10 +72,10 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
 
         var healthRecord = new HealthRecord
         {
-            Hight = request.HealthRecord.Height,
+            Height = request.HealthRecord.Height,
             Weight = request.HealthRecord.Weight,
-            BloodType = bloodType,
-            Notes = request.HealthRecord.Note
+            BloodType = bloodType.ToString(),
+            MedicalConditions = request.HealthRecord.Note ?? string.Empty
         };
 
         member.HealthRecord = healthRecord;
@@ -120,10 +120,10 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
 
         return new HealthRecordResponse
         {
-            Hight = member.HealthRecord.Hight,
+            Height = member.HealthRecord.Height,
             Weight = member.HealthRecord.Weight,
-            BloodType = member.HealthRecord.BloodType.ToString(),
-            Note = member.HealthRecord.Notes
+            BloodType = member.HealthRecord.BloodType,
+            Note = member.HealthRecord.MedicalConditions
         };
     }
 
@@ -205,5 +205,110 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
         await memberRepository.SaveChangesAsync();
 
         return Result.Success();
+    }
+
+    public async Task<int?> GetIdByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var spec = new MemberByApplicationUserIdSpecification(userId);
+        var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
+        return member?.Id;
+    }
+
+    public async Task<MemberProfileResponse?> GetProfileAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var spec = new MemberByApplicationUserIdSpecification(userId);
+        var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
+
+        if (member == null) return null;
+
+        return new MemberProfileResponse
+        {
+            Id = member.Id,
+            Name = member.Name,
+            Email = member.Email,
+            Phone = member.Phone,
+            PhotoUrl = member.Photo ?? string.Empty,
+            Gender = member.Gender.ToString(),
+            DateOfBirth = member.DateOfBirth != DateOnly.MinValue ? member.DateOfBirth.ToString("MMM dd, yyyy") : "N/A",
+            JoinDate = member.JoinDate.ToString("MMM dd, yyyy"),
+            Address = member.Address != null
+                ? member.Address.BuildingNumber > 0
+                    ? $"{member.Address.BuildingNumber} {member.Address.Street}, {member.Address.City}"
+                    : !string.IsNullOrWhiteSpace(member.Address.Street)
+                        ? $"{member.Address.Street}, {member.Address.City}"
+                        : "Not provided"
+                : "Not provided",
+            HealthRecord = member.HealthRecord != null ? new HealthRecordResponse
+            {
+                Height = member.HealthRecord.Height,
+                Weight = member.HealthRecord.Weight,
+                BloodType = member.HealthRecord.BloodType,
+                Note = member.HealthRecord.MedicalConditions
+            } : new HealthRecordResponse()
+        };
+    }
+
+    public async Task<Result> UpdateProfileAsync(string userId, UpdateMemberProfileRequest request, CancellationToken cancellationToken = default)
+    {
+        var spec = new MemberByApplicationUserIdSpecification(userId);
+        var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
+
+        if (member == null)
+            return Result.Failure("Member not found", "User");
+
+        if (member.Address == null)
+            member.Address = new Address();
+            
+        member.Address.Street = request.Street ?? string.Empty;
+        member.Address.City = request.City ?? string.Empty;
+        member.Address.BuildingNumber = request.BuildingNumber;
+
+        if (member.HealthRecord == null)
+            member.HealthRecord = new HealthRecord();
+
+        member.HealthRecord.Height = request.Height;
+        member.HealthRecord.Weight = request.Weight;
+        member.HealthRecord.BloodType = request.BloodType ?? "Unknown";
+        member.HealthRecord.MedicalConditions = request.Notes ?? string.Empty;
+
+        await memberRepository.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
+    public async Task<IEnumerable<MemberBookingResponse>> GetBookingsAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var spec = new MemberByApplicationUserIdSpecification(userId);
+        var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
+
+        if (member == null || member.Bookings == null) return Enumerable.Empty<MemberBookingResponse>();
+
+        return member.Bookings.Select(b => new MemberBookingResponse
+        {
+            BookingId = b.Id,
+            SessionName = b.Session?.Description ?? "Unknown",
+            TrainerName = b.Session?.Trainer?.Name ?? "Unassigned",
+            Date = b.Session?.StartDate.ToShortDateString() ?? "N/A",
+            Time = b.Session != null ? $"{b.Session.StartDate:HH:mm} - {b.Session.EndDate:HH:mm}" : "N/A",
+            Status = b.Session?.StartDate >= DateTime.Now ? "Upcoming" : "Completed"
+        }).OrderByDescending(b => b.Status == "Upcoming").ThenBy(b => b.Date);
+    }
+
+    public async Task<IEnumerable<MemberMembershipResponse>> GetMembershipsAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var spec = new MemberByApplicationUserIdSpecification(userId);
+        var member = await memberRepository.GetEntityWithSpecAsync(spec, cancellationToken);
+
+        if (member == null || member.MemberShips == null) return Enumerable.Empty<MemberMembershipResponse>();
+
+        return member.MemberShips.Select(m => new MemberMembershipResponse
+        {
+            MembershipId = m.Id,
+            PlanName = m.Plan?.Name ?? "Unknown Plan",
+            Price = m.Plan?.Price ?? 0,
+            StartDate = m.StartDate.ToShortDateString(),
+            EndDate = m.EndDate.ToShortDateString(),
+            IsActive = m.EndDate >= DateTime.Today
+        }).OrderByDescending(m => m.IsActive).ThenByDescending(m => m.EndDate);
     }
 }

@@ -24,6 +24,7 @@ try
     {
         containerBuilder.RegisterModule(new InfrastructureModule());
     });
+    
 
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddDomain(builder.Configuration);

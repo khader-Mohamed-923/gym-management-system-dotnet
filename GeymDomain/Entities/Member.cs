@@ -1,4 +1,6 @@
-﻿namespace GymManagement.Domain.Entities;
+﻿using GymManagement.Domain.Enums;
+
+namespace GymManagement.Domain.Entities;
 
 public class Member : User
 {
