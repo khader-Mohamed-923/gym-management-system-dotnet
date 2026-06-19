@@ -9,7 +9,7 @@ namespace GymManagement.Infrastructure.Services.Media;
 
 internal sealed class CloudinaryService : IImageService
 {
-    private const long MaxFileSizeBytes = 5 * 1024 * 1024; // 5 MB
+    private const long MaxFileSizeBytes = 5 * 1024 * 1024; 
 
     private static readonly HashSet<string> AllowedExtensions =
         new(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".webp" };
