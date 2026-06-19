@@ -1,4 +1,4 @@
-﻿
+
 
 :root {
     --primary-color: #070093;
@@ -588,3 +588,13 @@ footer .footer-content .location p {
         border-color: var(--primary-color);
         -webkit-text-fill-color: #fff; 
     }
+
+.text-muted { color: var(--text-muted) !important; }
+.text-primary { color: var(--text-primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+.text-body { color: var(--text-body) !important; }
+.text-accent { color: var(--text-accent) !important; }
+.text-success { color: var(--text-success) !important; }
+.text-warning { color: var(--text-warning) !important; }
+.text-error { color: var(--text-error) !important; }
+.text-info { color: var(--text-info) !important; }
