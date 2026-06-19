@@ -1,0 +1,645 @@
+@using GymManagement.Domain.Enums
+@using System.Security.Claims
+@model ScheduleViewModel
+
+@{
+    ViewData["Title"] = "Sessions Schedule";
+    var userRole = User?.FindFirst(ClaimTypes.Role)?.Value;
+    var isAdmin = userRole == nameof(Role.Admin);
+    var isTrainer = userRole == nameof(Role.Trainer);
+    var isMember = userRole == nameof(Role.Member);
+
+    if (isMember)
+    {
+        Layout = "~/Views/Shared/_MemberLayout.cshtml";
+    }
+    else if (isTrainer)
+    {
+        Layout = "~/Views/Shared/_TrainerLayout.cshtml";
+    }
+    else if (isAdmin)
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+}
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header">
+        <h1 class="iron-title">SESSIONS SCHEDULE</h1>
+        <p class="iron-subtitle">View and manage upcoming and ongoing sessions</p>
+    </div>
+
+    @Html.AntiForgeryToken()
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    <!-- Upcoming Sessions Section -->
+    <div class="schedule-section mb-5">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">
+                    <i class="bi bi-calendar-event me-2"></i>Upcoming Sessions
+                </h2>
+                <p class="section-subtitle">Sessions available for booking</p>
+            </div>
+        </div>
+
+        @if (Model.UpcomingSessions.Any())
+        {
+            <div class="sessions-upcoming-grid">
+                @foreach (var session in Model.UpcomingSessions)
+                {
+                    var isFull = session.BookedCount >= session.Capacity;
+                    <div class="schedule-card upcoming animate-in" data-session-id="@session.SessionId">
+                        <div class="schedule-card-header">
+                            <div class="session-icon">
+                                <i class="bi bi-activity"></i>
+                            </div>
+                            <div class="session-title-section">
+                                <h3 class="session-name">@session.SessionName</h3>
+                                <span class="category-badge">@session.CategoryName</span>
+                            </div>
+                            <span class="status-badge status-upcoming">Upcoming</span>
+                        </div>
+
+                        <div class="schedule-card-body">
+                            <div class="info-row">
+                                <i class="bi bi-person-badge"></i>
+                                <span class="info-label">Trainer:</span>
+                                <span class="info-value">@session.TrainerName</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-calendar3"></i>
+                                <span class="info-label">Date:</span>
+                                <span class="info-value">@session.StartDate.ToString("MMM dd, yyyy")</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-clock"></i>
+                                <span class="info-label">Time:</span>
+                                <span class="info-value">@session.StartDate.ToString("HH:mm") - @session.EndDate.ToString("HH:mm")</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-stopwatch"></i>
+                                <span class="info-label">Duration:</span>
+                                <span class="info-value">@session.DurationMinutes min</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-people"></i>
+                                <span class="info-label">Capacity:</span>
+                                <span class="info-value @(isFull ? "text-warning" : "")">@session.BookedCount/@session.Capacity slots</span>
+                            </div>
+                        </div>
+
+                        <div class="schedule-card-footer">
+                            @if (session.IsBookedByCurrentUser)
+                            {
+                                <span class="badge bg-success bg-opacity-25 text-success px-3 py-2">
+                                    <i class="bi bi-check-circle me-1"></i>Booked
+                                </span>
+                                <button class="btn btn-outline-danger btn-sm ms-2" onclick="cancelBooking(@session.CurrentUserBookingId, @session.SessionId, this)">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </button>
+                            }
+                            else if (isFull)
+                            {
+                                <span class="badge bg-warning bg-opacity-25 text-warning px-3 py-2">
+                                    <i class="bi bi-exclamation-circle me-1"></i>Full
+                                </span>
+                            }
+                            else if (!isAdmin && !isTrainer)
+                            {
+                                <button class="btn-book-now" onclick="bookSession(@session.SessionId, this)">
+                                    <i class="bi bi-plus-circle me-1"></i>Book Now
+                                </button>
+                            }
+                            else
+                            {
+                                <a asp-controller="Booking" asp-action="SessionMembers" asp-route-sessionId="@session.SessionId" 
+                                   class="btn btn-outline-primary">
+                                    <i class="bi bi-people me-1"></i>View Members
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state animate-in">
+                <div class="empty-icon">📅</div>
+                <h3 class="empty-title">No Upcoming Sessions</h3>
+                <p class="empty-text">There are no upcoming sessions scheduled.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Ongoing Sessions Section -->
+    <div class="schedule-section">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title" style="color: var(--lime);">
+                    <i class="bi bi-play-circle me-2"></i>Ongoing Sessions
+                </h2>
+                <p class="section-subtitle">Sessions currently in progress</p>
+            </div>
+        </div>
+
+        @if (Model.OngoingSessions.Any())
+        {
+            <div class="sessions-ongoing-grid">
+                @foreach (var session in Model.OngoingSessions)
+                {
+                    <div class="schedule-card ongoing animate-in" data-session-id="@session.SessionId">
+                        <div class="schedule-card-header ongoing-header">
+                            <div class="session-icon">
+                                <i class="bi bi-activity"></i>
+                            </div>
+                            <div class="session-title-section">
+                                <h3 class="session-name">@session.SessionName</h3>
+                                <span class="category-badge ongoing-category">@session.CategoryName</span>
+                            </div>
+                            <span class="status-badge status-ongoing">Ongoing</span>
+                        </div>
+
+                        <div class="schedule-card-body">
+                            <div class="info-row">
+                                <i class="bi bi-person-badge"></i>
+                                <span class="info-label">Trainer:</span>
+                                <span class="info-value">@session.TrainerName</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-calendar3"></i>
+                                <span class="info-label">Date:</span>
+                                <span class="info-value">@session.StartDate.ToString("MMM dd, yyyy")</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-clock"></i>
+                                <span class="info-label">Time:</span>
+                                <span class="info-value">@session.StartDate.ToString("HH:mm") - @session.EndDate.ToString("HH:mm")</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-stopwatch"></i>
+                                <span class="info-label">Duration:</span>
+                                <span class="info-value">@session.DurationMinutes min</span>
+                            </div>
+                            <div class="info-row">
+                                <i class="bi bi-people"></i>
+                                <span class="info-label">Capacity:</span>
+                                <span class="info-value">@session.BookedCount/@session.Capacity slots</span>
+                            </div>
+                        </div>
+
+                        <div class="schedule-card-footer">
+                            @if (isAdmin || isTrainer)
+                            {
+                                <a asp-controller="Booking" asp-action="SessionMembers" asp-route-sessionId="@session.SessionId" 
+                                   class="btn btn-success">
+                                    <i class="bi bi-people me-1"></i>View Members
+                                </a>
+                            }
+                            else if (isMember)
+                            {
+                                @if (session.IsBookedByCurrentUser)
+                                {
+                                    <span class="badge bg-success bg-opacity-25 text-success px-3 py-2">
+                                        <i class="bi bi-check-circle me-1"></i>You're Booked
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info bg-opacity-25 text-info px-3 py-2">
+                                        <i class="bi bi-info-circle me-1"></i>In Progress
+                                    </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state animate-in">
+                <div class="empty-icon">🏃</div>
+                <h3 class="empty-title">No Ongoing Sessions</h3>
+                <p class="empty-text">There are no sessions currently in progress.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .schedule-section {
+        margin-bottom: var(--space-2xl);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-xl);
+        padding-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--steel-line);
+    }
+
+    .section-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+        color: var(--fire);
+        margin: 0;
+    }
+
+    .section-subtitle {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin: var(--space-xs) 0 0 0;
+    }
+
+    .sessions-upcoming-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: var(--space-lg);
+    }
+
+    .sessions-ongoing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: var(--space-lg);
+    }
+
+    .schedule-card {
+        background: var(--glass-fill);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: all 0.25s ease;
+    }
+
+    .schedule-card:hover {
+        background: var(--glass-hover);
+        border-color: rgba(255, 255, 255, 0.12);
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    .schedule-card-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        padding: var(--space-lg);
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--steel-line);
+    }
+
+    .ongoing-header {
+        background: rgba(132, 204, 22, 0.05);
+        border-bottom: 1px solid rgba(132, 204, 22, 0.2);
+    }
+
+    .session-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2));
+        color: var(--fire);
+    }
+
+    .ongoing .session-icon {
+        background: linear-gradient(135deg, rgba(132, 204, 22, 0.2), rgba(34, 197, 94, 0.2));
+        color: var(--lime);
+    }
+
+    .session-title-section {
+        flex: 1;
+    }
+
+    .session-name {
+        font-family: var(--font-display);
+        font-size: 1.125rem;
+        font-weight: 400;
+        color: var(--text-primary);
+        margin: 0 0 var(--space-xs) 0;
+    }
+
+    .category-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background: rgba(56, 189, 248, 0.12);
+        color: var(--ice);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .ongoing-category {
+        background: rgba(132, 204, 22, 0.12);
+        color: var(--lime);
+        border: 1px solid rgba(132, 204, 22, 0.25);
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-full);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .status-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-upcoming {
+        background: rgba(56, 189, 248, 0.12);
+        color: var(--ice);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .status-ongoing {
+        background: rgba(132, 204, 22, 0.12);
+        color: var(--lime);
+        border: 1px solid rgba(132, 204, 22, 0.25);
+    }
+
+    .schedule-card-body {
+        padding: var(--space-lg);
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        padding: var(--space-sm) 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-row i {
+        width: 20px;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+    }
+
+    .info-label {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .info-value {
+        color: var(--text-primary);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-left: auto;
+    }
+
+    .schedule-card-footer {
+        padding: var(--space-lg);
+        background: rgba(255, 255, 255, 0.02);
+        border-top: 1px solid var(--steel-line);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .text-warning {
+        color: var(--text-warning); !important;
+    }
+
+    /* Book Now Button - Orange Gradient */
+    .btn-book-now {
+        background: linear-gradient(135deg, #f97316, #ef4444);
+        border: none;
+        color: var(--text-primary);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-book-now:hover {
+        background: linear-gradient(135deg, #ea580c, #dc2626);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+        color: var(--text-primary);
+        text-decoration: none;
+    }
+
+    .btn-book-now:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+    }
+
+    @@media (max-width: 768px) {
+        .sessions-upcoming-grid,
+        .sessions-ongoing-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+@section Scripts {
+    <partial name="_AlertDismissScript"/>
+    <script>
+        function dismissAlert(btn) {
+            btn.parentElement.remove();
+        }
+
+        function bookSession(sessionId, btnElement) {
+            // Visual loading state
+            const originalHtml = btnElement.innerHTML;
+            btnElement.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Booking...';
+            btnElement.disabled = true;
+
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+            fetch('@Url.Action("Book", "Booking")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': token
+                },
+                body: 'sessionId=' + sessionId
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    
+                    // Update UI to show "Booked" status
+                    const footer = btnElement.parentElement;
+                    footer.innerHTML = `
+                        <span class="badge bg-success bg-opacity-25 text-success px-3 py-2">
+                            <i class="bi bi-check-circle me-1"></i>Booked
+                        </span>
+                        <button class="btn btn-outline-danger btn-sm ms-2" onclick="cancelBooking(${data.bookingId}, ${sessionId}, this)">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </button>
+                    `;
+
+                    // Increment capacity on UI
+                    const card = footer.closest('.schedule-card');
+                    if (card) {
+                        const capacityElem = card.querySelector('.info-row i.bi-people').nextElementSibling.nextElementSibling;
+                        if (capacityElem) {
+                            let text = capacityElem.textContent;
+                            let parts = text.split('/');
+                            if (parts.length === 2) {
+                                let booked = parseInt(parts[0]);
+                                capacityElem.textContent = (booked + 1) + '/' + parts[1];
+                            }
+                        }
+                    }
+                } else {
+                    btnElement.innerHTML = originalHtml;
+                    btnElement.disabled = false;
+                    showToast(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                btnElement.innerHTML = originalHtml;
+                btnElement.disabled = false;
+                showToast('An error occurred. Please try again.', 'error');
+            });
+        }
+
+        function cancelBooking(bookingId, sessionId, btnElement) {
+            if (!confirm('Are you sure you want to cancel this booking?')) {
+                return;
+            }
+            
+            // Visual loading state
+            const originalHtml = btnElement.innerHTML;
+            btnElement.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Canceling...';
+            btnElement.disabled = true;
+
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+            fetch('@Url.Action("Cancel", "Booking")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': token
+                },
+                body: 'bookingId=' + bookingId
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    
+                    // Update UI back to "Book Now"
+                    const footer = btnElement.parentElement;
+                    footer.innerHTML = `
+                        <button class="btn-book-now" onclick="bookSession(${sessionId}, this)">
+                            <i class="bi bi-plus-circle me-1"></i>Book Now
+                        </button>
+                    `;
+
+                    // Decrement capacity on UI
+                    const card = footer.closest('.schedule-card');
+                    if (card) {
+                        const capacityElem = card.querySelector('.info-row i.bi-people').nextElementSibling.nextElementSibling;
+                        if (capacityElem) {
+                            let text = capacityElem.textContent;
+                            let parts = text.split('/');
+                            if (parts.length === 2) {
+                                let booked = parseInt(parts[0]);
+                                capacityElem.textContent = Math.max(0, booked - 1) + '/' + parts[1];
+                            }
+                        }
+                    }
+                } else {
+                    btnElement.innerHTML = originalHtml;
+                    btnElement.disabled = false;
+                    showToast(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                btnElement.innerHTML = originalHtml;
+                btnElement.disabled = false;
+                showToast('An error occurred. Please try again.', 'error');
+            });
+        }
+
+        function showToast(message, type) {
+            const isSuccess = type === 'success';
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${isSuccess ? 'success' : 'danger'} alert-dismissible animate-in`;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.style.minWidth = '300px';
+            alertDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
+            
+            alertDiv.innerHTML = `
+                <span class="alert-icon">${isSuccess ? '✓' : '⚠️'}</span>
+                <span>${message}</span>
+                <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (document.body.contains(alertDiv)) {
+                    alertDiv.style.opacity = '0';
+                    alertDiv.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => alertDiv.remove(), 500);
+                }
+            }, 5000);
+        }
+    </script>
+}

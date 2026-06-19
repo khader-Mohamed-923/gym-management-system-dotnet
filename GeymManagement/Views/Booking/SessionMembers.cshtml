@@ -1,0 +1,391 @@
+@model SessionMembersViewModel
+
+@{
+    ViewData["Title"] = "Session Members";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/iron-ui.css" />
+
+<div class="iron-container">
+    <div class="iron-page-header">
+        <a asp-controller="Booking" asp-action="Schedule" class="btn btn-secondary mb-3">
+            <i class="bi bi-arrow-left me-1"></i>Back to Schedule
+        </a>
+        <h1 class="iron-title">SESSION MEMBERS</h1>
+        <p class="iron-subtitle">View and manage attendance for this session</p>
+    </div>
+
+    <!-- Session Info Card -->
+    <div class="session-info-card animate-in mb-4">
+        <div class="session-info-header">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h2 class="session-name">@Model.SessionName</h2>
+                    <span class="status-badge status-@Model.Status.ToLower()">@Model.Status</span>
+                </div>
+                <span class="trainer-badge">
+                    <i class="bi bi-person-badge me-1"></i>@Model.TrainerName
+                </span>
+            </div>
+        </div>
+        <div class="session-info-body">
+            <div class="info-grid">
+                <div class="info-item">
+                    <i class="bi bi-calendar3"></i>
+                    <span class="info-label">Date</span>
+                    <span class="info-value">@Model.StartDate.ToString("MMM dd, yyyy")</span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-clock"></i>
+                    <span class="info-label">Time</span>
+                    <span class="info-value">@Model.StartDate.ToString("HH:mm") - @Model.EndDate.ToString("HH:mm")</span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-stopwatch"></i>
+                    <span class="info-label">Duration</span>
+                    <span class="info-value">@((int)(Model.EndDate - Model.StartDate).TotalMinutes) min</span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-people"></i>
+                    <span class="info-label">Members</span>
+                    <span class="info-value">@Model.Members.Count()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">✓</span>
+            <span>@TempData["SuccessMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
+            <span class="alert-icon">⚠️</span>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
+            <div class="alert-progress"></div>
+        </div>
+    }
+
+    @if (Model.Members.Any())
+    {
+        <div class="members-table-container animate-in">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Member</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Booking Date</th>
+                            <th>Attendance</th>
+                            @if (Model.Status == "Ongoing" || Model.Status == "Completed")
+                            {
+                                <th>Actions</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var member in Model.Members)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="member-cell">
+                                        <div class="member-avatar">
+                                            <i class="bi bi-person-fill"></i>
+                                        </div>
+                                        <div>
+                                            <div class="member-name">@member.MemberName</div>
+                                            <div class="member-id">ID: @member.MemberId</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@member.MemberEmail</td>
+                                <td>@member.MemberPhone</td>
+                                <td>@member.BookingDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>
+                                    @if (member.IsAttended)
+                                    {
+                                        <span class="attendance-badge attended">
+                                            <i class="bi bi-check-circle-fill"></i> Attended
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="attendance-badge pending">
+                                            <i class="bi bi-clock"></i> Pending
+                                        </span>
+                                    }
+                                </td>
+                                @if (Model.Status == "Ongoing" || Model.Status == "Completed")
+                                {
+                                    <td>
+                                        <div class="action-buttons">
+                                            @if (!member.IsAttended)
+                                            {
+                                                <button class="btn btn-success btn-sm" onclick="markAttendance(@member.BookingId, true)">
+                                                    <i class="bi bi-check"></i> Mark Present
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-outline-warning btn-sm" onclick="markAttendance(@member.BookingId, false)">
+                                                    <i class="bi bi-x"></i> Mark Absent
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state animate-in">
+            <div class="empty-icon">👥</div>
+            <h3 class="empty-title">No Members Booked</h3>
+            <p class="empty-text">No members have booked this session yet.</p>
+        </div>
+    }
+</div>
+
+<style>
+    .session-info-card {
+        background: var(--glass-fill);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .session-info-header {
+        padding: var(--space-lg);
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--steel-line);
+    }
+
+    .session-name {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: var(--text-primary);
+        margin: 0 0 var(--space-sm) 0;
+    }
+
+    .trainer-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-md);
+        background: rgba(249, 115, 22, 0.12);
+        color: var(--fire);
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .session-info-body {
+        padding: var(--space-lg);
+    }
+
+    .session-info-body .info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-lg);
+    }
+
+    .session-info-body .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+
+    .session-info-body .info-item i {
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+
+    .session-info-body .info-item .info-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .session-info-body .info-item .info-value {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-full);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .status-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-upcoming {
+        background: rgba(56, 189, 248, 0.12);
+        color: var(--ice);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .status-ongoing {
+        background: rgba(132, 204, 22, 0.12);
+        color: var(--lime);
+        border: 1px solid rgba(132, 204, 22, 0.25);
+    }
+
+    .status-completed {
+        background: rgba(163, 163, 163, 0.12);
+        color: var(--text-secondary);
+        border: 1px solid rgba(163, 163, 163, 0.25);
+    }
+
+    .members-table-container {
+        background: var(--glass-fill);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: var(--space-lg);
+        border-bottom: 1px solid var(--steel-line);
+    }
+
+    .table tbody td {
+        padding: var(--space-lg);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        color: var(--text-primary);
+    }
+
+    .member-cell {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+    }
+
+    .member-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--fire);
+    }
+
+    .member-name {
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    .member-id {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .attendance-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-sm);
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--radius-md);
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .attendance-badge.attended {
+        background: rgba(34, 197, 94, 0.12);
+        color: #22c55e;
+    }
+
+    .attendance-badge.pending {
+        background: rgba(251, 191, 36, 0.12);
+        color: var(--text-warning);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: var(--space-sm);
+    }
+
+    @@media (max-width: 992px) {
+        .session-info-body .info-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .session-info-body .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+@section Scripts {
+    <partial name="_AlertDismissScript"/>
+    <script>
+        function markAttendance(bookingId, attended) {
+            fetch('@Url.Action("MarkAttendance", "Booking")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                body: 'bookingId=' + bookingId + '&attended=' + attended
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+}
