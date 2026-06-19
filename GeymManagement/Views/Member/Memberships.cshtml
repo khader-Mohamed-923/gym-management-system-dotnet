@@ -1,4 +1,4 @@
-@model IEnumerable<GymManagement.Domain.DTOs.Members.Responses.MemberMembershipResponse>
+@model IEnumerable<MemberMembershipResponse>
 @{
     ViewData["Title"] = "My Memberships";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -17,7 +17,7 @@
                 <i class="bi bi-card-heading text-secondary" style="font-size: 4rem;"></i>
                 <h4 class="text-white mt-3">No memberships found</h4>
                 <p class="text-muted">You do not have any active or past memberships.</p>
-                <a href="#" class="btn btn-warning mt-3 px-4 py-2 fw-bold" style="background-color: #f97316; border-color: #f97316; color: white;">Explore Plans</a>
+                <a href="#" class="btn btn-warning mt-3 px-4 py-2 fw-bold" style="background-color: var(--text-accent); border-color: var(--text-accent); color: white;">Explore Plans</a>
             </div>
         </div>
     }
@@ -50,7 +50,7 @@
                             <div class="mb-4">
                                 <h3 class="fw-bold text-white mb-1" style="font-family: 'Oswald', sans-serif;">@membership.PlanName</h3>
                                 <div class="d-flex align-items-baseline">
-                                    <h2 class="fw-bold mb-0 me-2" style="color: #f97316;">$@membership.Price</h2>
+                                    <h2 class="fw-bold mb-0 me-2" style="color: var(--text-accent);">$@membership.Price</h2>
                                 </div>
                             </div>
 

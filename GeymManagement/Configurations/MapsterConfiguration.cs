@@ -14,6 +14,8 @@ using GymManagement.Presentation.ViewModels.Session;
 using GymManagement.Presentation.ViewModels.Membership;
 using GymManagement.Domain.DTOs.Memberships.Requests;
 using GymManagement.Domain.DTOs.Memberships.Responses;
+using GymManagement.Domain.DTOs.Bookings.Responses;
+using GymManagement.Presentation.Controllers;
 using Mapster;
 
 namespace GymManagement.Presentation.Configurations;
@@ -73,6 +75,11 @@ public static class MapsterConfiguration
             .Map(dest => dest.Status, src => ComputeMembershipStatus(src.EndDate));
 
         TypeAdapterConfig<MembershipCreateViewModel, CreateMembershipRequest>.NewConfig();
+
+        // Booking mappings
+        TypeAdapterConfig<SessionScheduleResponse, SessionScheduleViewModel>.NewConfig();
+
+        TypeAdapterConfig<BookingResponse, BookingViewModel>.NewConfig();
     }
 
     private static string ComputeMembershipStatus(DateTime endDate)

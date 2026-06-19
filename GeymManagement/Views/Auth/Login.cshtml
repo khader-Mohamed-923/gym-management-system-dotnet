@@ -1,4 +1,4 @@
-@model GymManagement.Domain.DTOs.Auth.LoginRequest
+@model LoginRequest
 
 @{
     ViewData["Title"] = "Login";
@@ -10,7 +10,7 @@
             <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 1rem;">
                 <div class="card-body p-5">
                     <div class="text-center mb-4">
-                        <i class="bi bi-box-arrow-in-right fs-1" style="color: #f97316;"></i>
+                        <i class="bi bi-box-arrow-in-right fs-1" style="color: var(--text-accent);"></i>
                         <h2 class="fw-bold mt-2 text-white" style="font-family: 'Oswald', sans-serif;">Welcome Back</h2>
                         <p class="text-muted">Sign in to your account</p>
                     </div>
@@ -35,7 +35,7 @@
                         </button>
 
                         <div class="text-center">
-                            <p class="text-muted mb-0">Don't have an account? <a asp-controller="Auth" asp-action="Register" class="text-decoration-none" style="color: #f97316;">Register here</a></p>
+                            <p class="text-muted mb-0">Don't have an account? <a asp-controller="Auth" asp-action="Register" class="text-decoration-none" style="color: var(--text-accent);">Register here</a></p>
                         </div>
                     </form>
                 </div>

@@ -3,7 +3,7 @@
 @if (User.Identity?.IsAuthenticated == true)
 {
     <li class="nav-item">
-        <span class="nav-link-iron" style="cursor: default; color: #f5f5f5;">
+        <span class="nav-link-iron" style="cursor: default; color: var(--text-primary);">
             <i class="bi bi-person-circle"></i> @User.Identity.Name
         </span>
     </li>

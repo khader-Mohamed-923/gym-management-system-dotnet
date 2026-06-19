@@ -1,4 +1,4 @@
-@model GymManagement.Domain.DTOs.Members.Responses.MemberDashboardResponse
+@model MemberDashboardResponse
 @{
     ViewData["Title"] = "Member Dashboard";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -31,7 +31,7 @@
                     {
                         <div class="p-4 rounded text-center" style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05);">
                             <p class="text-muted mb-3">You don't have an active membership.</p>
-                            <a asp-controller="Member" asp-action="Memberships" class="btn btn-sm btn-outline-warning rounded-pill px-4" style="color: #f97316; border-color: rgba(249,115,22,0.5);">View Plans</a>
+                            <a asp-controller="Member" asp-action="Memberships" class="btn btn-sm btn-outline-warning rounded-pill px-4" style="color: var(--text-accent); border-color: rgba(249,115,22,0.5);">View Plans</a>
                         </div>
                     }
                 </div>
@@ -42,7 +42,7 @@
             <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
                 <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
                     <div class="mb-3">
-                        <i class="bi bi-fire fs-1" style="color: #f97316;"></i>
+                        <i class="bi bi-fire fs-1" style="color: var(--text-accent);"></i>
                     </div>
                     <h2 class="fw-bold text-white mb-1" style="font-family: 'JetBrains Mono', monospace;">@Model.TotalBookings</h2>
                     <p class="text-muted mb-0 small text-uppercase fw-bold letter-spacing-1">Total Bookings</p>
@@ -55,7 +55,7 @@
         <div class="card-body p-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="fw-bold text-white mb-0" style="font-family: 'Oswald', sans-serif;">MY BOOKINGS</h5>
-                <a asp-controller="Member" asp-action="Bookings" class="btn btn-sm btn-outline-warning rounded-pill px-3" style="color: #f97316; border-color: rgba(249,115,22,0.5);">View All</a>
+                <a asp-controller="Member" asp-action="Bookings" class="btn btn-sm btn-outline-warning rounded-pill px-3" style="color: var(--text-accent); border-color: rgba(249,115,22,0.5);">View All</a>
             </div>
             
             @if (Model.UpcomingBookings.Any())

@@ -25,6 +25,10 @@ public class InfrastructureModule : Module
                .As<ISessionRepository>()
                .InstancePerLifetimeScope();
 
+        builder.RegisterType<BookingRepository>()
+               .As<IBookingRepository>()
+               .InstancePerLifetimeScope();
+
         builder.RegisterType<DataCleanupJob>()
        .As<IHostedService>()
        .InstancePerDependency();
