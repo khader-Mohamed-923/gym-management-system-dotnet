@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 namespace GymManagement.Domain.DTOs.Admin.Responses;
 
 public class AdminDashboardResponse
@@ -15,5 +16,6 @@ public class RecentRegistrationResponse
     public string Email { get; set; } = string.Empty;
     public string PlanName { get; set; } = string.Empty;
     public string Date { get; set; } = string.Empty;
-    public string Status { get; set; } = string.Empty;
+    public MembershipStatus Status { get; set; }
 }
+
