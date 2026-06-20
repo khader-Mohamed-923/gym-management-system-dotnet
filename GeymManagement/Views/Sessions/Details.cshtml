@@ -4,150 +4,128 @@
     ViewData["Title"] = "Session Details";
 }
 
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    <div class="iron-page-header">
-        <h1 class="iron-title">SESSION DETAILS</h1>
-        <p class="iron-subtitle">View session information</p>
+<div class="container py-5">
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">SESSION DETAILS</h1>
+            <p class="ke-subtitle">View session information</p>
+        </div>
     </div>
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            <div class="details-header">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
-                    <span class="session-category-badge">@Model.CategoryName</span>
-                    <span class="session-status-badge session-status-@Model.Status.ToString().ToLower()">@Model.Status</span>
-                </div>
-                <h2 style="font-family: var(--font-display); font-size: 2rem; margin: var(--space-lg) 0 0 0; color: var(--text-primary);">@Model.Description</h2>
-            </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card card-elevated">
+                <div class="card-body p-4 p-md-5">
+                    @{
+                        var statusColor = Model.Status.ToString().ToLower() switch {
+                            "upcoming" => "var(--ice, #38bdf8)",
+                            "ongoing" => "var(--lime, #84cc16)",
+                            _ => "var(--text-muted)"
+                        };
+                    }
 
-            <div class="details-body">
-                <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
-                    SCHEDULE INFORMATION
-                </h3>
+                    <div class="pb-4 mb-5 border-bottom border-structural">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="d-inline-block px-3 py-1 label-sm data-mono" style="border: 2px solid var(--primary); color: var(--primary); background: var(--surface-container-high);">
+                                @Model.CategoryName
+                            </span>
+                            <span class="d-inline-flex align-items-center gap-2 label-sm data-mono" style="color: @statusColor;">
+                                <span style="width: 8px; height: 8px; background: currentColor; border-radius: 50%;"></span>
+                                @Model.Status
+                            </span>
+                        </div>
+                        <h2 class="display-md text-primary m-0">@Model.Description</h2>
+                    </div>
 
-                <div class="details-grid">
-                    <div class="details-block">
-                        <div class="details-label">Start Date</div>
-                        <div class="details-value">@Model.StartDate.ToString("MMM dd, yyyy")</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">Start Time</div>
-                        <div class="details-value">@Model.StartDate.ToString("HH:mm")</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">End Date</div>
-                        <div class="details-value">@Model.EndDate.ToString("MMM dd, yyyy")</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">End Time</div>
-                        <div class="details-value">@Model.EndDate.ToString("HH:mm")</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">Duration</div>
-                        <div class="details-value">@((int)(Model.EndDate - Model.StartDate).TotalMinutes) minutes</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">Capacity</div>
-                        <div class="details-value">@Model.BookedCount / @Model.Capacity slots</div>
-                    </div>
-                </div>
+                    <h3 class="ke-section-header text-primary pb-2 border-bottom border-structural mb-4">
+                        SCHEDULE INFORMATION
+                    </h3>
 
-                <hr class="divider" />
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-calendar-event"></i> Start Date</div>
+                                <div class="ke-detail-value data-mono">@Model.StartDate.ToString("MMM dd, yyyy")</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-clock"></i> Start Time</div>
+                                <div class="ke-detail-value data-mono">@Model.StartDate.ToString("HH:mm")</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-hourglass-split"></i> Duration</div>
+                                <div class="ke-detail-value data-mono">@((int)(Model.EndDate - Model.StartDate).TotalMinutes) min</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-calendar-check"></i> End Date</div>
+                                <div class="ke-detail-value data-mono">@Model.EndDate.ToString("MMM dd, yyyy")</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-clock-history"></i> End Time</div>
+                                <div class="ke-detail-value data-mono">@Model.EndDate.ToString("HH:mm")</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-people"></i> Capacity</div>
+                                <div class="ke-detail-value data-mono">@Model.BookedCount / @Model.Capacity slots</div>
+                            </div>
+                        </div>
+                    </div>
 
-                <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
-                    TRAINER INFORMATION
-                </h3>
+                    <h3 class="ke-section-header text-primary pb-2 border-bottom border-structural mb-4">
+                        TRAINER INFORMATION
+                    </h3>
 
-                <div class="details-grid">
-                    <div class="details-block">
-                        <div class="details-label">Trainer Name</div>
-                        <div class="details-value">@Model.TrainerName</div>
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-person-badge"></i> Trainer Name</div>
+                                <div class="ke-detail-value text-on-surface fw-bold">@Model.TrainerName</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-star"></i> Specialization</div>
+                                <div class="ke-detail-value data-mono">@Model.TrainerSpecialization</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-envelope"></i> Email</div>
+                                <div class="ke-detail-value data-mono">@Model.TrainerEmail</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-telephone"></i> Phone</div>
+                                <div class="ke-detail-value data-mono">@Model.TrainerPhone</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="details-block">
-                        <div class="details-label">Specialization</div>
-                        <div class="details-value">@Model.TrainerSpecialization</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">Email</div>
-                        <div class="details-value">@Model.TrainerEmail</div>
-                    </div>
-                    <div class="details-block">
-                        <div class="details-label">Phone</div>
-                        <div class="details-value">@Model.TrainerPhone</div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="details-footer">
-                <a asp-controller="Sessions" asp-action="Index" class="btn btn-secondary">
-                    ← Back to Sessions
-                </a>
-                <div style="display: flex; gap: var(--space-md);">
-                    <a asp-controller="Sessions" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                        Edit
-                    </a>
-                    <a asp-controller="Sessions" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
-                        Delete
-                    </a>
+                    <div class="d-flex flex-wrap gap-3 pt-4 border-top border-structural">
+                        <a asp-controller="Sessions" asp-action="Index" class="btn-secondary px-4 py-2 text-decoration-none">
+                            ← Back to Sessions
+                        </a>
+                        <div class="ms-auto d-flex gap-3">
+                            <a asp-controller="Sessions" asp-action="Edit" asp-route-id="@Model.Id" class="ke-btn ke-btn-primary px-4 py-2 text-decoration-none">
+                                Edit Session
+                            </a>
+                            <a asp-controller="Sessions" asp-action="Delete" asp-route-id="@Model.Id" class="btn-secondary px-4 py-2 text-error text-decoration-none" style="border-color: var(--error);">
+                                Delete Session
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .session-category-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.35rem 0.85rem;
-        border-radius: var(--radius-full);
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        background: rgba(56, 189, 248, 0.12);
-        color: var(--ice);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .session-status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: var(--radius-full);
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-    }
-
-    .session-status-badge::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-    }
-
-    .session-status-upcoming {
-        background: rgba(56, 189, 248, 0.12);
-        color: var(--ice);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .session-status-ongoing {
-        background: rgba(132, 204, 22, 0.12);
-        color: var(--lime);
-        border: 1px solid rgba(132, 204, 22, 0.25);
-    }
-
-    .session-status-completed {
-        background: rgba(163, 163, 163, 0.12);
-        color: var(--text-secondary);
-        border: 1px solid rgba(163, 163, 163, 0.25);
-    }
-</style>
-

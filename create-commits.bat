@@ -1,36 +1,86 @@
 @echo off
-echo ===================================================
-echo Creating GitHub Atomic Commits...
-echo ===================================================
+echo Resetting current staging area...
+git reset
 
-echo.
-echo [1/4] Committing Trainer Feature Implementation...
-git add GeymDomain/Services/Trainers/ITrainerService.cs
-git add GeymDomain/Services/Trainers/TrainerService.cs
-git add GeymDomain/ViewModels/Trainer/
-git add GeymManagement/Controllers/TrainersController.cs
-git add GeymManagement/Views/Trainers/
-git commit -m "feat(trainers): implement comprehensive trainer management module" -m "Adds Create, Read, Update, and Delete capabilities for the Trainer domain including respective views, viewmodels, and service logic."
+echo Committing Admin Dashboard Services...
+git add GeymInfrastructure/Services/Admin/AdminDashboardService.cs
+git add GeymManagement/Views/Admin/Dashboard.cshtml
+git commit -m "refactor(admin): update admin dashboard service and view"
 
-echo.
-echo [2/4] Committing Delete Messaging Updates...
+echo Committing Booking and Sessions Views...
+git add GeymManagement/Controllers/BookingController.cs
+git add GeymManagement/Views/Booking/MyBookings.cshtml
+git add GeymManagement/Views/Booking/Schedule.cshtml
+git add GeymManagement/Views/Booking/SessionMembers.cshtml
+git add GeymManagement/Views/Sessions/Index.cshtml
+git add GeymManagement/Views/Sessions/Create.cshtml
+git add GeymManagement/Views/Sessions/Delete.cshtml
+git add GeymManagement/Views/Sessions/Details.cshtml
+git add GeymManagement/Views/Sessions/Edit.cshtml
+git commit -m "refactor(booking): update booking controller and related session views"
+
+echo Committing Member Views...
+git add GeymManagement/Views/Member/Bookings.cshtml
+git add GeymManagement/Views/Member/CompleteProfile.cshtml
+git add GeymManagement/Views/Member/Dashboard.cshtml
+git add GeymManagement/Views/Member/Memberships.cshtml
+git add GeymManagement/Views/Member/Profile.cshtml
+git add GeymManagement/Views/Members/Create.cshtml
 git add GeymManagement/Views/Members/Delete.cshtml
-git commit -m "refactor(ui): clarify member delete confirmation messaging" -m "Replaces technical hard-delete terminology with user-friendly, business-focused messaging."
+git add GeymManagement/Views/Members/Details.cshtml
+git add GeymManagement/Views/Members/Edit.cshtml
+git add GeymManagement/Views/Members/HealthRecord.cshtml
+git add GeymManagement/Views/Members/Index.cshtml
+git commit -m "refactor(members): restructure member views and profiles"
 
-echo.
-echo [3/4] Committing Codebase Comment Cleanup (Migrations)...
-git add GeymInfrastructure/Migrations/
-git commit -m "refactor(data): remove auto-generated comments from EF Core migrations"
+echo Committing Memberships and Plans Views...
+git add GeymManagement/Views/Memberships/Create.cshtml
+git add GeymManagement/Views/Memberships/Index.cshtml
+git add GeymManagement/Views/Plans/Details.cshtml
+git add GeymManagement/Views/Plans/Edit.cshtml
+git add GeymManagement/Views/Plans/Index.cshtml
+git commit -m "refactor(plans): update membership and plan views"
 
-echo.
-echo [4/4] Committing Codebase Comment Cleanup (Views)...
-git add GeymManagement/Views/Home/
-git add GeymManagement/Views/Members/
-git add GeymManagement/Views/Plans/
-git add GeymManagement/Views/Shared/
-git commit -m "refactor(ui): remove HTML and Razor comments across all presentation views"
+echo Committing Trainer Views...
+git add GeymManagement/Views/Trainers/Create.cshtml
+git add GeymManagement/Views/Trainers/Dashboard.cshtml
+git add GeymManagement/Views/Trainers/Delete.cshtml
+git add GeymManagement/Views/Trainers/Details.cshtml
+git add GeymManagement/Views/Trainers/Edit.cshtml
+git add GeymManagement/Views/Trainers/Index.cshtml
+git commit -m "refactor(trainers): update trainer dashboard and management views"
 
-echo.
-echo ===================================================
-echo Done! Run 'git status' to verify working directory.
-echo ===================================================
+echo Committing Authentication Views...
+git add GeymManagement/Views/Auth/Login.cshtml
+git add GeymManagement/Views/Auth/Register.cshtml
+git commit -m "refactor(auth): update authentication views"
+
+echo Committing Shared Layouts and Home Views...
+git add GeymManagement/Views/Home/Index.cshtml
+git add GeymManagement/Views/Home/Privacy.cshtml
+git add GeymManagement/Views/Shared/Error.cshtml
+git add GeymManagement/Views/Shared/_AdminLayout.cshtml
+git add GeymManagement/Views/Shared/_Layout.cshtml
+git add GeymManagement/Views/Shared/_LogoutPartial.cshtml
+git add GeymManagement/Views/Shared/_MemberLayout.cshtml
+git add GeymManagement/Views/Shared/_TrainerLayout.cshtml
+git commit -m "refactor(ui): update shared layouts and home views"
+
+echo Committing Styling Adjustments...
+git rm GeymManagement/wwwroot/css/Style.css
+git rm GeymManagement/wwwroot/css/iron-ui.css
+git add GeymManagement/wwwroot/css/site.css
+git commit -m "style: remove obsolete css files and update site.css"
+
+echo Committing Documentation and Assets...
+git add README.md
+git add gym-kinetic-design-skill.md
+git add photos/
+git commit -m "docs: add kinetic design skill, update README and photos"
+
+echo Committing chore updates...
+git add create-commits.bat
+git commit -m "chore: update create-commits script"
+
+echo Finished atomic commits!
+git status

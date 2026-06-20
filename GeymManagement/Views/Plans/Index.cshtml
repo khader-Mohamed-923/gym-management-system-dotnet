@@ -4,99 +4,98 @@
     ViewData["Title"] = "Membership Plans";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    
-    <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
-        <div>
-            <h1 class="iron-title">MEMBERSHIP PLANS</h1>
-            <p class="iron-subtitle">Configure and manage your gym membership packages</p>
+<div class="container py-5">
+    <div class="ke-header-content mb-5 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="ke-header-text">
+            <h1 class="ke-title">MEMBERSHIP PLANS</h1>
+            <p class="ke-subtitle">Configure and manage your gym membership packages</p>
         </div>
     </div>
 
-
-
-    
     @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
-        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">✓</span>
-            <span>@TempData[TempDataKeys.SuccessMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--primary);">
+            <i class="bi bi-check-circle-fill text-primary fs-4 me-3"></i>
+            <span class="body-md">@TempData[TempDataKeys.SuccessMessage]</span>
         </div>
     }
     else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
-        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">⚠️</span>
-            <span>@TempData[TempDataKeys.ErrorMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--error);">
+            <i class="bi bi-exclamation-triangle-fill text-error fs-4 me-3"></i>
+            <span class="body-md text-error">@TempData[TempDataKeys.ErrorMessage]</span>
         </div>
     }
 
     @if (Model.Any())
     {
-        <div class="plans-grid">
+        <div class="row g-4">
             @foreach (var plan in Model)
             {
-                <div class="plan-card animate-in @(!plan.IsActive ? "inactive" : "")">
-                    
-                    <div class="plan-card-header" style="@(plan.IsActive ? "" : "background: rgba(163, 163, 163, 0.1);")">
-                        <h3 class="plan-card-title" style="@(plan.IsActive ? "" : "color: var(--text-secondary);")">@plan.Name</h3>
-                        @if (plan.IsActive)
-                        {
-                            <span class="status-badge status-active">Active</span>
-                        }
-                        else
-                        {
-                            <span class="status-badge status-inactive">Inactive</span>
-                        }
-                    </div>
-
-                    
-                    <div class="plan-card-body">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-elevated h-100 d-flex flex-column" style="@(!plan.IsActive ? "opacity: 0.75; filter: grayscale(1);" : "")">
                         
-                        <div class="plan-price-section">
-                            <span class="plan-price" style="@(plan.IsActive ? "" : "color: var(--text-secondary);")">@plan.Price</span>
-                            <span class="plan-currency">EGP</span>
-                            <div class="plan-period">/ @plan.DurationInDays days</div>
-                        </div>
-
-                        
-                        <ul class="plan-features">
-                            <li>Duration: @plan.DurationInDays days</li>
-                            <li>@plan.Description</li>
-                        </ul>
-
-                        
-                        <div class="plan-card-actions">
-                            <a asp-action="Details" asp-route-id="@plan.Id" class="btn btn-secondary" style="flex: 1;">
-                                View Details
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@plan.Id" class="btn btn-primary" style="flex: 1;">
-                                Edit
-                            </a>
-                        </div>
-
-                        <form asp-action="Activate" asp-route-id="@plan.Id" method="post" style="margin-top: var(--space-sm);">
-                            @Html.AntiForgeryToken()
+                        <div class="p-4 border-bottom border-structural d-flex justify-content-between align-items-center">
+                            <h3 class="display-sm m-0" style="@(plan.IsActive ? "color: var(--primary);" : "color: var(--text-secondary);")">@plan.Name</h3>
                             @if (plan.IsActive)
                             {
-                                <button type="submit" class="btn btn-danger btn-block">
-                                    Deactivate Plan
-                                </button>
+                                <span class="d-inline-flex align-items-center gap-2 label-sm data-mono" style="color: var(--lime);">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> Active
+                                </span>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-success btn-block">
-                                    Activate Plan
-                                </button>
+                                <span class="d-inline-flex align-items-center gap-2 label-sm data-mono text-muted">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> Inactive
+                                </span>
                             }
-                        </form>
+                        </div>
+
+                        <div class="p-4 flex-grow-1 d-flex flex-column">
+                            <div class="mb-4">
+                                <span class="display-md" style="@(plan.IsActive ? "color: var(--on-surface);" : "color: var(--text-secondary);")">@plan.Price</span>
+                                <span class="label-lg" style="color: var(--text-muted);">EGP</span>
+                                <div class="label-sm data-mono text-muted mt-1">/ @plan.DurationInDays days</div>
+                            </div>
+
+                            <ul class="list-unstyled flex-grow-1 mb-0 body-sm text-on-surface">
+                                <li class="mb-2 d-flex gap-2">
+                                    <i class="bi bi-calendar-check text-primary"></i> 
+                                    <span>Duration: <strong>@plan.DurationInDays days</strong></span>
+                                </li>
+                                <li class="d-flex gap-2">
+                                    <i class="bi bi-info-square text-primary"></i> 
+                                    <span>@plan.Description</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-3 border-top border-structural bg-surface mt-auto">
+                            <div class="d-flex gap-2 mb-2">
+                                <a asp-action="Details" asp-route-id="@plan.Id" class="btn-secondary flex-grow-1 py-2 text-center text-decoration-none">
+                                    Details
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@plan.Id" class="ke-btn ke-btn-primary flex-grow-1 py-2 text-center text-decoration-none">
+                                    Edit
+                                </a>
+                            </div>
+
+                            <form asp-action="Activate" asp-route-id="@plan.Id" method="post">
+                                @Html.AntiForgeryToken()
+                                @if (plan.IsActive)
+                                {
+                                    <button type="submit" class="btn-secondary w-100 py-2 text-error" style="border-color: var(--error);">
+                                        Deactivate Plan
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="ke-btn w-100 py-2" style="background: var(--lime); border-color: var(--lime); color: #000;">
+                                        Activate Plan
+                                    </button>
+                                }
+                            </form>
+                        </div>
                     </div>
                 </div>
             }
@@ -104,16 +103,17 @@
     }
     else
     {
-        
-        <div class="empty-state animate-in">
-            <div class="empty-icon">📋</div>
-            <h2 class="empty-title">No Plans Available</h2>
-            <p class="empty-text">Get started by creating your first membership plan</p>
-            <a asp-action="Create" class="btn btn-primary btn-lg">
-                <span style="font-size: 1.25rem; font-weight: 700;">+</span>
-                Create First Plan
+        <div class="card card-elevated p-5 text-center">
+            <div class="display-lg mb-3">📋</div>
+            <h2 class="display-md mb-2">No Plans Available</h2>
+            <p class="body-md text-muted mb-4">Get started by creating your first membership plan</p>
+            <a asp-action="Create" class="ke-btn ke-btn-primary px-4 py-2 d-inline-block mx-auto" style="width: fit-content;">
+                <span class="fs-5 fw-bold me-2">+</span> Create First Plan
             </a>
         </div>
     }
 </div>
 
+@section Scripts {
+    <partial name="_AlertDismissScript"/>
+}

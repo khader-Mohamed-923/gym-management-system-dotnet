@@ -7,137 +7,111 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <div class="card shadow-lg border-0"
-                 style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 1rem;">
+            <div class="card card-elevated">
                 <div class="card-body p-5">
                     <div class="text-center mb-4">
-                        <i class="bi bi-person-plus fs-1" style="color: var(--text-accent);"></i>
-                        <h2 class="fw-bold mt-2 text-white" style="font-family: 'Oswald', sans-serif;">Create Account
-                        </h2>
-                        <p class="text-muted">Join IronCore Gym today</p>
+                        <i class="bi bi-person-plus fs-1 text-primary"></i>
+                        <h2 class="display-md mt-2">Create Account</h2>
+                        <p class="body-md text-muted">Join IronCore Gym today</p>
                     </div>
 
-                    
                     @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
                     {
-                        <div class="alert mb-4"
-                             style="background: rgba(249, 115, 22, 0.08); border: 1px solid rgba(249, 115, 22, 0.3); color: #fb923c; border-radius: 0.5rem; padding: 1rem;">
+                        <div class="mb-4 p-3" style="border: 2px solid var(--error); background: var(--surface-container-low);">
                             <div class="d-flex align-items-start">
-                                <i class="bi bi-shield-exclamation me-2 mt-1" style="color: var(--text-accent);"></i>
+                                <i class="bi bi-shield-exclamation me-2 mt-1 text-primary"></i>
                                 <div>
-                                    <strong style="color: var(--text-accent);">Security Notice</strong><br>
-                                    <span class="small" style="color: #fdba74;">For your protection, please re-enter your
-                                        password and re-select your profile photo.</span>
-                                    </div>
+                                    <strong class="text-primary data-mono">Security Notice</strong><br>
+                                    <span class="label-sm text-muted">For your protection, please re-enter your password and re-select your profile photo.</span>
                                 </div>
-                            </div>
-                        }
-
-                        <form asp-action="Register" method="post" enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="FirstName" class="form-control bg-transparent text-white"
-                                               placeholder="First Name" style="border-color: rgba(255,255,255,0.1);" />
-                                        <label asp-for="FirstName" class="text-muted">First Name</label>
-                                        <span asp-validation-for="FirstName" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="LastName" class="form-control bg-transparent text-white"
-                                               placeholder="Last Name" style="border-color: rgba(255,255,255,0.1);" />
-                                        <label asp-for="LastName" class="text-muted">Last Name</label>
-                                        <span asp-validation-for="LastName" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-floating mb-3">
-                                <input asp-for="UserName" class="form-control bg-transparent text-white"
-                                       placeholder="Username" style="border-color: rgba(255,255,255,0.1);" />
-                                <label asp-for="UserName" class="text-muted">Username</label>
-                                <span asp-validation-for="UserName" class="text-danger small"></span>
-                            </div>
-
-                            <div class="form-floating mb-3">
-                                <input asp-for="Email" type="email" class="form-control bg-transparent text-white"
-                                       placeholder="Email" style="border-color: rgba(255,255,255,0.1);" />
-                                <label asp-for="Email" class="text-muted">Email Address</label>
-                                <span asp-validation-for="Email" class="text-danger small"></span>
-                            </div>
-
-                            <div class="form-floating mb-3">
-                                <input asp-for="Password" type="password" class="form-control bg-transparent text-white"
-                                       placeholder="Password" style="border-color: rgba(255,255,255,0.1);" />
-                                <label asp-for="Password" class="text-muted">Password</label>
-                                <span asp-validation-for="Password" class="text-danger small"></span>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="Phone" class="form-control bg-transparent text-white"
-                                               placeholder="Phone" style="border-color: rgba(255,255,255,0.1);" />
-                                        <label asp-for="Phone" class="text-muted">Phone Number</label>
-                                        <span asp-validation-for="Phone" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input asp-for="DateOfBirth" type="date"
-                                               class="form-control bg-transparent text-white" placeholder="Date of Birth"
-                                               style="border-color: rgba(255,255,255,0.1); color-scheme: dark;" />
-                                        <label asp-for="DateOfBirth" class="text-muted">Date of Birth (Optional)</label>
-                                        <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-floating mb-4">
-                                <select asp-for="Gender"
-                                        asp-items="Html.GetEnumSelectList<GymManagement.Domain.Enums.Gender>()"
-                                        class="form-select bg-transparent text-white"
-                                        style="border-color: rgba(255,255,255,0.1);">
-                                    <option value="" style="background-color: #111; color: white;">Select Gender (Optional)
-                                    </option>
-                                </select>
-                                <label asp-for="Gender" class="text-muted">Gender</label>
-                                <span asp-validation-for="Gender" class="text-danger small"></span>
-                            </div>
-
-                            <div class="mb-4">
-                                <h6 class="fw-bold mb-3"
-                                    style="color: var(--text-accent); letter-spacing: 1px; font-family: 'Oswald', sans-serif;">PROFILE
-                                    PHOTO</h6>
-                                    <label asp-for="ProfilePhotoFile"
-                                           class="form-label text-muted small fw-bold letter-spacing-1">PHOTO</label>
-                                    <input asp-for="ProfilePhotoFile" type="file" class="form-control bg-transparent text-white"
-                                           style="border-color: rgba(255,255,255,0.1); background-color: rgba(0,0,0,0.2) !important;"
-                                           accept=".jpg,.jpeg,.png,.webp" />
-                                    <div class="form-text text-muted mt-2">Accepted formats: JPG, JPEG, PNG, WEBP. Max size: 5
-                                        MB.</div>
-                                        <span asp-validation-for="ProfilePhotoFile" class="text-danger small"></span>
-                                    </div>
-
-                                    <button type="submit" class="btn w-100 py-3 fw-bold mb-3"
-                                            style="background: linear-gradient(135deg, #f97316, #ef4444); border: none; color: white; letter-spacing: 0.05em; font-family: 'Oswald', sans-serif; font-size: 1.1rem; border-radius: 0.5rem; transition: transform 0.2s ease;">
-                                        CREATE ACCOUNT
-                                    </button>
-
-                                    <div class="text-center">
-                                        <p class="text-muted mb-0">Already have an account? <a asp-controller="Auth"
-                                                                                                   asp-action="Login" class="text-decoration-none" style="color: var(--text-accent);">Sign in</a>
-                                        </p>
-                                    </div>
-                                </form>
                             </div>
                         </div>
-                    </div>
+                    }
+
+                    <form asp-action="Register" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-error mb-3 small"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FirstName" class="label-sm mb-1">First Name</label>
+                                    <input asp-for="FirstName" class="input-field" placeholder="First Name" />
+                                    <span asp-validation-for="FirstName" class="text-error small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="LastName" class="label-sm mb-1">Last Name</label>
+                                    <input asp-for="LastName" class="input-field" placeholder="Last Name" />
+                                    <span asp-validation-for="LastName" class="text-error small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="label-sm mb-1">Username</label>
+                            <input asp-for="UserName" class="input-field" placeholder="Username" />
+                            <span asp-validation-for="UserName" class="text-error small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="label-sm mb-1">Email Address</label>
+                            <input asp-for="Email" type="email" class="input-field" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-error small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="label-sm mb-1">Password</label>
+                            <input asp-for="Password" type="password" class="input-field" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-error small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Phone" class="label-sm mb-1">Phone Number</label>
+                                    <input asp-for="Phone" class="input-field" placeholder="Phone" />
+                                    <span asp-validation-for="Phone" class="text-error small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="DateOfBirth" class="label-sm mb-1">Date of Birth (Optional)</label>
+                                    <input asp-for="DateOfBirth" type="date" class="input-field" placeholder="Date of Birth" style="color-scheme: dark;" />
+                                    <span asp-validation-for="DateOfBirth" class="text-error small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Gender" class="label-sm mb-1">Gender</label>
+                            <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GymManagement.Domain.Enums.Gender>()" class="input-field">
+                                <option value="" style="background-color: var(--surface); color: var(--on-surface);">Select Gender (Optional)</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-error small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="ke-section-header">PROFILE PHOTO</h6>
+                            <label asp-for="ProfilePhotoFile" class="label-sm mb-1">PHOTO</label>
+                            <input asp-for="ProfilePhotoFile" type="file" class="input-field" accept=".jpg,.jpeg,.png,.webp" />
+                            <div class="body-sm text-muted mt-2">Accepted formats: JPG, JPEG, PNG, WEBP. Max size: 5 MB.</div>
+                            <span asp-validation-for="ProfilePhotoFile" class="text-error small"></span>
+                        </div>
+
+                        <button type="submit" class="ke-btn ke-btn-primary w-100 mb-3">
+                            CREATE ACCOUNT
+                        </button>
+
+                        <div class="text-center">
+                            <p class="body-md text-muted mb-0">Already have an account? <a asp-controller="Auth" asp-action="Login" class="text-decoration-none text-primary">Sign in</a></p>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
             @section Scripts {
                 <partial name="_ValidationScriptsPartial" />

@@ -49,20 +49,17 @@ public class BookingController : BaseController
         var userId = GetCurrentUserId();
         if (string.IsNullOrEmpty(userId))
         {
-            TempData[TempDataKeys.ErrorMessage] = "User not authenticated.";
-            return RedirectToAction(nameof(Schedule));
+            return Json(new { success = false, message = "User not authenticated." });
         }
 
         var result = await _bookingService.BookSessionAsync(sessionId, userId, cancellationToken);
 
         if (result.IsFailure)
         {
-            TempData[TempDataKeys.ErrorMessage] = result.Error;
-            return RedirectToAction(nameof(Schedule));
+            return Json(new { success = false, message = result.Error });
         }
 
-        TempData[TempDataKeys.SuccessMessage] = "Session booked successfully!";
-        return RedirectToAction(nameof(Schedule));
+        return Json(new { success = true, message = "Session booked successfully!", bookingId = result.Value });
     }
 
     [HttpGet]
@@ -96,20 +93,17 @@ public class BookingController : BaseController
         var userId = GetCurrentUserId();
         if (string.IsNullOrEmpty(userId))
         {
-            TempData[TempDataKeys.ErrorMessage] = "User not authenticated.";
-            return RedirectToAction(nameof(Schedule));
+            return Json(new { success = false, message = "User not authenticated." });
         }
 
         var result = await _bookingService.CancelBookingAsync(bookingId, userId, cancellationToken);
 
         if (result.IsFailure)
         {
-            TempData[TempDataKeys.ErrorMessage] = result.Error;
-            return RedirectToAction(nameof(Schedule));
+            return Json(new { success = false, message = result.Error });
         }
 
-        TempData[TempDataKeys.SuccessMessage] = "Booking cancelled successfully!";
-        return RedirectToAction(nameof(Schedule));
+        return Json(new { success = true, message = "Booking cancelled successfully!" });
     }
 
     [HttpGet]

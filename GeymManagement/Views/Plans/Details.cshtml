@@ -4,71 +4,78 @@
     ViewData["Title"] = $"{Model.Name} - Plan Details";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    
-    <div class="iron-page-header">
-        <h1 class="iron-title">PLAN DETAILS</h1>
-        <p class="iron-subtitle">View complete information about this membership plan</p>
+<div class="container py-5">
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">PLAN DETAILS</h1>
+            <p class="ke-subtitle">View complete information about this membership plan</p>
+        </div>
     </div>
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            
-            <div class="details-header">
-                <h2 class="plan-card-title" style="font-size: 2rem; margin-bottom: var(--space-md);">@Model.Name</h2>
-                @if (Model.IsActive)
-                {
-                    <span class="status-badge status-active">Active Plan</span>
-                }
-                else
-                {
-                    <span class="status-badge status-inactive">Inactive Plan</span>
-                }
-            </div>
-
-            
-            <div class="details-body">
-                
-                <div class="plan-price-section" style="margin-bottom: var(--space-2xl);">
-                    <span class="plan-price" style="font-size: 4rem;">@Model.Price</span>
-                    <span class="plan-currency" style="font-size: 1.25rem;">EGP</span>
-                </div>
-
-                
-                <div class="details-grid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-elevated">
+                <div class="card-body p-4 p-md-5">
                     
-                    <div class="details-block">
-                        <div class="details-label">Duration</div>
-                        <div class="details-value">@Model.DurationInDays Days</div>
-                    </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">Status</div>
-                        <div class="details-value" style="color: @(Model.IsActive ? "var(--lime)" : "var(--ember)");">
-                            @(Model.IsActive ? "Active" : "Inactive")
+                    <div class="pb-4 mb-5 border-bottom border-structural">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="display-md text-primary m-0">@Model.Name</h2>
+                            @if (Model.IsActive)
+                            {
+                                <span class="d-inline-flex align-items-center gap-2 label-sm data-mono" style="color: var(--lime);">
+                                    <span style="width: 8px; height: 8px; background: currentColor; border-radius: 50%;"></span> Active Plan
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="d-inline-flex align-items-center gap-2 label-sm data-mono text-muted">
+                                    <span style="width: 8px; height: 8px; background: currentColor; border-radius: 50%;"></span> Inactive Plan
+                                </span>
+                            }
                         </div>
                     </div>
 
-                    
-                    <div class="details-block details-block-full">
-                        <div class="details-label">Description</div>
-                        <div class="details-value">@Model.Description</div>
+                    <div class="mb-5 text-center">
+                        <span class="display-lg text-on-surface">@Model.Price</span>
+                        <span class="label-lg text-primary">EGP</span>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-clock"></i> Duration</div>
+                                <div class="ke-detail-value data-mono text-primary">@Model.DurationInDays Days</div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="ke-detail-block h-100">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-activity"></i> Status</div>
+                                <div class="ke-detail-value data-mono" style="color: @(Model.IsActive ? "var(--lime)" : "var(--error)");">
+                                    @(Model.IsActive ? "Active" : "Inactive")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="ke-detail-block">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-info-square"></i> Description</div>
+                                <div class="ke-detail-value text-on-surface">@Model.Description</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-3 pt-4 border-top border-structural">
+                        <a asp-action="Index" class="btn-secondary px-4 py-2 text-decoration-none">
+                            ← Back to Plans
+                        </a>
+                        <div class="ms-auto">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="ke-btn ke-btn-primary px-4 py-2 text-decoration-none">
+                                Edit Plan
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            
-            <div class="details-footer">
-                <a asp-action="Index" class="btn btn-secondary">
-                    ← Back to Plans
-                </a>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                    Edit Plan
-                </a>
             </div>
         </div>
     </div>

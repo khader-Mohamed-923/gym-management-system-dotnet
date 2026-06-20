@@ -4,121 +4,87 @@
     ViewData["Title"] = $"{Model.Name} - Trainer Details";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
+<div class="container py-5">
     
-    <div class="iron-page-header">
-        <h1 class="iron-title">TRAINER DETAILS</h1>
-        <p class="iron-subtitle">View complete profile information for this trainer</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">TRAINER DETAILS</h1>
+            <p class="ke-subtitle">View complete profile information for this trainer</p>
+        </div>
     </div>
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            
-            <div class="details-header">
-                <div class="member-avatar member-avatar--orange" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto var(--space-lg);">
-                    @(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-elevated">
+                <div class="card-body p-4 p-md-5">
+                    
+                    @{
+                        var spec = Model.Specialization.ToLower();
+                        var specColor = spec switch {
+                            "cardio" => "var(--error)",
+                            "balance" => "var(--ice, var(--ice))",
+                            "boxing" => "var(--primary)",
+                            "yoga" => "var(--lime, #84cc16)",
+                            "crossfit" => "var(--warning, var(--gold))",
+                            "fitness" => "var(--purple, #a855f7)",
+                            _ => "var(--text-muted)"
+                        };
+                    }
+
+                    <div class="d-flex flex-column align-items-center text-center mb-5 pb-4 border-bottom border-structural">
+                        <div class="d-flex align-items-center justify-content-center border-structural bg-surface mb-3" style="width: 100px; height: 100px; font-size: 2.5rem; color: var(--primary);">
+                            @(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())
+                        </div>
+                        <h2 class="display-lg text-on-surface mb-3">@Model.Name</h2>
+                        <span class="d-inline-block px-3 py-1 label-sm data-mono" style="border: 2px solid @specColor; color: @specColor; background: var(--surface-container-high);">
+                            @Model.Specialization Trainer
+                        </span>
+                    </div>
+
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <div class="ke-detail-block">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-envelope"></i> Email</div>
+                                <div class="ke-detail-value data-mono">@Model.Email</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="ke-detail-block">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-telephone"></i> Phone</div>
+                                <div class="ke-detail-value data-mono">@Model.Phone</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="ke-detail-block">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-calendar3"></i> Date of Birth</div>
+                                <div class="ke-detail-value data-mono">@Model.DateOfBirth</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="ke-detail-block">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-award"></i> Specialization</div>
+                                <div class="ke-detail-value data-mono">@Model.Specialization</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="ke-detail-block">
+                                <div class="ke-detail-label d-flex align-items-center gap-2 mb-2"><i class="bi bi-geo-alt"></i> Address</div>
+                                <div class="ke-detail-value">@Model.Address</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-top border-structural text-center">
+                        <a asp-controller="Trainers" asp-action="Index" class="btn-secondary w-100 py-2 d-inline-block text-decoration-none">
+                            ← Back to List
+                        </a>
+                    </div>
                 </div>
-                <h2 class="iron-title" style="font-size: 2rem; margin-bottom: var(--space-md);">@Model.Name</h2>
-                <span class="specialization-badge specialization-@Model.Specialization.ToLower()">
-                    @Model.Specialization Trainer
-                </span>
-            </div>
-
-            
-            <div class="details-body">
-                <div class="details-grid">
-                    
-                    <div class="details-block">
-                        <div class="details-label">📧 Email</div>
-                        <div class="details-value">@Model.Email</div>
-                    </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">📞 Phone</div>
-                        <div class="details-value">@Model.Phone</div>
-                    </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">🎂 Date of Birth</div>
-                        <div class="details-value">@Model.DateOfBirth</div>
-                    </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">🏅 Specialization</div>
-                        <div class="details-value">@Model.Specialization</div>
-                    </div>
-
-                    
-                    <div class="details-block details-block-full">
-                        <div class="details-label">🏠 Address</div>
-                        <div class="details-value">@Model.Address</div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="details-footer">
-                <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary">
-                    ← Back to List
-                </a>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    
-    .specialization-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.35rem 0.85rem;
-        border-radius: var(--radius-full);
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        font-family: var(--font-body);
-    }
-
-    .specialization-cardio {
-        background: rgba(239, 68, 68, 0.12);
-        color: var(--ember);
-        border: 1px solid rgba(239, 68, 68, 0.25);
-    }
-
-    .specialization-balance {
-        background: rgba(56, 189, 248, 0.12);
-        color: var(--ice);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .specialization-boxing {
-        background: rgba(249, 115, 22, 0.12);
-        color: var(--fire);
-        border: 1px solid rgba(249, 115, 22, 0.25);
-    }
-
-    .specialization-yoga {
-        background: rgba(132, 204, 22, 0.12);
-        color: var(--lime);
-        border: 1px solid rgba(132, 204, 22, 0.25);
-    }
-
-    .specialization-crossfit {
-        background: rgba(234, 179, 8, 0.12);
-        color: var(--gold);
-        border: 1px solid rgba(234, 179, 8, 0.25);
-    }
-
-    .specialization-fitness {
-        background: rgba(168, 85, 247, 0.12);
-        color: #a855f7;
-        border: 1px solid rgba(168, 85, 247, 0.25);
-    }
-</style>
