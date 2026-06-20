@@ -2,47 +2,47 @@
     ViewData["Title"] = "Delete Member";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
+<div class="container py-5">
     
-    <div class="iron-page-header">
-        <h1 class="iron-title" style="background: linear-gradient(135deg, var(--ember), var(--fire)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">DELETE MEMBER</h1>
-        <p class="iron-subtitle">Confirm member removal</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title text-error">DELETE MEMBER</h1>
+            <p class="ke-subtitle">Confirm member removal</p>
+        </div>
     </div>
 
-    <div class="details-container" style="max-width: 500px;">
-        <div class="glass-card glow-card-red animate-in" style="text-align: center; padding: var(--space-3xl);">
-            
-            <div style="font-size: 4rem; margin-bottom: var(--space-lg);">⚠️</div>
-            
-            
-            <h2 class="iron-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
-                Are you sure you want to remove this member?
-            </h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card card-elevated text-center p-5" style="border-top: 4px solid var(--error);">
+                
+                <div class="display-lg mb-4">⚠️</div>
+                
+                <h2 class="display-md mb-4 text-error">
+                    Are you sure you want to remove this member?
+                </h2>
 
-            
-            <div class="alert alert-danger" style="text-align: left; margin-bottom: var(--space-xl);">
-                <span class="alert-icon">⚠️</span>
-                <div>
-                    <strong>Please confirm</strong><br />
-                    This member will be removed from the system and will no longer appear in active lists.
+                <div class="mb-5 p-3 text-start" style="border: 2px solid var(--error); background: var(--surface-container-low);">
+                    <div class="d-flex align-items-start">
+                        <span class="me-3 text-error fs-4">⚠️</span>
+                        <div>
+                            <strong class="text-error data-mono d-block mb-1">Please confirm</strong>
+                            <span class="body-md text-on-surface">This member will be removed from the system and will no longer appear in active lists.</span>
+                        </div>
+                    </div>
                 </div>
+
+                <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
+                    @Html.AntiForgeryToken()
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a asp-controller="Members" asp-action="Index" class="btn-secondary px-4 py-2">
+                            No, Cancel
+                        </a>
+                        <button type="submit" class="ke-btn ke-btn-primary px-4 py-2" style="background: var(--error);">
+                            Yes, Delete
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            
-            <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
-                @Html.AntiForgeryToken()
-                <div style="display: flex; gap: var(--space-md); justify-content: center;">
-                    <a asp-controller="Members" asp-action="Index" class="btn btn-secondary btn-lg">
-                        No, Cancel
-                    </a>
-                    <button type="submit" class="btn btn-danger btn-lg">
-                        Yes, Delete
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 </div>

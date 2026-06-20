@@ -4,60 +4,73 @@
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    <div class="iron-page-header">
-        <h1 class="iron-title">MY BOOKINGS</h1>
-        <p class="iron-subtitle">View your class and session history</p>
+<div class="container py-5">
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">MY BOOKINGS</h1>
+            <p class="ke-subtitle">View your class and session history</p>
+        </div>
     </div>
 
     @if (!Model.Any())
     {
-        <div class="empty-state animate-in">
-            <div class="empty-icon">📅</div>
-            <h3 class="empty-title">No Bookings Yet</h3>
-            <p class="empty-text">You haven't booked any sessions yet. Check the schedule to get started!</p>
-            <a asp-controller="Booking" asp-action="Schedule" class="btn btn-primary mt-3">
-                <i class="bi bi-calendar-event me-1"></i>View Schedule
+        <div class="card card-elevated p-5 text-center">
+            <div class="display-lg mb-3">📅</div>
+            <h3 class="display-md mb-2">No Bookings Yet</h3>
+            <p class="body-md text-muted mb-4">You haven't booked any sessions yet. Check the schedule to get started!</p>
+            <a asp-controller="Booking" asp-action="Schedule" class="ke-btn ke-btn-primary px-4 py-2 d-inline-flex align-items-center justify-content-center mx-auto" style="width: fit-content;">
+                <i class="bi bi-calendar-event me-2"></i> View Schedule
             </a>
         </div>
     }
     else
     {
-        <div class="bookings-grid">
+        <div class="row g-4">
             @foreach (var booking in Model)
             {
                 var isUpcoming = booking.Status == SessionStatus.Upcoming;
-                
-                <div class="booking-card animate-in @(!isUpcoming ? "past-session" : "")">
-                    <div class="booking-card-header">
-                        <div class="session-icon">
-                            <i class="bi bi-activity"></i>
-                        </div>
-                        <div class="booking-info">
-                            <h3 class="booking-title" title="@booking.SessionName">@booking.SessionName</h3>
-                            <div class="booking-meta">
-                                <span class="status-badge @(isUpcoming ? "status-upcoming" : "status-completed")">@booking.Status</span>
-                            </div>
-                        </div>
-                    </div>
+                var borderColor = isUpcoming ? "var(--primary)" : "var(--border-color)";
+                var bgClass = isUpcoming ? "bg-surface" : "bg-dark";
+                var opacityStyle = isUpcoming ? "" : "opacity: 0.7;";
 
-                    <div class="booking-card-body">
-                        <div class="info-row">
-                            <i class="bi bi-person-badge"></i>
-                            <span class="info-label">Trainer:</span>
-                            <span class="info-value">@booking.TrainerName</span>
-                        </div>
-                        <div class="info-row">
-                            <i class="bi bi-calendar3"></i>
-                            <span class="info-label">Date:</span>
-                            <span class="info-value">@booking.Date</span>
-                        </div>
-                        <div class="info-row">
-                            <i class="bi bi-clock"></i>
-                            <span class="info-label">Time:</span>
-                            <span class="info-value">@booking.Time</span>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-elevated h-100" style="border-top-color: @borderColor; @opacityStyle">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex align-items-start gap-3 mb-4 pb-3 border-bottom border-structural">
+                                <div class="d-flex align-items-center justify-content-center border-structural" style="width: 48px; height: 48px; flex-shrink: 0; background: var(--surface-container-low); color: var(--primary);">
+                                    <i class="bi bi-activity fs-4"></i>
+                                </div>
+                                <div style="min-width: 0;">
+                                    <h3 class="body-md fw-bold text-primary mb-2 text-truncate" title="@booking.SessionName">@booking.SessionName</h3>
+                                    <span class="d-inline-block px-2 py-1 label-sm data-mono" style="border: 2px solid @borderColor; color: @(isUpcoming ? "var(--primary)" : "var(--text-muted)"); background: var(--surface-container-high);">
+                                        @booking.Status
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-person-badge text-muted me-3 fs-5" style="width: 24px; text-align: center;"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="label-sm text-muted">Trainer</div>
+                                        <div class="body-md">@booking.TrainerName</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-calendar3 text-muted me-3 fs-5" style="width: 24px; text-align: center;"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="label-sm text-muted">Date</div>
+                                        <div class="body-md data-mono">@booking.Date</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-clock text-muted me-3 fs-5" style="width: 24px; text-align: center;"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="label-sm text-muted">Time</div>
+                                        <div class="body-md data-mono">@booking.Time</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -65,159 +78,4 @@
         </div>
     }
 </div>
-
-<style>
-    .bookings-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: var(--space-lg);
-        margin-top: var(--space-xl);
-    }
-
-    .booking-card {
-        background: var(--glass-fill);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        transition: all 0.25s ease;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .booking-card.past-session {
-        opacity: 0.7;
-    }
-
-    .booking-card:hover {
-        background: var(--glass-hover);
-        border-color: rgba(255, 255, 255, 0.12);
-        transform: translateY(-4px);
-    }
-
-    .booking-card-header {
-        display: flex;
-        align-items: center;
-        gap: var(--space-md);
-        padding: var(--space-lg);
-        background: rgba(255, 255, 255, 0.02);
-        border-bottom: 1px solid var(--steel-line);
-    }
-
-    .session-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2));
-        color: var(--fire);
-        flex-shrink: 0;
-    }
-
-    .booking-info {
-        flex: 1;
-        min-width: 0; /* Enables text truncation inside flexbox */
-    }
-
-    .booking-title {
-        font-family: var(--font-display);
-        font-size: 1.125rem;
-        font-weight: 400;
-        color: var(--text-primary);
-        margin: 0 0 var(--space-xs) 0;
-        
-        /* Handling long text elegantly */
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.4;
-    }
-
-    .booking-meta {
-        display: flex;
-        align-items: center;
-        gap: var(--space-sm);
-    }
-
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: var(--radius-full);
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-    }
-
-    .status-badge::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-    }
-
-    .status-upcoming {
-        background: rgba(249, 115, 22, 0.12);
-        color: var(--fire);
-        border: 1px solid rgba(249, 115, 22, 0.25);
-    }
-
-    .status-completed {
-        background: rgba(163, 163, 163, 0.12);
-        color: var(--text-secondary);
-        border: 1px solid rgba(163, 163, 163, 0.25);
-    }
-
-    .booking-card-body {
-        padding: var(--space-lg);
-        flex-grow: 1;
-    }
-
-    .info-row {
-        display: flex;
-        align-items: center;
-        gap: var(--space-sm);
-        padding: var(--space-sm) 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    .info-row:last-child {
-        border-bottom: none;
-    }
-
-    .info-row i {
-        width: 20px;
-        color: var(--text-muted);
-        font-size: 0.875rem;
-        text-align: center;
-    }
-
-    .info-label {
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-
-    .info-value {
-        color: var(--text-primary);
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-left: auto;
-    }
-
-    @@media (max-width: 768px) {
-        .bookings-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
 

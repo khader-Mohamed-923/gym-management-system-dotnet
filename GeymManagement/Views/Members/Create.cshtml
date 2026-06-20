@@ -4,163 +4,160 @@
     ViewData["Title"] = "Add Member";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
+<div class="container py-5">
     
-    <div class="iron-page-header">
-        <h1 class="iron-title">ADD NEW MEMBER</h1>
-        <p class="iron-subtitle">Create a new gym member with personal and health information</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">ADD NEW MEMBER</h1>
+            <p class="ke-subtitle">Create a new gym member with personal and health information</p>
+        </div>
     </div>
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            <form method="post" enctype="multipart/form-data">
-                @Html.AntiForgeryToken()
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="margin-bottom: var(--space-xl);"></div>
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card card-elevated">
+                <form method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-error mb-4 p-3" style="border: 2px solid var(--error); background: var(--surface-container-low);"></div>
 
-                <div class="details-body">
-                    
-                    <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-2xl); border-bottom: 1px solid var(--steel-line);">
-                        <button type="button" class="tab-btn active" onclick="switchTab('member-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-primary); border-bottom: 2px solid var(--fire); cursor: pointer;">
-                            👤 Member Info
-                        </button>
-                        <button type="button" class="tab-btn" onclick="switchTab('health-info', event)" style="padding: var(--space-md) var(--space-xl); background: transparent; border: none; color: var(--text-secondary); border-bottom: 2px solid transparent; cursor: pointer;">
-                            🏥 Health Data
-                        </button>
-                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex gap-3 mb-5 border-bottom border-structural">
+                            <button type="button" class="tab-btn active bg-transparent border-0 pb-2 label-md text-primary" onclick="switchTab('member-info', event)" style="border-bottom: 2px solid var(--primary);">
+                                👤 Member Info
+                            </button>
+                            <button type="button" class="tab-btn bg-transparent border-0 pb-2 label-md text-muted" onclick="switchTab('health-info', event)" style="border-bottom: 2px solid transparent;">
+                                🏥 Health Data
+                            </button>
+                        </div>
 
-                    
-                    <div id="member-info" class="tab-content">
-                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
-                            PERSONAL INFORMATION
-                        </h3>
+                        <div id="member-info" class="tab-content">
+                            <h3 class="ke-section-header mb-4 text-primary">PERSONAL INFORMATION</h3>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label asp-for="Name" class="form-label form-label-required">Name</label>
-                                <input asp-for="Name" type="text" class="form-input" placeholder="Enter member name" />
-                                <span asp-validation-for="Name" class="form-error-text"></span>
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label asp-for="Name" class="label-sm mb-1">Name *</label>
+                                    <input asp-for="Name" type="text" class="input-field" placeholder="Enter member name" />
+                                    <span asp-validation-for="Name" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Email" class="label-sm mb-1">Email *</label>
+                                    <input asp-for="Email" type="email" class="input-field" placeholder="Enter email address" />
+                                    <span asp-validation-for="Email" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Phone" class="label-sm mb-1">Phone *</label>
+                                    <input asp-for="Phone" type="tel" class="input-field" placeholder="Enter phone number" />
+                                    <span asp-validation-for="Phone" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="DateOfBirth" class="label-sm mb-1">Date of Birth *</label>
+                                    <input asp-for="DateOfBirth" type="date" class="input-field" style="color-scheme: dark;" />
+                                    <span asp-validation-for="DateOfBirth" class="text-error small"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="Gender" class="label-sm mb-1">Gender *</label>
+                                    <select asp-for="Gender" class="input-field" asp-items="Html.GetEnumSelectList<Gender>()">
+                                        <option value="" style="background-color: var(--surface); color: var(--on-surface);">Select Gender</option>
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-error small"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="Email" class="form-label form-label-required">Email</label>
-                                <input asp-for="Email" type="email" class="form-input" placeholder="Enter email address" />
-                                <span asp-validation-for="Email" class="form-error-text"></span>
+
+                            <hr class="border-structural my-5" />
+
+                            <h3 class="ke-section-header mb-4 text-primary">ADDRESS INFORMATION</h3>
+
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label asp-for="BuildingNumber" class="label-sm mb-1">Building Number</label>
+                                    <input asp-for="BuildingNumber" class="input-field" placeholder="Enter building number" />
+                                    <span asp-validation-for="BuildingNumber" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Street" class="label-sm mb-1">Street</label>
+                                    <input asp-for="Street" class="input-field" placeholder="Enter street name" />
+                                    <span asp-validation-for="Street" class="text-error small"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="City" class="label-sm mb-1">City</label>
+                                    <input asp-for="City" class="input-field" placeholder="Enter city" />
+                                    <span asp-validation-for="City" class="text-error small"></span>
+                                </div>
+                            </div>
+
+                            <hr class="border-structural my-5" />
+
+                            <h3 class="ke-section-header mb-4 text-primary">PROFILE PHOTO</h3>
+
+                            <div class="mb-4">
+                                <label asp-for="Photo" class="label-sm mb-1">Photo</label>
+                                <input asp-for="Photo" type="file" class="input-field" accept=".jpg,.jpeg,.png,.webp" />
+                                <span asp-validation-for="Photo" class="text-error small"></span>
+                                <small class="text-muted mt-2 d-block body-sm">Accepted formats: JPG, JPEG, PNG, WEBP. Max size: 5 MB.</small>
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label asp-for="Phone" class="form-label form-label-required">Phone</label>
-                                <input asp-for="Phone" type="tel" class="form-input" placeholder="Enter phone number" />
-                                <span asp-validation-for="Phone" class="form-error-text"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="DateOfBirth" class="form-label form-label-required">Date of Birth</label>
-                                <input asp-for="DateOfBirth" type="date" class="form-input" />
-                                <span asp-validation-for="DateOfBirth" class="form-error-text"></span>
-                            </div>
-                        </div>
+                        <div id="health-info" class="tab-content" style="display: none;">
+                            <h3 class="ke-section-header mb-4 text-primary">HEALTH METRICS</h3>
 
-                        <div class="form-group">
-                            <label asp-for="Gender" class="form-label form-label-required">Gender</label>
-                            <select asp-for="Gender" class="form-input" asp-items="Html.GetEnumSelectList<Gender>()">
-                                <option value="">Select Gender</option>
-                            </select>
-                            <span asp-validation-for="Gender" class="form-error-text"></span>
-                        </div>
-
-                        <hr class="divider" />
-
-                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
-                            ADDRESS INFORMATION
-                        </h3>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label asp-for="BuildingNumber" class="form-label">Building Number</label>
-                                <input asp-for="BuildingNumber" class="form-input" placeholder="Enter building number" />
-                                <span asp-validation-for="BuildingNumber" class="form-error-text"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Street" class="form-label">Street</label>
-                                <input asp-for="Street" class="form-input" placeholder="Enter street name" />
-                                <span asp-validation-for="Street" class="form-error-text"></span>
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label asp-for="HealthRecord.Height" class="label-sm mb-1">Height (cm)</label>
+                                    <input asp-for="HealthRecord.Height" class="input-field" placeholder="Enter height" />
+                                    <span asp-validation-for="HealthRecord.Height" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="HealthRecord.Weight" class="label-sm mb-1">Weight (kg)</label>
+                                    <input asp-for="HealthRecord.Weight" class="input-field" placeholder="Enter weight" />
+                                    <span asp-validation-for="HealthRecord.Weight" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="HealthRecord.BloodType" class="label-sm mb-1">Blood Type</label>
+                                    <select asp-for="HealthRecord.BloodType" class="input-field" asp-items="Html.GetEnumSelectList<BloodType>()">
+                                        <option value="" style="background-color: var(--surface); color: var(--on-surface);">Select Blood Type</option>
+                                    </select>
+                                    <span asp-validation-for="HealthRecord.BloodType" class="text-error small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="HealthRecord.Note" class="label-sm mb-1">Notes</label>
+                                    <input asp-for="HealthRecord.Note" class="input-field" placeholder="Any health notes" />
+                                    <span asp-validation-for="HealthRecord.Note" class="text-error small"></span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="City" class="form-label">City</label>
-                            <input asp-for="City" class="form-input" placeholder="Enter city" />
-                            <span asp-validation-for="City" class="form-error-text"></span>
-                        </div>
-
-                        <hr class="divider" />
-
-                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
-                            PROFILE PHOTO
-                        </h3>
-
-                        <div class="form-group">
-                            <label asp-for="Photo" class="form-label">Photo</label>
-                            <input asp-for="Photo" type="file" class="form-input" accept=".jpg,.jpeg,.png,.webp" />
-                            <span asp-validation-for="Photo" class="form-error-text"></span>
-                            <small style="color: var(--text-secondary); margin-top: var(--space-xs); display: block;">Accepted formats: JPG, JPEG, PNG, WEBP. Max size: 5 MB.</small>
-                        </div>
-                    </div>
-
-                    
-                    <div id="health-info" class="tab-content" style="display: none;">
-                        <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
-                            HEALTH METRICS
-                        </h3>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label asp-for="HealthRecord.Height" class="form-label">Height (cm)</label>
-                                <input asp-for="HealthRecord.Height" class="form-input" placeholder="Enter height" />
-                                <span asp-validation-for="HealthRecord.Height" class="form-error-text"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="HealthRecord.Weight" class="form-label">Weight (kg)</label>
-                                <input asp-for="HealthRecord.Weight" class="form-input" placeholder="Enter weight" />
-                                <span asp-validation-for="HealthRecord.Weight" class="form-error-text"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label asp-for="HealthRecord.BloodType" class="form-label">Blood Type</label>
-                                <select asp-for="HealthRecord.BloodType" class="form-input" asp-items="Html.GetEnumSelectList<BloodType>()">
-                                    <option value="">Select Blood Type</option>
-                                </select>
-                                <span asp-validation-for="HealthRecord.BloodType" class="form-error-text"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="HealthRecord.Note" class="form-label">Notes</label>
-                                <input asp-for="HealthRecord.Note" class="form-input" placeholder="Any health notes" />
-                                <span asp-validation-for="HealthRecord.Note" class="form-error-text"></span>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center mt-5">
+                            <a asp-controller="Members" asp-action="Index" class="btn-secondary">
+                                ← Back to List
+                            </a>
+                            <button type="submit" class="ke-btn ke-btn-primary">
+                                <span class="me-2">+</span>
+                                Add Member
+                            </button>
                         </div>
                     </div>
-                </div>
-
-                
-                <div class="details-footer">
-                    <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
-                        ← Back to List
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <span style="margin-right: var(--space-sm);">+</span>
-                        Add Member
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-primary');
+                btn.classList.add('text-muted');
+                btn.style.borderBottomColor = 'transparent';
+            });
+            
+            event.currentTarget.classList.remove('text-muted');
+            event.currentTarget.classList.add('text-primary');
+            event.currentTarget.style.borderBottomColor = 'var(--primary)';
+        }
+    </script>
 }
