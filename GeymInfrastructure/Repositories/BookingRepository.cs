@@ -17,19 +17,19 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
 
     public async Task<bool> HasBookingAsync(int memberId, int sessionId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .AnyAsync(b => b.MemberId == memberId && b.SessionId == sessionId && !b.IsDeleted, cancellationToken);
     }
 
     public async Task<int> GetBookingCountAsync(int sessionId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .CountAsync(b => b.SessionId == sessionId && !b.IsDeleted, cancellationToken);
     }
 
     public async Task<Booking?> GetBookingWithDetailsAsync(int bookingId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .Include(b => b.Session)
                 .ThenInclude(s => s!.Category)
             .Include(b => b.Session)
@@ -40,13 +40,13 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
 
     public async Task<Booking?> GetMemberBookingAsync(int memberId, int sessionId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .FirstOrDefaultAsync(b => b.MemberId == memberId && b.SessionId == sessionId && !b.IsDeleted, cancellationToken);
     }
 
     public async Task<Booking?> GetBookingIncludingDeletedAsync(int memberId, int sessionId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(b => b.MemberId == memberId && b.SessionId == sessionId, cancellationToken);
     }

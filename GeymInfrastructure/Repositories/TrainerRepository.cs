@@ -20,4 +20,14 @@ public class TrainerRepository : Repository<Trainer>, ITrainerRepository
 
     public async Task<bool> IsPhoneTakenAsync(string phone, int? excludeId = null, CancellationToken cancellationToken = default)
         => await _dbContext.Set<User>().AnyAsync(u => u.Phone == phone && (!excludeId.HasValue || u.Id != excludeId.Value), cancellationToken);
+
+    public async Task<Trainer?> GetTrainerWithSessionsByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<Trainer>()
+            .Include(t => t.Sessions)
+                .ThenInclude(s => s.Category)
+            .Include(t => t.Sessions)
+                .ThenInclude(s => s.Bookings)
+            .FirstOrDefaultAsync(t => t.ApplicationUserId == userId, cancellationToken);
+    }
 }

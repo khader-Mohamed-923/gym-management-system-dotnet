@@ -10,12 +10,12 @@ namespace GymManagement.Domain.Services.Sessions;
 public class SessionService : ISessionService
 {
     private readonly ISessionRepository _sessionRepository;
-    private readonly IMemberRepository<Category> _categoryRepository;
+    private readonly IRepository<Category> _categoryRepository;
     private readonly ITrainerRepository _trainerRepository;
 
     public SessionService(
         ISessionRepository sessionRepository,
-        IMemberRepository<Category> categoryRepository,
+        IRepository<Category> categoryRepository,
         ITrainerRepository trainerRepository)
     {
         _sessionRepository = sessionRepository;
@@ -62,13 +62,13 @@ public class SessionService : ISessionService
             return Result.Failure("Capacity must be between 1 and 25.", nameof(request.Capacity));
         }
 
-        var categoryExists = await _categoryRepository.ExistAsyc(c => c.Id == request.CategoryId, cancellationToken);
+        var categoryExists = await _categoryRepository.ExistsAsync(c => c.Id == request.CategoryId, cancellationToken);
         if (!categoryExists)
         {
             return Result.Failure("Category is required.", nameof(request.CategoryId));
         }
 
-        var trainerExists = await _trainerRepository.ExistAsyc(t => t.Id == request.TrainerId, cancellationToken);
+        var trainerExists = await _trainerRepository.ExistsAsync(t => t.Id == request.TrainerId, cancellationToken);
         if (!trainerExists)
         {
             return Result.Failure("Trainer is required.", nameof(request.TrainerId));
@@ -146,13 +146,13 @@ public class SessionService : ISessionService
             return Result.Failure("Capacity must be between 1 and 25.", nameof(request.Capacity));
         }
 
-        var categoryExists = await _categoryRepository.ExistAsyc(c => c.Id == request.CategoryId, cancellationToken);
+        var categoryExists = await _categoryRepository.ExistsAsync(c => c.Id == request.CategoryId, cancellationToken);
         if (!categoryExists)
         {
             return Result.Failure("Category is required.", nameof(request.CategoryId));
         }
 
-        var trainerExists = await _trainerRepository.ExistAsyc(t => t.Id == request.TrainerId, cancellationToken);
+        var trainerExists = await _trainerRepository.ExistsAsync(t => t.Id == request.TrainerId, cancellationToken);
         if (!trainerExists)
         {
             return Result.Failure("Trainer is required.", nameof(request.TrainerId));

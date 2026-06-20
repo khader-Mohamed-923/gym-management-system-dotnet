@@ -1,4 +1,4 @@
-﻿using GymManagement.Infrastructure.Data.DbContexts;
+using GymManagement.Infrastructure.Data.DbContexts;
 using GymManagement.Domain.Entities;
 using GymManagement.Domain.Repositories;
 using GymManagement.Domain.Specifications;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace GymManagement.Infrastructure.Repositories;
 
-public class Repository<TEntity>(GymDbContext dbContext) : IMemberRepository<TEntity> where TEntity : BaseEntity
+public class Repository<TEntity>(GymDbContext dbContext) : IRepository<TEntity> where TEntity : BaseEntity
 {
     private readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>();
 
@@ -21,7 +21,7 @@ public class Repository<TEntity>(GymDbContext dbContext) : IMemberRepository<TEn
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         => await _dbSet.AddAsync(entity, cancellationToken);
 
-    public Task<bool> ExistAsyc(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellation = default)
+    public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellation = default)
         => _dbSet.AnyAsync(predicate, cancellation);
 
     public Task UpdateAsync(TEntity entity)
