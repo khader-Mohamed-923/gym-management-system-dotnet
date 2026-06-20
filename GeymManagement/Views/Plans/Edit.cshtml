@@ -4,125 +4,103 @@
     ViewData["Title"] = "Edit Plan";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    
-    <div class="iron-page-header">
-        <h1 class="iron-title">PLAN — EDIT PAGE</h1>
-        
-
+<div class="container py-5">
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">PLAN — EDIT PAGE</h1>
+            <p class="ke-subtitle">Update membership plan details</p>
+        </div>
     </div>
 
-    
     @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
-        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">✓</span>
-            <span>@TempData[TempDataKeys.SuccessMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--primary);">
+            <i class="bi bi-check-circle-fill text-primary fs-4 me-3"></i>
+            <span class="body-md">@TempData[TempDataKeys.SuccessMessage]</span>
         </div>
     }
     else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
-        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">⚠️</span>
-            <span>@TempData[TempDataKeys.ErrorMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--error);">
+            <i class="bi bi-exclamation-triangle-fill text-error fs-4 me-3"></i>
+            <span class="body-md text-error">@TempData[TempDataKeys.ErrorMessage]</span>
         </div>
     }
 
-    <div class="details-container">
-        
-        <div class="details-card animate-in">
-            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
-                @Html.AntiForgeryToken()
-                <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="PlanName" />
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-elevated">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="PlanName" />
 
-                <div class="details-body">
-                    
-                    <div class="form-group">
-                        <label class="form-label">
-                            🔒 PLAN NAME (LOCKED)
-                        </label>
-                        <div class="form-input form-input-locked" style="display: flex; align-items: center; gap: var(--space-sm);">
-                            <span style="color: var(--text-muted);">🏷️</span>
-                            @Model.PlanName
-                        </div>
-                        <span class="form-help-text">
-                            Plan name cannot be modified to maintain data integrity and member references.
-                        </span>
-                    </div>
-
-                    <hr class="divider" />
-
-                    
-                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary);">
-                        EDITABLE FIELDS
-                    </h3>
-
-                    <div class="form-row">
-                        
-                        <div class="form-group">
-                            <label asp-for="DurationInDays" class="form-label form-label-required">
-                                DURATION (DAYS)
+                        <div class="mb-5 p-4 border-structural bg-surface" style="border-left-color: var(--primary);">
+                            <label class="label-sm mb-2 d-flex align-items-center gap-2">
+                                <i class="bi bi-lock-fill"></i> PLAN NAME (LOCKED)
                             </label>
-                            <input asp-for="DurationInDays" 
-                                   class="form-input" 
-                                   type="number"
-                                   min="1"
-                                   placeholder="Enter duration in days" />
-                            <span asp-validation-for="DurationInDays" class="form-error-text"></span>
+                            <div class="d-flex align-items-center gap-2 px-3 py-2 bg-background border-structural">
+                                <span class="text-muted"><i class="bi bi-tag"></i></span>
+                                <span class="body-md fw-bold">@Model.PlanName</span>
+                            </div>
+                            <span class="small text-muted mt-2 d-block">
+                                Plan name cannot be modified to maintain data integrity and member references.
+                            </span>
                         </div>
 
-                        
-                        <div class="form-group">
-                            <label asp-for="Price" class="form-label form-label-required">
-                                PRICE (EGP)
-                            </label>
-                            <input asp-for="Price" 
-                                   class="form-input" 
-                                   type="number"
-                                   step="0.01"
-                                   min="0.01"
-                                   placeholder="Enter price in EGP" />
-                            <span asp-validation-for="Price" class="form-error-text"></span>
+                        <h3 class="ke-section-header text-primary pb-2 border-bottom border-structural mb-4">
+                            EDITABLE FIELDS
+                        </h3>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="DurationInDays" class="label-sm mb-1">DURATION (DAYS) <span class="text-error">*</span></label>
+                                <input asp-for="DurationInDays" 
+                                       class="input-field" 
+                                       type="number"
+                                       min="1"
+                                       placeholder="Enter duration in days" />
+                                <span asp-validation-for="DurationInDays" class="text-error small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="label-sm mb-1">PRICE (EGP) <span class="text-error">*</span></label>
+                                <input asp-for="Price" 
+                                       class="input-field" 
+                                       type="number"
+                                       step="0.01"
+                                       min="0.01"
+                                       placeholder="Enter price in EGP" />
+                                <span asp-validation-for="Price" class="text-error small mt-1"></span>
+                            </div>
                         </div>
-                    </div>
 
-                    
-                    <div class="form-group">
-                        <label asp-for="Description" class="form-label form-label-required">
-                            DESCRIPTION
-                        </label>
-                        <textarea asp-for="Description" 
-                                  class="form-textarea" 
-                                  rows="4"
-                                  placeholder="Enter plan description"></textarea>
-                        <span asp-validation-for="Description" class="form-error-text"></span>
-                    </div>
-                </div>
+                        <div class="mb-5">
+                            <label asp-for="Description" class="label-sm mb-1">DESCRIPTION <span class="text-error">*</span></label>
+                            <textarea asp-for="Description" 
+                                      class="input-field" 
+                                      rows="4"
+                                      placeholder="Enter plan description"></textarea>
+                            <span asp-validation-for="Description" class="text-error small mt-1"></span>
+                        </div>
 
-                
-                <div class="details-footer">
-                    <a asp-action="Index" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        Update Plan
-                    </button>
+                        <div class="d-flex justify-content-end gap-3 pt-4 border-top border-structural">
+                            <a asp-action="Index" class="btn-secondary px-4 py-2 text-decoration-none">
+                                Cancel
+                            </a>
+                            <button type="submit" class="ke-btn ke-btn-primary px-4 py-2">
+                                Update Plan
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
-
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <partial name="_AlertDismissScript" />
 }
-
