@@ -7,35 +7,35 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 1rem;">
+            <div class="card card-elevated">
                 <div class="card-body p-5">
                     <div class="text-center mb-4">
-                        <i class="bi bi-box-arrow-in-right fs-1" style="color: var(--text-accent);"></i>
-                        <h2 class="fw-bold mt-2 text-white" style="font-family: 'Oswald', sans-serif;">Welcome Back</h2>
-                        <p class="text-muted">Sign in to your account</p>
+                        <i class="bi bi-box-arrow-in-right fs-1 text-primary"></i>
+                        <h2 class="display-md mt-2">Welcome Back</h2>
+                        <p class="body-md text-muted">Sign in to your account</p>
                     </div>
 
                     <form asp-action="Login" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-error mb-3 small"></div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="UserName" class="form-control bg-transparent text-white" placeholder="Username" style="border-color: rgba(255,255,255,0.1);" />
-                            <label asp-for="UserName" class="text-muted">Username</label>
-                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="label-sm mb-1">Username</label>
+                            <input asp-for="UserName" class="input-field" placeholder="Username" />
+                            <span asp-validation-for="UserName" class="text-error small"></span>
                         </div>
 
-                        <div class="form-floating mb-4">
-                            <input asp-for="Password" type="password" class="form-control bg-transparent text-white" placeholder="Password" style="border-color: rgba(255,255,255,0.1);" />
-                            <label asp-for="Password" class="text-muted">Password</label>
-                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        <div class="mb-4">
+                            <label asp-for="Password" class="label-sm mb-1">Password</label>
+                            <input asp-for="Password" type="password" class="input-field" placeholder="Password" />
+                            <span asp-validation-for="Password" class="text-error small"></span>
                         </div>
 
-                        <button type="submit" class="btn w-100 py-3 fw-bold mb-3" style="background: linear-gradient(135deg, #f97316, #ef4444); border: none; color: white; letter-spacing: 0.05em; font-family: 'Oswald', sans-serif; font-size: 1.1rem; border-radius: 0.5rem; transition: transform 0.2s ease;">
+                        <button type="submit" class="ke-btn ke-btn-primary w-100 mb-3">
                             SIGN IN
                         </button>
 
                         <div class="text-center">
-                            <p class="text-muted mb-0">Don't have an account? <a asp-controller="Auth" asp-action="Register" class="text-decoration-none" style="color: var(--text-accent);">Register here</a></p>
+                            <p class="body-md text-muted mb-0">Don't have an account? <a asp-controller="Auth" asp-action="Register" class="text-decoration-none text-primary">Register here</a></p>
                         </div>
                     </form>
                 </div>
