@@ -1,4 +1,4 @@
-﻿namespace GymManagement.Domain.Entities;
+namespace GymManagement.Domain.Entities;
 
 public class Session : BaseEntity
 {
@@ -15,5 +15,5 @@ public class Session : BaseEntity
     public Trainer Trainer { get; set; } = null!;
 
 
-    public ICollection<Booking> Bokings { get; set; } = [];
+    public ICollection<Booking> Bookings { get; set; } = [];
 }

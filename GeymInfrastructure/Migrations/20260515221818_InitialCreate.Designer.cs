@@ -66,7 +66,7 @@ namespace GymManagement.Infrastructure.Migrations
                     b.HasIndex("MemberId", "SessionId")
                         .IsUnique();
 
-                    b.ToTable("Bokings");
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("GymManagement.Infrastructure.Models.Category", b =>
@@ -399,13 +399,13 @@ namespace GymManagement.Infrastructure.Migrations
             modelBuilder.Entity("GymManagement.Infrastructure.Models.Booking", b =>
                 {
                     b.HasOne("GymManagement.Infrastructure.Models.Member", "Member")
-                        .WithMany("Bokings")
+                        .WithMany("Bookings")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("GymManagement.Infrastructure.Models.Session", "Session")
-                        .WithMany("Bokings")
+                        .WithMany("Bookings")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -547,12 +547,12 @@ namespace GymManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("GymManagement.Infrastructure.Models.Session", b =>
                 {
-                    b.Navigation("Bokings");
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("GymManagement.Infrastructure.Models.Member", b =>
                 {
-                    b.Navigation("Bokings");
+                    b.Navigation("Bookings");
 
                     b.Navigation("HealthRecord")
                         .IsRequired();
