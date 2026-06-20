@@ -5,146 +5,126 @@
 }
 
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">ADMIN DASHBOARD</h1>
-            <p class="text-muted mt-1 mb-0">System overview and management statistics.</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">ADMIN DASHBOARD</h1>
+            <p class="ke-subtitle">System overview and management statistics.</p>
         </div>
-        <a asp-controller="Admin" asp-action="DownloadReport" class="btn fw-bold px-4 py-2" style="background: linear-gradient(135deg, #f97316, #ef4444); border: none; color: var(--text-primary); border-radius: 8px;">
+        <a asp-controller="Admin" asp-action="DownloadReport" class="ke-btn ke-btn-primary">
             <i class="bi bi-file-earmark-bar-graph"></i> Generate Report
         </a>
     </div>
 
     
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-3"><i class="bi bi-people fs-1" style="color: var(--text-accent);"></i></div>
-                    <h3 class="fw-bold mb-1" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.TotalActiveMembers</h3>
-                    <p class="mb-0 small text-uppercase fw-bold" style="color: var(--text-body);">Active Members</p>
-                </div>
-            </div>
+    <div class="ke-grid mb-5">
+        <div class="card card-elevated text-center">
+            <div class="mb-3"><i class="bi bi-people fs-1 text-primary"></i></div>
+            <h3 class="stat-value">@Model.TotalActiveMembers</h3>
+            <p class="stat-label">Active Members</p>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-3"><i class="bi bi-person-badge fs-1" style="color: var(--text-error);"></i></div>
-                    <h3 class="fw-bold mb-1" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.TotalTrainers</h3>
-                    <p class="mb-0 small text-uppercase fw-bold" style="color: var(--text-body);">Trainers</p>
-                </div>
-            </div>
+        <div class="card card-elevated text-center">
+            <div class="mb-3"><i class="bi bi-person-badge fs-1 text-primary"></i></div>
+            <h3 class="stat-value">@Model.TotalTrainers</h3>
+            <p class="stat-label">Trainers</p>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-3"><i class="bi bi-calendar-event fs-1" style="color: var(--text-accent);"></i></div>
-                    <h3 class="fw-bold mb-1" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.WeeklySessions</h3>
-                    <p class="mb-0 small text-uppercase fw-bold" style="color: var(--text-body);">Weekly Sessions</p>
-                </div>
-            </div>
+        <div class="card card-elevated text-center">
+            <div class="mb-3"><i class="bi bi-calendar-event fs-1 text-primary"></i></div>
+            <h3 class="stat-value">@Model.WeeklySessions</h3>
+            <p class="stat-label">Weekly Sessions</p>
         </div>
 
-        <div class="col-md-3">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-3"><i class="bi bi-currency-dollar fs-1" style="color: var(--text-error);"></i></div>
-                    <h3 class="fw-bold mb-1" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">$@Model.MonthlyRevenue.ToString("N0")</h3>
-                    <p class="mb-0 small text-uppercase fw-bold" style="color: var(--text-body);">Monthly Revenue</p>
-                </div>
-            </div>
+        <div class="card card-elevated text-center">
+            <div class="mb-3"><i class="bi bi-currency-dollar fs-1 text-primary"></i></div>
+            <h3 class="stat-value">$@Model.MonthlyRevenue.ToString("N0")</h3>
+            <p class="stat-label">Monthly Revenue</p>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-md-8">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4" style="font-family: 'Oswald', sans-serif; color: var(--text-primary);">RECENT REGISTRATIONS</h5>
-                    <div class="table-responsive">
-                        <table class="table table-dark table-hover table-borderless align-middle" style="background: transparent;">
-                            <thead>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                    <th class="small text-uppercase pb-3" style="color: var(--text-body);">Name</th>
-                                    <th class="small text-uppercase pb-3" style="color: var(--text-body);">Plan</th>
-                                    <th class="small text-uppercase pb-3" style="color: var(--text-body);">Date</th>
-                                    <th class="small text-uppercase pb-3" style="color: var(--text-body);">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.RecentRegistrations.Any())
+            <div class="card card-elevated h-100">
+                <h5 class="ke-section-header">RECENT REGISTRATIONS</h5>
+                <div class="roster-container">
+                    <table class="roster-list">
+                        <thead>
+                            <tr>
+                                <th class="roster-header">Name</th>
+                                <th class="roster-header">Plan</th>
+                                <th class="roster-header">Date</th>
+                                <th class="roster-header">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentRegistrations.Any())
+                            {
+                                @foreach (var reg in Model.RecentRegistrations)
                                 {
-                                    @foreach (var reg in Model.RecentRegistrations)
-                                    {
-                                        <tr>
-                                            <td class="py-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="bg-dark rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.1);">
-                                                        <i class="bi bi-person text-white"></i>
-                                                    </div>
-                                                    <div>
-                                                        <div class="fw-bold" style="color: var(--text-primary);">@reg.Name</div>
-                                                        <div class="small" style="color: var(--text-body);">@reg.Email</div>
-                                                    </div>
+                                    <tr class="roster-row">
+                                        <td class="roster-cell">
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center justify-content-center me-3 border-structural bg-surface" style="width: 40px; height: 40px;">
+                                                    <i class="bi bi-person text-on-surface"></i>
                                                 </div>
-                                            </td>
-                                            <td class="py-3" style="color: var(--text-primary);">@reg.PlanName</td>
-                                            <td class="py-3" style="color: var(--text-body);">@reg.Date</td>
-                                            <td class="py-3">
-                                                @if (reg.Status == MembershipStatus.Active)
-                                                {
-                                                    <span class="badge bg-success bg-opacity-25 text-success px-3 py-2 rounded-pill">Active</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-secondary bg-opacity-25 text-secondary px-3 py-2 rounded-pill">Inactive</span>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td colspan="4" class="text-center py-4" style="color: #e5e7eb;">No members registered yet.</td>
+                                                <div>
+                                                    <div class="data-mono">@reg.Name</div>
+                                                    <div class="label-sm text-muted">@reg.Email</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="roster-cell data-mono">@reg.PlanName</td>
+                                        <td class="roster-cell text-muted">@reg.Date</td>
+                                        <td class="roster-cell">
+                                            @if (reg.Status == MembershipStatus.Active)
+                                            {
+                                                <span class="status-chip status-chip--active">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="status-chip status-chip--inactive">Inactive</span>
+                                            }
+                                        </td>
                                     </tr>
                                 }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                            else
+                            {
+                                <tr class="roster-row">
+                                    <td colspan="4" class="roster-cell text-center py-4 text-muted">No members registered yet.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4" style="font-family: 'Oswald', sans-serif; color: var(--text-primary);">QUICK ACTIONS</h5>
-                    <div class="d-grid gap-3">
-                        <a asp-controller="Members" asp-action="Create" class="btn btn-dark text-start p-3 d-flex align-items-center" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5);">
-                            <div class="me-3" style="color: var(--text-accent);"><i class="bi bi-person-plus fs-4"></i></div>
-                            <div>
-                                <div class="fw-bold" style="color: var(--text-primary);">Add New Member</div>
-                                <div class="small" style="color: var(--text-body);">Manually register a user</div>
-                            </div>
-                        </a>
-                        <a asp-controller="Sessions" asp-action="Create" class="btn btn-dark text-start p-3 d-flex align-items-center" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5);">
-                            <div class="me-3" style="color: var(--text-error);"><i class="bi bi-calendar-plus fs-4"></i></div>
-                            <div>
-                                <div class="fw-bold" style="color: var(--text-primary);">Create Session</div>
-                                <div class="small" style="color: var(--text-body);">Schedule a new class</div>
-                            </div>
-                        </a>
-                        <a asp-controller="Plans" asp-action="Index" class="btn btn-dark text-start p-3 d-flex align-items-center" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5);">
-                            <div class="me-3" style="color: var(--text-accent);"><i class="bi bi-credit-card fs-4"></i></div>
-                            <div>
-                                <div class="fw-bold" style="color: var(--text-primary);">Manage Plans</div>
-                                <div class="small" style="color: var(--text-body);">Update pricing &amp; features</div>
-                            </div>
-                        </a>
-                    </div>
+            <div class="card card-elevated h-100">
+                <h5 class="ke-section-header">QUICK ACTIONS</h5>
+                <div class="d-grid gap-3">
+                    <a asp-controller="Members" asp-action="Create" class="btn-secondary d-flex align-items-center justify-content-start p-3 w-100">
+                        <div class="me-3 text-primary"><i class="bi bi-person-plus fs-4"></i></div>
+                        <div class="text-start">
+                            <div class="data-mono">Add New Member</div>
+                            <div class="label-sm text-muted">Manually register a user</div>
+                        </div>
+                    </a>
+                    <a asp-controller="Sessions" asp-action="Create" class="btn-secondary d-flex align-items-center justify-content-start p-3 w-100">
+                        <div class="me-3 text-primary"><i class="bi bi-calendar-plus fs-4"></i></div>
+                        <div class="text-start">
+                            <div class="data-mono">Create Session</div>
+                            <div class="label-sm text-muted">Schedule a new class</div>
+                        </div>
+                    </a>
+                    <a asp-controller="Plans" asp-action="Index" class="btn-secondary d-flex align-items-center justify-content-start p-3 w-100">
+                        <div class="me-3 text-primary"><i class="bi bi-credit-card fs-4"></i></div>
+                        <div class="text-start">
+                            <div class="data-mono">Manage Plans</div>
+                            <div class="label-sm text-muted">Update pricing &amp; features</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
