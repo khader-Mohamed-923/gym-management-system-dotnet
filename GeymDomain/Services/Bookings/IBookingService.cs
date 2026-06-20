@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.DTOs.Bookings.Responses;
 
@@ -7,6 +8,7 @@ public interface IBookingService
 {
     Task<Result<IEnumerable<SessionScheduleResponse>>> GetUpcomingSessionsAsync(string? userId, CancellationToken cancellationToken = default);
     Task<Result<IEnumerable<SessionScheduleResponse>>> GetOngoingSessionsAsync(string? userId, CancellationToken cancellationToken = default);
+    Task<Result<IEnumerable<SessionScheduleResponse>>> GetTrainerSessionsAsync(string trainerId, CancellationToken cancellationToken = default);
     Task<Result<int>> BookSessionAsync(int sessionId, string memberUserId, CancellationToken cancellationToken = default);
     Task<Result> CancelBookingAsync(int bookingId, string memberUserId, CancellationToken cancellationToken = default);
     Task<Result> MarkAttendanceAsync(int bookingId, bool attended, CancellationToken cancellationToken = default);
@@ -21,6 +23,7 @@ public class SessionMembersDetailsResponse
     public string TrainerName { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public string Status { get; set; } = string.Empty;
+    public SessionStatus Status { get; set; }
     public IEnumerable<SessionMemberResponse> Members { get; set; } = [];
 }
+

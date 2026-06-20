@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 namespace GymManagement.Domain.DTOs.Bookings.Responses;
 
 public class SessionScheduleResponse
@@ -11,7 +12,8 @@ public class SessionScheduleResponse
     public int DurationMinutes { get; set; }
     public int Capacity { get; set; }
     public int BookedCount { get; set; }
-    public string Status { get; set; } = string.Empty;
+    public SessionStatus Status { get; set; }
     public bool IsBookedByCurrentUser { get; set; }
     public int? CurrentUserBookingId { get; set; }
 }
+

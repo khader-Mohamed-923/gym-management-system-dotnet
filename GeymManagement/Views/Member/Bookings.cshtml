@@ -28,7 +28,7 @@
         <div class="bookings-grid">
             @foreach (var booking in Model)
             {
-                var isUpcoming = booking.Status == "Upcoming";
+                var isUpcoming = booking.Status == SessionStatus.Upcoming;
                 
                 <div class="booking-card animate-in @(!isUpcoming ? "past-session" : "")">
                     <div class="booking-card-header">
@@ -220,3 +220,4 @@
         }
     }
 </style>
+
