@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.DTOs.Bookings.Responses;
 using GymManagement.Domain.Entities;
@@ -70,7 +71,7 @@ public class BookingService : IBookingService
                 DurationMinutes = (int)(session.EndDate - session.StartDate).TotalMinutes,
                 Capacity = session.Capacity,
                 BookedCount = bookedCount,
-                Status = "Upcoming",
+                Status = SessionStatus.Upcoming,
                 IsBookedByCurrentUser = isBookedByCurrentUser,
                 CurrentUserBookingId = bookingId
             });
@@ -126,9 +127,48 @@ public class BookingService : IBookingService
                 DurationMinutes = (int)(session.EndDate - session.StartDate).TotalMinutes,
                 Capacity = session.Capacity,
                 BookedCount = bookedCount,
-                Status = "Ongoing",
+                Status = SessionStatus.Ongoing,
                 IsBookedByCurrentUser = isBookedByCurrentUser,
                 CurrentUserBookingId = bookingId
+            });
+        }
+
+        return Result<IEnumerable<SessionScheduleResponse>>.Success(responses);
+    }
+
+    public async Task<Result<IEnumerable<SessionScheduleResponse>>> GetTrainerSessionsAsync(string trainerId, CancellationToken cancellationToken = default)
+    {
+        var spec = new SessionWithDetailsSpecification();
+        var sessions = await _sessionRepository.GetListWithSpecAsync(spec, cancellationToken);
+        var now = DateTime.Now;
+
+        var trainerSessions = sessions
+            .Where(s => s.Trainer != null && s.Trainer.ApplicationUserId == trainerId)
+            .OrderByDescending(s => s.StartDate > now)
+            .ThenBy(s => s.StartDate)
+            .ToList();
+
+        var responses = new List<SessionScheduleResponse>();
+        foreach (var session in trainerSessions)
+        {
+            var bookedCount = await _sessionRepository.GetBookedCountAsync(session.Id, cancellationToken);
+            
+            SessionStatus status = session.StartDate > now ? SessionStatus.Upcoming : (session.EndDate < now ? SessionStatus.Completed : SessionStatus.Ongoing);
+
+            responses.Add(new SessionScheduleResponse
+            {
+                SessionId = session.Id,
+                SessionName = session.Description,
+                CategoryName = session.Category?.Name ?? "Unknown",
+                TrainerName = session.Trainer?.Name ?? "Unassigned",
+                StartDate = session.StartDate,
+                EndDate = session.EndDate,
+                DurationMinutes = (int)(session.EndDate - session.StartDate).TotalMinutes,
+                Capacity = session.Capacity,
+                BookedCount = bookedCount,
+                Status = status,
+                IsBookedByCurrentUser = false,
+                CurrentUserBookingId = null
             });
         }
 
@@ -300,9 +340,9 @@ public class BookingService : IBookingService
             BookedCount = 0, // Not needed for member view
             IsAttended = b.IsAttended,
             Status = b.Session != null 
-                ? (b.Session.StartDate > now ? "Upcoming" : b.Session.EndDate < now ? "Completed" : "Ongoing")
-                : "Unknown"
-        }).OrderByDescending(b => b.Status == "Upcoming").ThenBy(b => b.StartDate);
+                ? (b.Session.StartDate > now ? SessionStatus.Upcoming : b.Session.EndDate < now ? SessionStatus.Completed : SessionStatus.Ongoing)
+                : SessionStatus.Completed
+        }).OrderByDescending(b => b.Status == SessionStatus.Upcoming).ThenBy(b => b.StartDate);
 
         return Result<IEnumerable<BookingResponse>>.Success(responses);
     }
@@ -320,7 +360,7 @@ public class BookingService : IBookingService
             new BookingsBySessionSpecification(sessionId), cancellationToken);
 
         var now = DateTime.Now;
-        var status = session.StartDate > now ? "Upcoming" : session.EndDate < now ? "Completed" : "Ongoing";
+        var status = session.StartDate > now ? SessionStatus.Upcoming : session.EndDate < now ? SessionStatus.Completed : SessionStatus.Ongoing;
 
         var members = bookings.Select(b => new SessionMemberResponse
         {
@@ -366,3 +406,4 @@ public class BookingsBySessionSpecification : BaseSpecification<Booking>
         AddInclude(b => b.Member!);
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace GymManagement.Presentation.ExceptionHandlers;
 
@@ -19,7 +19,9 @@ public class CustomExceptionHandler : IExceptionHandler
      
         _logger.LogError(exception, "An unhandled exception occurred: {Message}", exception.Message);
 
+        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        httpContext.Response.Redirect("/Home/Error");
 
-        return false;
+        return true;
     }
 }

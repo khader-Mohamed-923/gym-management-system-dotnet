@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<ITrainerService, TrainerService>();
         services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<GymManagement.Domain.Services.Categories.ICategoryService, GymManagement.Domain.Services.Categories.CategoryService>();
         services.AddScoped<IMembershipService, MembershipService>();
         services.AddScoped<IBookingService, BookingService>();
 

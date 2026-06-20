@@ -1,3 +1,4 @@
+using GymManagement.Presentation.Constants;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.DTOs.Bookings.Requests;
 using GymManagement.Domain.Services.Bookings;
@@ -5,11 +6,12 @@ using GymManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Mapster;
+using GymManagement.Presentation.ViewModels.Booking;
 
 namespace GymManagement.Presentation.Controllers;
 
 [Authorize]
-public class BookingController : Controller
+public class BookingController : BaseController
 {
     private readonly IBookingService _bookingService;
 
@@ -47,17 +49,20 @@ public class BookingController : Controller
         var userId = GetCurrentUserId();
         if (string.IsNullOrEmpty(userId))
         {
-            return Json(new { success = false, message = "User not authenticated." });
+            TempData[TempDataKeys.ErrorMessage] = "User not authenticated.";
+            return RedirectToAction(nameof(Schedule));
         }
 
         var result = await _bookingService.BookSessionAsync(sessionId, userId, cancellationToken);
 
         if (result.IsFailure)
         {
-            return Json(new { success = false, message = result.Error });
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
+            return RedirectToAction(nameof(Schedule));
         }
 
-        return Json(new { success = true, message = "Session booked successfully!", bookingId = result.Value });
+        TempData[TempDataKeys.SuccessMessage] = "Session booked successfully!";
+        return RedirectToAction(nameof(Schedule));
     }
 
     [HttpGet]
@@ -74,7 +79,7 @@ public class BookingController : Controller
 
         if (result.IsFailure)
         {
-            TempData["ErrorMessage"] = result.Error;
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
             return View(Enumerable.Empty<BookingViewModel>());
         }
 
@@ -91,17 +96,20 @@ public class BookingController : Controller
         var userId = GetCurrentUserId();
         if (string.IsNullOrEmpty(userId))
         {
-            return Json(new { success = false, message = "User not authenticated." });
+            TempData[TempDataKeys.ErrorMessage] = "User not authenticated.";
+            return RedirectToAction(nameof(Schedule));
         }
 
         var result = await _bookingService.CancelBookingAsync(bookingId, userId, cancellationToken);
 
         if (result.IsFailure)
         {
-            return Json(new { success = false, message = result.Error });
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
+            return RedirectToAction(nameof(Schedule));
         }
 
-        return Json(new { success = true, message = "Booking cancelled successfully!" });
+        TempData[TempDataKeys.SuccessMessage] = "Booking cancelled successfully!";
+        return RedirectToAction(nameof(Schedule));
     }
 
     [HttpGet]
@@ -112,7 +120,7 @@ public class BookingController : Controller
 
         if (result.IsFailure)
         {
-            TempData["ErrorMessage"] = result.Error;
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
             return RedirectToAction(nameof(Schedule));
         }
 
@@ -164,87 +172,25 @@ public class BookingController : Controller
             return RedirectToAction("Login", "Auth");
         }
 
-        // Get trainer's sessions - we'll reuse the schedule view but filter for this trainer
-        var upcomingResult = await _bookingService.GetUpcomingSessionsAsync(null, cancellationToken);
-        var ongoingResult = await _bookingService.GetOngoingSessionsAsync(null, cancellationToken);
+        var result = await _bookingService.GetTrainerSessionsAsync(userId, cancellationToken);
 
-        // For trainer view, we show all sessions but could filter in the future
         var viewModel = new ScheduleViewModel
         {
-            UpcomingSessions = upcomingResult.IsSuccess 
-                ? upcomingResult.Value.Select(s => s.Adapt<SessionScheduleViewModel>()) 
+            UpcomingSessions = result.IsSuccess 
+                ? result.Value.Where(s => s.Status == SessionStatus.Upcoming).Select(s => s.Adapt<SessionScheduleViewModel>()) 
                 : Enumerable.Empty<SessionScheduleViewModel>(),
-            OngoingSessions = ongoingResult.IsSuccess 
-                ? ongoingResult.Value.Select(s => s.Adapt<SessionScheduleViewModel>()) 
+            OngoingSessions = result.IsSuccess 
+                ? result.Value.Where(s => s.Status == SessionStatus.Ongoing).Select(s => s.Adapt<SessionScheduleViewModel>()) 
                 : Enumerable.Empty<SessionScheduleViewModel>()
         };
 
         return View("Schedule", viewModel);
     }
 
-    private string? GetCurrentUserId()
-    {
-        return User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-    }
+
 }
 
-// View Models
-public class ScheduleViewModel
-{
-    public IEnumerable<SessionScheduleViewModel> UpcomingSessions { get; set; } = [];
-    public IEnumerable<SessionScheduleViewModel> OngoingSessions { get; set; } = [];
-}
 
-public class SessionScheduleViewModel
-{
-    public int SessionId { get; set; }
-    public string SessionName { get; set; } = string.Empty;
-    public string CategoryName { get; set; } = string.Empty;
-    public string TrainerName { get; set; } = string.Empty;
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public int DurationMinutes { get; set; }
-    public int Capacity { get; set; }
-    public int BookedCount { get; set; }
-    public string Status { get; set; } = string.Empty;
-    public bool IsBookedByCurrentUser { get; set; }
-    public int? CurrentUserBookingId { get; set; }
-}
 
-public class BookingViewModel
-{
-    public int BookingId { get; set; }
-    public int SessionId { get; set; }
-    public string SessionName { get; set; } = string.Empty;
-    public string CategoryName { get; set; } = string.Empty;
-    public string TrainerName { get; set; } = string.Empty;
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public int DurationMinutes { get; set; }
-    public int Capacity { get; set; }
-    public int BookedCount { get; set; }
-    public bool IsAttended { get; set; }
-    public string Status { get; set; } = string.Empty;
-}
 
-public class SessionMembersViewModel
-{
-    public int SessionId { get; set; }
-    public string SessionName { get; set; } = string.Empty;
-    public string TrainerName { get; set; } = string.Empty;
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public string Status { get; set; } = string.Empty;
-    public IEnumerable<SessionMemberViewModel> Members { get; set; } = [];
-}
 
-public class SessionMemberViewModel
-{
-    public int BookingId { get; set; }
-    public int MemberId { get; set; }
-    public string MemberName { get; set; } = string.Empty;
-    public string MemberEmail { get; set; } = string.Empty;
-    public string MemberPhone { get; set; } = string.Empty;
-    public bool IsAttended { get; set; }
-    public DateTime BookingDate { get; set; }
-}

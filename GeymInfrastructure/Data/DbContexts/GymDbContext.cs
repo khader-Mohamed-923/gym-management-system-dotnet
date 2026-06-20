@@ -49,7 +49,7 @@ public class GymDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Trainer> Trainers => Set<Trainer>();
     public DbSet<Session> Sessions { get; set; }
-    public DbSet<Booking> Bokings { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
     public DbSet<MemberShip> MemberShips { get; set; }
     public DbSet<HealthRecord> HealthRecords { get; set; }
 }

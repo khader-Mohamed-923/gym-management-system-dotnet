@@ -33,12 +33,12 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
 
     public async Task<Result> CreateAsync(CreateMemberRequest request, CancellationToken cancellationToken)
     {
-        if (await memberRepository.ExistAsyc(e => e.Email == request.Email, cancellationToken))
+        if (await memberRepository.ExistsAsync(e => e.Email == request.Email, cancellationToken))
         {
             return Result.Failure("Email already exists.", nameof(request.Email));
         }
 
-        if (await memberRepository.ExistAsyc(e => e.Phone == request.Phone, cancellationToken))
+        if (await memberRepository.ExistsAsync(e => e.Phone == request.Phone, cancellationToken))
         {
             return Result.Failure("Phone number already exists.", nameof(request.Phone));
         }
@@ -238,6 +238,9 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
                         ? $"{member.Address.Street}, {member.Address.City}"
                         : "Not provided"
                 : "Not provided",
+            Street = member.Address?.Street ?? string.Empty,
+            City = member.Address?.City ?? string.Empty,
+            BuildingNumber = member.Address?.BuildingNumber ?? 0,
             HealthRecord = member.HealthRecord != null ? new HealthRecordResponse
             {
                 Height = member.HealthRecord.Height,
@@ -290,8 +293,8 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
             TrainerName = b.Session?.Trainer?.Name ?? "Unassigned",
             Date = b.Session?.StartDate.ToShortDateString() ?? "N/A",
             Time = b.Session != null ? $"{b.Session.StartDate:HH:mm} - {b.Session.EndDate:HH:mm}" : "N/A",
-            Status = b.Session?.StartDate >= DateTime.Now ? "Upcoming" : "Completed"
-        }).OrderByDescending(b => b.Status == "Upcoming").ThenBy(b => b.Date);
+            Status = b.Session?.StartDate >= DateTime.Now ? SessionStatus.Upcoming : SessionStatus.Completed
+        }).OrderByDescending(b => b.Status == SessionStatus.Upcoming).ThenBy(b => b.Date);
     }
 
     public async Task<IEnumerable<MemberMembershipResponse>> GetMembershipsAsync(string userId, CancellationToken cancellationToken = default)
@@ -311,4 +314,15 @@ public class MemberService(IMemberRepository memberRepository) : IMemberService
             IsActive = m.EndDate >= DateTime.Today
         }).OrderByDescending(m => m.IsActive).ThenByDescending(m => m.EndDate);
     }
+
+    public async Task<Result<MemberDashboardResponse>> GetMemberDashboardAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var dashboardData = await memberRepository.GetDashboardDataAsync(userId, cancellationToken);
+        
+        if (dashboardData == null)
+            return Result<MemberDashboardResponse>.Failure("Member not found", "User");
+            
+        return Result<MemberDashboardResponse>.Success(dashboardData);
+    }
 }
+

@@ -17,13 +17,13 @@ public class SessionRepository : Repository<Session>, ISessionRepository
 
     public async Task<int> GetBookedCountAsync(int sessionId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .CountAsync(b => b.SessionId == sessionId, cancellationToken);
     }
 
     public async Task<bool> HasActiveBookingsAsync(int sessionId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Bokings
+        return await _dbContext.Bookings
             .AnyAsync(b => b.SessionId == sessionId, cancellationToken);
     }
 }

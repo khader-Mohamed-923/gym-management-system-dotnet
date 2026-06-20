@@ -1,4 +1,4 @@
-﻿using GymManagement.Domain.Entities;
+using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +14,9 @@ internal class BokingConfiguration : IEntityTypeConfiguration<Booking>
                 .HasDefaultValue(false);
 
 
+
+        builder.HasIndex(x => x.MemberId);
+        builder.HasIndex(x => x.SessionId);
 
         builder.HasIndex(x => new
         {

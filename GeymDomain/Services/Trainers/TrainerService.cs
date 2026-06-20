@@ -185,4 +185,37 @@ public class TrainerService(ITrainerRepository trainerRepository, IUserIdentityS
 
         return Result.Success();
     }
+
+    public async Task<Result<TrainerDashboardResponse>> GetTrainerDashboardAsync(string trainerId, CancellationToken cancellationToken = default)
+    {
+        var trainer = await trainerRepository.GetTrainerWithSessionsByUserIdAsync(trainerId, cancellationToken);
+        if (trainer == null)
+            return Result<TrainerDashboardResponse>.Failure("Trainer not found.", nameof(trainerId));
+
+        var today = DateTime.UtcNow.Date;
+        var todaysSessions = trainer.Sessions.Where(s => s.StartDate.Date == today).ToList();
+        var upcomingSessions = trainer.Sessions
+            .Where(s => s.StartDate >= DateTime.UtcNow)
+            .OrderBy(s => s.StartDate)
+            .Take(5)
+            .ToList();
+
+        var uniqueTraineesCount = trainer.Sessions.SelectMany(s => s.Bookings).Select(b => b.MemberId).Distinct().Count();
+
+        return Result<TrainerDashboardResponse>.Success(new TrainerDashboardResponse
+        {
+             TodaysSessionsCount = todaysSessions.Count,
+             TotalTraineesCount = uniqueTraineesCount,
+             AverageRating = 4.9, // Hardcoded for now
+             UpcomingSessions = upcomingSessions.Select(s => new TrainerSessionResponse
+             {
+                 Id = s.Id,
+                 Name = s.Category?.Name ?? s.Description,
+                 TimeRange = $"{s.StartDate:hh:mm tt} - {s.EndDate:hh:mm tt}",
+                 Location = "Main Floor", // Hardcoded for now
+                 RegisteredTrainees = s.Bookings.Count,
+                 MaxCapacity = s.Capacity
+             })
+        });
+    }
 }

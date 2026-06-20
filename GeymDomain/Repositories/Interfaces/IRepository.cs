@@ -1,16 +1,16 @@
-﻿using GymManagement.Domain.Entities;
+using GymManagement.Domain.Entities;
 using GymManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
 namespace GymManagement.Domain.Repositories;
 
-public interface IMemberRepository<TEntity> where TEntity : BaseEntity
+public interface IRepository<TEntity> where TEntity : BaseEntity
 {
     Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
     Task<TEntity?> GetByIdIncludedDeletedAsync(int id, CancellationToken cancellationToken = default);
 
-    Task<bool> ExistAsyc(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellation = default);
+    Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellation = default);
 
     Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 

@@ -1,4 +1,4 @@
-﻿using GymManagement.Domain.Entities;
+using GymManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,6 +21,8 @@ public class SessionConfiguration : IEntityTypeConfiguration<Session>
             t.HasCheckConstraint("CK_Session_DataRange", "StartDate < EndDate");
 
         });
+
+        builder.HasIndex(s => s.TrainerId);
 
         builder.HasQueryFilter(s => !s.IsDeleted);
 

@@ -52,7 +52,7 @@ public class AdminDashboardService : IAdminDashboardService
                     .FirstOrDefault(ms => ms.MemberId == m.Id)
                     ?.Plan?.Name ?? "No Plan",
                 Date   = m.JoinDate.ToString("MMM dd, yyyy"),
-                Status = activeMemberships.Any(ms => ms.MemberId == m.Id) ? "Active" : "Inactive"
+                Status = activeMemberships.Any(ms => ms.MemberId == m.Id) ? GymManagement.Domain.Enums.MembershipStatus.Active : GymManagement.Domain.Enums.MembershipStatus.Inactive
             });
 
         return new AdminDashboardResponse
@@ -63,5 +63,31 @@ public class AdminDashboardService : IAdminDashboardService
             MonthlyRevenue      = monthlyRevenue,
             RecentRegistrations = recentRegistrations
         };
+    }
+
+    public async Task<byte[]> GenerateReportCsvAsync(CancellationToken cancellationToken = default)
+    {
+        var model = await GetDashboardAsync(cancellationToken);
+
+        var csv = new System.Text.StringBuilder();
+        csv.AppendLine("GYM MANAGEMENT SYSTEM - REPORT");
+        csv.AppendLine($"Generated:,{DateTime.Now:MMM dd yyyy  HH:mm}");
+        csv.AppendLine();
+        csv.AppendLine("SUMMARY");
+        csv.AppendLine($"Active Members,{model.TotalActiveMembers}");
+        csv.AppendLine($"Total Trainers,{model.TotalTrainers}");
+        csv.AppendLine($"Weekly Sessions,{model.WeeklySessions}");
+        csv.AppendLine($"Monthly Revenue,${model.MonthlyRevenue:N2}");
+        csv.AppendLine();
+        csv.AppendLine("RECENT REGISTRATIONS");
+        csv.AppendLine("Name,Email,Plan,Join Date,Status");
+        foreach (var reg in model.RecentRegistrations)
+        {
+            csv.AppendLine($"\"{reg.Name}\",\"{reg.Email}\",\"{reg.PlanName}\",\"{reg.Date}\",\"{reg.Status}\"");
+        }
+
+        var preamble = System.Text.Encoding.UTF8.GetPreamble();
+        var data = System.Text.Encoding.UTF8.GetBytes(csv.ToString());
+        return preamble.Concat(data).ToArray();
     }
 }

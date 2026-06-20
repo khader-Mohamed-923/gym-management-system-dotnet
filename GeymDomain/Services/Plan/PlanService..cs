@@ -1,4 +1,4 @@
-﻿using GymManagement.Domain.Common;
+using GymManagement.Domain.Common;
 using GymManagement.Domain.DTOs.Plans.Requests;
 using GymManagement.Domain.DTOs.Plans.Responses;
 using GymManagement.Domain.Entities;
@@ -9,12 +9,12 @@ namespace GymManagement.Domain.Services
 {
     public class PlanService : IPlanService
     {
-        private readonly IMemberRepository<Plan> _planRepository;
-        private readonly IMemberRepository<MemberShip> _membershipRepository;
+        private readonly IRepository<Plan> _planRepository;
+        private readonly IRepository<MemberShip> _membershipRepository;
 
         public PlanService(
-            IMemberRepository<Plan> planRepository,
-            IMemberRepository<MemberShip> membershipRepository)
+            IRepository<Plan> planRepository,
+            IRepository<MemberShip> membershipRepository)
         {
             _planRepository = planRepository;
             _membershipRepository = membershipRepository;

@@ -17,7 +17,7 @@
             <div class="details-header">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
                     <span class="session-category-badge">@Model.CategoryName</span>
-                    <span class="session-status-badge session-status-@Model.Status.ToLower()">@Model.Status</span>
+                    <span class="session-status-badge session-status-@Model.Status.ToString().ToLower()">@Model.Status</span>
                 </div>
                 <h2 style="font-family: var(--font-display); font-size: 2rem; margin: var(--space-lg) 0 0 0; color: var(--text-primary);">@Model.Description</h2>
             </div>
@@ -150,3 +150,4 @@
         border: 1px solid rgba(163, 163, 163, 0.25);
     }
 </style>
+

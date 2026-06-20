@@ -1,3 +1,4 @@
+@model GymManagement.Presentation.ViewModels.Trainer.TrainerDashboardViewModel
 @{
     ViewData["Title"] = "Trainer Dashboard";
     Layout = "~/Views/Shared/_TrainerLayout.cshtml";
@@ -18,7 +19,7 @@
                     </div>
                     <div>
                         <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Today's Sessions</p>
-                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">4</h3>
+                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.TodaysSessionsCount</h3>
                     </div>
                 </div>
             </div>
@@ -32,7 +33,7 @@
                     </div>
                     <div>
                         <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Total Trainees</p>
-                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">128</h3>
+                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.TotalTraineesCount</h3>
                     </div>
                 </div>
             </div>
@@ -46,7 +47,7 @@
                     </div>
                     <div>
                         <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Avg Rating</p>
-                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">4.9</h3>
+                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.AverageRating.ToString("0.0")</h3>
                     </div>
                 </div>
             </div>
@@ -58,30 +59,32 @@
             <h5 class="fw-bold mb-4" style="font-family: 'Oswald', sans-serif; color: var(--text-primary);">UPCOMING SESSIONS</h5>
             
             <div class="d-flex flex-column gap-3">
-                <div class="p-4 rounded" style="background: rgba(0,0,0,0.4); border-left: 4px solid #f97316;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="fw-bold mb-1" style="color: var(--text-primary);">HIIT Cardio Burn</h5>
-                            <p class="mb-0" style="color: var(--text-body);"><i class="bi bi-clock me-2"></i> 10:00 AM - 11:00 AM &bull; Studio A</p>
+                @if(!Model.UpcomingSessions.Any())
+                {
+                    <p class="text-muted">No upcoming sessions scheduled.</p>
+                }
+                else
+                {
+                    foreach(var session in Model.UpcomingSessions)
+                    {
+                        var borderClass = session.RegisteredTrainees >= session.MaxCapacity ? "border-left: 4px solid #ef4444;" : "border-left: 4px solid #f97316;";
+                        <div class="p-4 rounded" style="background: rgba(0,0,0,0.4); @borderClass">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="fw-bold mb-1" style="color: var(--text-primary);">@session.Name</h5>
+                                    <p class="mb-0" style="color: var(--text-body);"><i class="bi bi-clock me-2"></i> @session.TimeRange &bull; @session.Location</p>
+                                </div>
+                                <div class="text-end">
+                                    @if(session.RegisteredTrainees >= session.MaxCapacity)
+                                    {
+                                        <span class="badge bg-danger bg-opacity-25 text-danger px-3 py-2 rounded-pill mb-2">Full</span>
+                                    }
+                                    <div class="small" style="color: var(--text-primary);">@session.RegisteredTrainees/@session.MaxCapacity Registered</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-end">
-                            <span class="badge bg-warning bg-opacity-25 text-warning px-3 py-2 rounded-pill mb-2">Starting Soon</span>
-                            <div class="small" style="color: var(--text-primary);">15/20 Registered</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-4 rounded" style="background: rgba(0,0,0,0.4); border-left: 4px solid #ef4444;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="fw-bold mb-1" style="color: var(--text-primary);">Strength & Conditioning</h5>
-                            <p class="mb-0" style="color: var(--text-body);"><i class="bi bi-clock me-2"></i> 02:00 PM - 03:30 PM &bull; Main Floor</p>
-                        </div>
-                        <div class="text-end">
-                            <div class="small" style="color: var(--text-primary);">12/15 Registered</div>
-                        </div>
-                    </div>
-                </div>
+                    }
+                }
             </div>
         </div>
     </div>

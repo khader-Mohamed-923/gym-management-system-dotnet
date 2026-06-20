@@ -12,8 +12,8 @@ namespace GymManagement.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Bokings_Users_MemberId",
-                table: "Bokings");
+                name: "FK_Bookings_Users_MemberId",
+                table: "Bookings");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_HealthRecord_Users_MemberId",
@@ -232,8 +232,8 @@ namespace GymManagement.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Bokings_User_MemberId",
-                table: "Bokings",
+                name: "FK_Bookings_User_MemberId",
+                table: "Bookings",
                 column: "MemberId",
                 principalTable: "User",
                 principalColumn: "Id",
@@ -268,8 +268,8 @@ namespace GymManagement.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Bokings_User_MemberId",
-                table: "Bokings");
+                name: "FK_Bookings_User_MemberId",
+                table: "Bookings");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_HealthRecord_User_MemberId",
@@ -323,8 +323,8 @@ namespace GymManagement.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Bokings_Users_MemberId",
-                table: "Bokings",
+                name: "FK_Bookings_Users_MemberId",
+                table: "Bookings",
                 column: "MemberId",
                 principalTable: "Users",
                 principalColumn: "Id",

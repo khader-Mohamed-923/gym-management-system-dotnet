@@ -12,4 +12,5 @@ public interface ITrainerService
     Task<TrainerEditResponse?> GetForEditAsync(int id, CancellationToken cancellationToken);
     Task<Result> UpdateAsync(int id, UpdateTrainerRequest request, CancellationToken cancellationToken);
     Task<Result> DeleteAsync(int id, CancellationToken cancellationToken);
+    Task<Result<TrainerDashboardResponse>> GetTrainerDashboardAsync(string trainerId, CancellationToken cancellationToken = default);
 }

@@ -11,6 +11,7 @@ using GymManagement.Infrastructure.Data.Identity;
 using GymManagement.Domain.Services.Admin;
 using GymManagement.Infrastructure.Services.Admin;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 
 namespace GeymInfrastructure;
@@ -19,7 +20,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
     {
         services.AddSingleton<AuditColumnsInterceptor>();
 
@@ -32,7 +34,7 @@ public static class DependencyInjection
                 sp.GetRequiredService<AuditColumnsInterceptor>());
         });
 
-        services.AddScoped(typeof(IMemberRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<ITrainerRepository, TrainerRepository>();
         services.AddScoped<IMembershipRepository, MembershipRepository>();
@@ -53,7 +55,9 @@ public static class DependencyInjection
            services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly  = true;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SecurePolicy = env.IsDevelopment()
+                ? CookieSecurePolicy.None
+                : CookieSecurePolicy.Always;
             options.ExpireTimeSpan   = TimeSpan.FromDays(7);
             options.LoginPath        = "/Auth/Login";
             options.LogoutPath       = "/Auth/Logout";

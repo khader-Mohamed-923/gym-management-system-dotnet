@@ -11,5 +11,8 @@ public class MemberProfileResponse
     public string DateOfBirth { get; set; } = string.Empty;
     public string JoinDate { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
+    public string Street { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public int BuildingNumber { get; set; }
     public HealthRecordResponse HealthRecord { get; set; } = new();
 }

@@ -176,7 +176,7 @@ namespace GymManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bokings",
+                name: "Bookings",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -192,15 +192,15 @@ namespace GymManagement.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bokings", x => x.Id);
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bokings_Sessions_SessionId",
+                        name: "FK_Bookings_Sessions_SessionId",
                         column: x => x.SessionId,
                         principalTable: "Sessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Bokings_Users_MemberId",
+                        name: "FK_Bookings_Users_MemberId",
                         column: x => x.MemberId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -208,14 +208,14 @@ namespace GymManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bokings_MemberId_SessionId",
-                table: "Bokings",
+                name: "IX_Bookings_MemberId_SessionId",
+                table: "Bookings",
                 columns: new[] { "MemberId", "SessionId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bokings_SessionId",
-                table: "Bokings",
+                name: "IX_Bookings_SessionId",
+                table: "Bookings",
                 column: "SessionId");
 
             migrationBuilder.CreateIndex(
@@ -262,7 +262,7 @@ namespace GymManagement.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Bokings");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "HealthRecord");

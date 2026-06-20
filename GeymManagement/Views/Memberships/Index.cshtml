@@ -18,20 +18,20 @@
         </a>
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
+    @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
         <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
             <span class="alert-icon">✓</span>
-            <span>@TempData["SuccessMessage"]</span>
+            <span>@TempData[TempDataKeys.SuccessMessage]</span>
             <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
             <div class="alert-progress"></div>
         </div>
     }
-    else if (TempData["ErrorMessage"] != null)
+    else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
         <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
             <span class="alert-icon">⚠️</span>
-            <span>@TempData["ErrorMessage"]</span>
+            <span>@TempData[TempDataKeys.ErrorMessage]</span>
             <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
             <div class="alert-progress"></div>
         </div>
@@ -69,7 +69,7 @@
                                     <span style="color: var(--text-secondary);">@membership.EndDate.ToString("MMM dd, yyyy")</span>
                                 </td>
                                 <td>
-                                    @if (membership.Status == "Active")
+                                    @if (membership.Status == MembershipStatus.Active)
                                     {
                                         <span class="status-badge status-active">Active</span>
                                     }
@@ -110,3 +110,5 @@
 @section Scripts {
     <partial name="_AlertDismissScript" />
 }
+
+

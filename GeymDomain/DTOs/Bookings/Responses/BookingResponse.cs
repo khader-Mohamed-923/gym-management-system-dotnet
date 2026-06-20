@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 namespace GymManagement.Domain.DTOs.Bookings.Responses;
 
 public class BookingResponse
@@ -13,5 +14,6 @@ public class BookingResponse
     public int Capacity { get; set; }
     public int BookedCount { get; set; }
     public bool IsAttended { get; set; }
-    public string Status { get; set; } = string.Empty;
+    public SessionStatus Status { get; set; }
 }
+

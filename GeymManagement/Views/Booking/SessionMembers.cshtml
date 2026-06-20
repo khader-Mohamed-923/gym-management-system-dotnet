@@ -22,7 +22,7 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
                     <h2 class="session-name">@Model.SessionName</h2>
-                    <span class="status-badge status-@Model.Status.ToLower()">@Model.Status</span>
+                    <span class="status-badge status-@Model.Status.ToString().ToLower()">@Model.Status</span>
                 </div>
                 <span class="trainer-badge">
                     <i class="bi bi-person-badge me-1"></i>@Model.TrainerName
@@ -55,20 +55,20 @@
         </div>
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
+    @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
         <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
             <span class="alert-icon">✓</span>
-            <span>@TempData["SuccessMessage"]</span>
+            <span>@TempData[TempDataKeys.SuccessMessage]</span>
             <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
             <div class="alert-progress"></div>
         </div>
     }
-    else if (TempData["ErrorMessage"] != null)
+    else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
         <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
             <span class="alert-icon">⚠️</span>
-            <span>@TempData["ErrorMessage"]</span>
+            <span>@TempData[TempDataKeys.ErrorMessage]</span>
             <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
             <div class="alert-progress"></div>
         </div>
@@ -86,7 +86,7 @@
                             <th>Phone</th>
                             <th>Booking Date</th>
                             <th>Attendance</th>
-                            @if (Model.Status == "Ongoing" || Model.Status == "Completed")
+                            @if (Model.Status == SessionStatus.Ongoing || Model.Status == SessionStatus.Completed)
                             {
                                 <th>Actions</th>
                             }
@@ -124,7 +124,7 @@
                                         </span>
                                     }
                                 </td>
-                                @if (Model.Status == "Ongoing" || Model.Status == "Completed")
+                                @if (Model.Status == SessionStatus.Ongoing || Model.Status == SessionStatus.Completed)
                                 {
                                     <td>
                                         <div class="action-buttons">
@@ -389,3 +389,6 @@
         }
     </script>
 }
+
+
+

@@ -10,13 +10,13 @@ namespace GymManagement.Domain.Services.Memberships;
 public class MembershipService : IMembershipService
 {
     private readonly IMembershipRepository _membershipRepository;
-    private readonly IMemberRepository<Member> _memberRepository;
-    private readonly IMemberRepository<Plan> _planRepository;
+    private readonly IRepository<Member> _memberRepository;
+    private readonly IRepository<Plan> _planRepository;
 
     public MembershipService(
         IMembershipRepository membershipRepository,
-        IMemberRepository<Member> memberRepository,
-        IMemberRepository<Plan> planRepository)
+        IRepository<Member> memberRepository,
+        IRepository<Plan> planRepository)
     {
         _membershipRepository = membershipRepository;
         _memberRepository = memberRepository;
