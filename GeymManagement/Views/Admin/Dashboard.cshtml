@@ -93,7 +93,7 @@
                                             <td class="py-3" style="color: var(--text-primary);">@reg.PlanName</td>
                                             <td class="py-3" style="color: var(--text-body);">@reg.Date</td>
                                             <td class="py-3">
-                                                @if (reg.Status == "Active")
+                                                @if (reg.Status == MembershipStatus.Active)
                                                 {
                                                     <span class="badge bg-success bg-opacity-25 text-success px-3 py-2 rounded-pill">Active</span>
                                                 }
@@ -150,3 +150,4 @@
         </div>
     </div>
 </div>
+

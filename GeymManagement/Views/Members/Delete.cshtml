@@ -32,7 +32,7 @@
             </div>
 
             
-            <form asp-action="Delete" method="post" asp-route-id="@ViewBag.id">
+            <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
                 @Html.AntiForgeryToken()
                 <div style="display: flex; gap: var(--space-md); justify-content: center;">
                     <a asp-controller="Members" asp-action="Index" class="btn btn-secondary btn-lg">

@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 namespace GymManagement.Presentation.ViewModels.Membership;
 
 public class MembershipIndexViewModel
@@ -9,5 +10,6 @@ public class MembershipIndexViewModel
     public string PlanName { get; set; } = default!;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public string Status { get; set; } = default!;
+    public MembershipStatus Status { get; set; }
 }
+

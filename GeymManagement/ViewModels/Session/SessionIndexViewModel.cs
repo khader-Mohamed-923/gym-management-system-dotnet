@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 namespace GymManagement.Presentation.ViewModels.Session;
 
 public class SessionIndexViewModel
@@ -12,5 +13,6 @@ public class SessionIndexViewModel
     public int TrainerId { get; set; }
     public int CategoryId { get; set; }
     public int BookedCount { get; set; }
-    public string Status { get; set; } = default!;
+    public SessionStatus Status { get; set; }
 }
+
