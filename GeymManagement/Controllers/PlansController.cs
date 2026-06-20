@@ -1,4 +1,5 @@
-﻿using GymManagement.Domain.Common;
+using GymManagement.Presentation.Constants;
+using GymManagement.Domain.Common;
 using GymManagement.Domain.Services;
 using GymManagement.Domain.DTOs.Plans.Requests;
 using GymManagement.Presentation.ViewModels.Plan;
@@ -37,7 +38,7 @@ namespace GymManagement.Presentation.Controllers
 
             if (response == null)
             {
-                TempData["ErrorMessage"] = "Plan not found.";
+                TempData[TempDataKeys.ErrorMessage] = "Plan not found.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -61,11 +62,11 @@ namespace GymManagement.Presentation.Controllers
             if (result.IsFailure)
             {
                 ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
-                TempData["ErrorMessage"] = "Cannot update plan: " + result.Error;
+                TempData[TempDataKeys.ErrorMessage] = "Cannot update plan: " + result.Error;
                 return View(viewModel);
             }
 
-            TempData["SuccessMessage"] = "Plan updated successfully.";
+            TempData[TempDataKeys.SuccessMessage] = "Plan updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -77,14 +78,15 @@ namespace GymManagement.Presentation.Controllers
 
             if (result.IsFailure)
             {
-                TempData["ErrorMessage"] = result.Error;
+                TempData[TempDataKeys.ErrorMessage] = result.Error;
             }
             else
             {
-                TempData["SuccessMessage"] = "Plan status changed.";
+                TempData[TempDataKeys.SuccessMessage] = "Plan status changed.";
             }
 
             return RedirectToAction(nameof(Index));
         }
     }
 }
+

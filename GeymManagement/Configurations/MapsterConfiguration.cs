@@ -1,3 +1,4 @@
+using GymManagement.Domain.Enums;
 using GymManagement.Domain.DTOs.Members.Requests;
 using GymManagement.Domain.DTOs.Members.Responses;
 using GymManagement.Domain.DTOs.Trainers.Requests;
@@ -16,6 +17,7 @@ using GymManagement.Domain.DTOs.Memberships.Requests;
 using GymManagement.Domain.DTOs.Memberships.Responses;
 using GymManagement.Domain.DTOs.Bookings.Responses;
 using GymManagement.Presentation.Controllers;
+using GymManagement.Presentation.ViewModels.Booking;
 using Mapster;
 
 namespace GymManagement.Presentation.Configurations;
@@ -82,18 +84,19 @@ public static class MapsterConfiguration
         TypeAdapterConfig<BookingResponse, BookingViewModel>.NewConfig();
     }
 
-    private static string ComputeMembershipStatus(DateTime endDate)
+    private static MembershipStatus ComputeMembershipStatus(DateTime endDate)
     {
-        return DateTime.Now > endDate ? "Expired" : "Active";
+        return DateTime.Now > endDate ? MembershipStatus.Expired : MembershipStatus.Active;
     }
 
-    private static string ComputeStatus(DateTime startDate, DateTime endDate)
+    private static SessionStatus ComputeStatus(DateTime startDate, DateTime endDate)
     {
         var now = DateTime.Now;
         if (now < startDate)
-            return "Upcoming";
+            return SessionStatus.Upcoming;
         if (now >= startDate && now <= endDate)
-            return "Ongoing";
-        return "Completed";
+            return SessionStatus.Ongoing;
+        return SessionStatus.Completed;
     }
 }
+

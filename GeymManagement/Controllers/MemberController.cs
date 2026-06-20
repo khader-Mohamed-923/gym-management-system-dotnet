@@ -1,35 +1,32 @@
+using GymManagement.Presentation.Constants;
 using GymManagement.Domain.Enums;
-using GymManagement.Infrastructure.Data.Identity;
 using GymManagement.Domain.DTOs.Members.Responses;
 using GymManagement.Domain.DTOs.Members.Requests;
 using GymManagement.Domain.Services.Members;
+using GymManagement.Domain.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagement.Presentation.Controllers;
 
 [Authorize(Roles = nameof(Role.Member))]
-public class MemberController : Controller
+public class MemberController : BaseController
 {
     private readonly IMemberService _memberService;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserIdentityService _userIdentityService;
 
-    public MemberController(IMemberService memberService, UserManager<ApplicationUser> userManager)
+    public MemberController(IMemberService memberService, IUserIdentityService userIdentityService)
     {
         _memberService = memberService;
-        _userManager = userManager;
+        _userIdentityService = userIdentityService;
     }
 
-    private async Task<string?> GetCurrentUserIdAsync()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        return user?.Id;
-    }
 
+
+    [HttpGet]
     public async Task<IActionResult> Profile()
     {
-        var userId = await GetCurrentUserIdAsync();
+        var userId = GetCurrentUserId();
         if (userId == null) return RedirectToAction("Login", "Auth");
         var profile = await _memberService.GetProfileAsync(userId);
         return View(profile);
@@ -38,7 +35,7 @@ public class MemberController : Controller
     [HttpGet]
     public async Task<IActionResult> CompleteProfile()
     {
-        var userId = await GetCurrentUserIdAsync();
+        var userId = GetCurrentUserId();
         if (userId == null) return RedirectToAction("Login", "Auth");
         
         var profile = await _memberService.GetProfileAsync(userId);
@@ -46,8 +43,9 @@ public class MemberController : Controller
 
         var request = new UpdateMemberProfileRequest
         {
-            Street = profile.Address?.Contains("Not provided") == false ? profile.Address.Split(',')[0].Trim() : "",
-            City = profile.Address?.Contains("Not provided") == false && profile.Address.Contains(',') ? profile.Address.Split(',')[1].Trim() : "",
+            Street = profile.Street,
+            City = profile.City,
+            BuildingNumber = profile.BuildingNumber,
             Height = profile.HealthRecord?.Height ?? 0,
             Weight = profile.HealthRecord?.Weight ?? 0,
             BloodType = profile.HealthRecord?.BloodType ?? "Unknown",
@@ -61,7 +59,7 @@ public class MemberController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CompleteProfile(UpdateMemberProfileRequest request)
     {
-        var userId = await GetCurrentUserIdAsync();
+        var userId = GetCurrentUserId();
         if (userId == null) return RedirectToAction("Login", "Auth");
 
         if (!ModelState.IsValid)
@@ -71,7 +69,7 @@ public class MemberController : Controller
 
         if (result.IsSuccess)
         {
-            TempData["SuccessMessage"] = "Profile completed successfully!";
+            TempData[TempDataKeys.SuccessMessage] = "Profile completed successfully!";
             return RedirectToAction("Profile");
         }
 
@@ -79,37 +77,39 @@ public class MemberController : Controller
         return View(request);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Bookings()
     {
-        var userId = await GetCurrentUserIdAsync();
+        var userId = GetCurrentUserId();
         if (userId == null) return RedirectToAction("Login", "Auth");
         var bookings = await _memberService.GetBookingsAsync(userId);
         return View(bookings);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Memberships()
     {
-        var userId = await GetCurrentUserIdAsync();
+        var userId = GetCurrentUserId();
         if (userId == null) return RedirectToAction("Login", "Auth");
         var memberships = await _memberService.GetMembershipsAsync(userId);
         return View(memberships);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Dashboard()
     {
-        var userId = await GetCurrentUserIdAsync();
+        var userId = GetCurrentUserId();
         if (userId == null) return RedirectToAction("Login", "Auth");
 
-        var memberships = await _memberService.GetMembershipsAsync(userId);
-        var bookings = await _memberService.GetBookingsAsync(userId);
-
-        var model = new MemberDashboardResponse
+        var result = await _memberService.GetMemberDashboardAsync(userId);
+        if (result.IsFailure)
         {
-            ActiveMembership = memberships.FirstOrDefault(m => m.IsActive),
-            TotalBookings = bookings.Count(),
-            UpcomingBookings = bookings.Where(b => b.Status == "Upcoming").Take(2)
-        };
+            TempData[TempDataKeys.ErrorMessage] = "Could not load dashboard data.";
+            return RedirectToAction("Login", "Auth");
+        }
 
-        return View(model);
+        return View(result.Value);
     }
 }
+
+

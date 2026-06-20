@@ -1,3 +1,8 @@
+using GymManagement.Presentation.Constants;
+using GymManagement.Domain.Common;
+using GymManagement.Domain.Services.Sessions;
+using GymManagement.Domain.Services.Trainers;
+using GymManagement.Domain.DTOs.Sessions.Requests;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Sessions;
 using GymManagement.Domain.Services.Trainers;
@@ -7,13 +12,14 @@ using GymManagement.Domain.Entities;
 using GymManagement.Presentation.ViewModels.Session;
 using Microsoft.AspNetCore.Mvc;
 using Mapster;
+using GymManagement.Domain.Services.Categories;
 
 namespace GymManagement.Presentation.Controllers;
 
 public class SessionsController(
     ISessionService sessions,
     ITrainerService trainers,
-    IMemberRepository<Category> categories) : Controller
+    ICategoryService categories) : BaseAdminController
 {
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
@@ -25,7 +31,7 @@ public class SessionsController(
             return View(viewModels);
         }
 
-        TempData["ErrorMessage"] = result.Error ?? "Failed to load sessions.";
+        TempData[TempDataKeys.ErrorMessage] = result.Error ?? "Failed to load sessions.";
         return View(new List<SessionIndexViewModel>());
     }
 
@@ -53,12 +59,12 @@ public class SessionsController(
         if (result.IsFailure)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
-            TempData["ErrorMessage"] = "Session Failed To Create. " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Session Failed To Create. " + result.Error;
             await PopulateDropdowns(cancellationToken);
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Session Created Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Session Created Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -69,7 +75,7 @@ public class SessionsController(
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Session not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Session not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -84,7 +90,7 @@ public class SessionsController(
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Session not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Session not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -110,12 +116,12 @@ public class SessionsController(
         if (!result.IsSuccess)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error!);
-            TempData["ErrorMessage"] = "Cannot Update Session: " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Cannot Update Session: " + result.Error;
             await PopulateDropdowns(cancellationToken);
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Session Updated Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Session Updated Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -126,12 +132,11 @@ public class SessionsController(
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Session not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Session not found.";
             return RedirectToAction(nameof(Index));
         }
 
         var viewModel = response.Adapt<SessionEditViewModel>();
-        ViewBag.Id = viewModel.Id;
         return View(viewModel);
     }
 
@@ -144,18 +149,18 @@ public class SessionsController(
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = result.Error;
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
             return RedirectToAction(nameof(Index));
         }
 
-        TempData["SuccessMessage"] = "Session Deleted Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Session Deleted Successfully";
         return RedirectToAction(nameof(Index));
     }
 
     private async Task PopulateDropdowns(CancellationToken cancellationToken)
     {
         var trainersResult = await trainers.GetAllAsync(cancellationToken);
-        var categoriesList = await categories.GetAllAsync(cancellationToken);
+        var categoriesList = await categories.GetAllCategoriesAsync(cancellationToken);
 
         ViewBag.Trainers = trainersResult.IsSuccess 
             ? trainersResult.Value.Select(t => new TrainerDropdownItem { Id = t.Id, Name = t.Name }).ToList() 
@@ -163,7 +168,4 @@ public class SessionsController(
 
         ViewBag.Categories = categoriesList.Select(c => new CategoryDropdownItem { Id = c.Id, Name = c.Name }).ToList();
     }
-
-    public record TrainerDropdownItem { public int Id { get; set; } public string Name { get; set; } = default!; }
-    public record CategoryDropdownItem { public int Id { get; set; } public string Name { get; set; } = default!; }
 }

@@ -1,3 +1,4 @@
+using GymManagement.Presentation.Constants;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Memberships;
 using GymManagement.Domain.Services.Members;
@@ -14,6 +15,7 @@ public class MembershipsController(
     IMemberService members,
     IPlanService plans) : Controller
 {
+    [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var result = await memberships.GetAllAsync(cancellationToken);
@@ -24,7 +26,7 @@ public class MembershipsController(
             return View(viewModels);
         }
 
-        TempData["ErrorMessage"] = result.Error ?? "Failed to load memberships.";
+        TempData[TempDataKeys.ErrorMessage] = result.Error ?? "Failed to load memberships.";
         return View(new List<MembershipIndexViewModel>());
     }
 
@@ -52,12 +54,12 @@ public class MembershipsController(
         if (result.IsFailure)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
-            TempData["ErrorMessage"] = "Membership Failed To Create. " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Membership Failed To Create. " + result.Error;
             await PopulateDropdowns(cancellationToken);
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Membership Created Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Membership Created Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -69,11 +71,11 @@ public class MembershipsController(
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = result.Error;
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
             return RedirectToAction(nameof(Index));
         }
 
-        TempData["SuccessMessage"] = "Membership Cancelled Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Membership Cancelled Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -93,3 +95,4 @@ public class MembershipsController(
     public record MemberDropdownItem { public int Id { get; set; } public string Name { get; set; } = default!; }
     public record PlanDropdownItem { public int Id { get; set; } public string Name { get; set; } = default!; }
 }
+

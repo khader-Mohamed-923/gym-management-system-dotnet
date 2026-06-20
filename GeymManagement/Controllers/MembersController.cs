@@ -1,3 +1,4 @@
+using GymManagement.Presentation.Constants;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Members;
 using GymManagement.Domain.DTOs.Members.Requests;
@@ -10,9 +11,9 @@ using GymManagement.Domain.Enums;
 
 namespace GymManagement.Presentation.Controllers;
 
-[Authorize(Roles = nameof(Role.Admin))]
-public class MembersController(IMemberService members, IImageService imageService) : Controller
+public class MembersController(IMemberService members, IImageService imageService) : BaseAdminController
 {
+    [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var result = await members.GetAllAsync(cancellationToken);
@@ -23,7 +24,7 @@ public class MembersController(IMemberService members, IImageService imageServic
             return View(viewModels);
         }
 
-        TempData["ErrorMessage"] = result.Error ?? "Failed to load members.";
+        TempData[TempDataKeys.ErrorMessage] = result.Error ?? "Failed to load members.";
         return View(new List<MemberIndexViewModel>());
     }
 
@@ -66,11 +67,11 @@ public class MembersController(IMemberService members, IImageService imageServic
         if (result.IsFailure)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
-            TempData["ErrorMessage"] = "Member Failed To Create. " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Member Failed To Create. " + result.Error;
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Member Created Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Member Created Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -81,7 +82,7 @@ public class MembersController(IMemberService members, IImageService imageServic
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Member not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Member not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -95,7 +96,7 @@ public class MembersController(IMemberService members, IImageService imageServic
         var healthRecord = await members.GetHealthRecordAsync(id, cancellationToken);
         if (healthRecord == null)
         {
-            TempData["ErrorMessage"] = "Health record not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Health record not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -110,7 +111,7 @@ public class MembersController(IMemberService members, IImageService imageServic
         
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Member not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Member not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -134,11 +135,11 @@ public class MembersController(IMemberService members, IImageService imageServic
         if (!result.IsSuccess)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error!);
-            TempData["ErrorMessage"] = "Cannot Update a Member: " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Cannot Update a Member: " + result.Error;
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Member Updated Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Member Updated Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -149,12 +150,11 @@ public class MembersController(IMemberService members, IImageService imageServic
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Member not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Member not found.";
             return RedirectToAction(nameof(Index));
         }
 
         var viewModel = response.Adapt<MemberEditViewModel>();
-        ViewBag.id = viewModel.Id;
         return View(viewModel);
     }
 
@@ -167,11 +167,14 @@ public class MembersController(IMemberService members, IImageService imageServic
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = result.Error;
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
             return RedirectToAction(nameof(Index));
         }
 
-        TempData["SuccessMessage"] = "Member Deleted Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Member Deleted Successfully";
         return RedirectToAction(nameof(Index));
     }
 }
+
+
+

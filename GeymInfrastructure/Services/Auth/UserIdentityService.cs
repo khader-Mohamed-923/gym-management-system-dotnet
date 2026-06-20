@@ -38,4 +38,10 @@ public class UserIdentityService : IUserIdentityService
 
         return Result<string>.Success(appUser.Id);
     }
+
+    public async Task<string?> GetCurrentUserIdAsync(System.Security.Claims.ClaimsPrincipal principal)
+    {
+        var user = await _userManager.GetUserAsync(principal);
+        return user?.Id;
+    }
 }

@@ -1,3 +1,4 @@
+using GymManagement.Presentation.Constants;
 using GymManagement.Domain.Common;
 using GymManagement.Domain.Services.Trainers;
 using GymManagement.Domain.DTOs.Trainers.Requests;
@@ -9,15 +10,16 @@ using Mapster;
 
 namespace GymManagement.Presentation.Controllers;
 
-[Authorize(Roles = $"{nameof(Role.Admin)},{nameof(Role.Trainer)}")]
-public class TrainersController(ITrainerService trainers) : Controller
+public class TrainersController(ITrainerService trainers) : BaseController
 {
+    [HttpGet]
     [Authorize(Roles = nameof(Role.Trainer))]
     public IActionResult Dashboard()
     {
         return View();
     }
 
+    [HttpGet]
     [Authorize(Roles = nameof(Role.Admin))]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
@@ -29,7 +31,7 @@ public class TrainersController(ITrainerService trainers) : Controller
             return View(viewModels);
         }
 
-        TempData["ErrorMessage"] = result.Error ?? "Failed to load trainers.";
+        TempData[TempDataKeys.ErrorMessage] = result.Error ?? "Failed to load trainers.";
         return View(new List<TrainerIndexViewModel>());
     }
 
@@ -41,7 +43,7 @@ public class TrainersController(ITrainerService trainers) : Controller
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Trainer not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Trainer not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -73,11 +75,11 @@ public class TrainersController(ITrainerService trainers) : Controller
         if (result.IsFailure)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
-            TempData["ErrorMessage"] = "Trainer Failed To Create. " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Trainer Failed To Create. " + result.Error;
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Trainer Created Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Trainer Created Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -88,7 +90,7 @@ public class TrainersController(ITrainerService trainers) : Controller
         var response = await trainers.GetForEditAsync(id, cancellationToken);
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Trainer not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Trainer not found.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -113,11 +115,11 @@ public class TrainersController(ITrainerService trainers) : Controller
         if (!result.IsSuccess)
         {
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error!);
-            TempData["ErrorMessage"] = "Cannot Update a Trainer: " + result.Error;
+            TempData[TempDataKeys.ErrorMessage] = "Cannot Update a Trainer: " + result.Error;
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Trainer Updated Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Trainer Updated Successfully";
         return RedirectToAction(nameof(Index));
     }
 
@@ -129,12 +131,11 @@ public class TrainersController(ITrainerService trainers) : Controller
 
         if (response == null)
         {
-            TempData["ErrorMessage"] = "Trainer not found.";
+            TempData[TempDataKeys.ErrorMessage] = "Trainer not found.";
             return RedirectToAction(nameof(Index));
         }
 
         var viewModel = response.Adapt<TrainerEditViewModel>();
-        ViewBag.id = viewModel.Id;
         return View(viewModel);
     }
 
@@ -148,11 +149,11 @@ public class TrainersController(ITrainerService trainers) : Controller
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = result.Error;
+            TempData[TempDataKeys.ErrorMessage] = result.Error;
             return RedirectToAction(nameof(Index));
         }
 
-        TempData["SuccessMessage"] = "Trainer Deleted Successfully";
+        TempData[TempDataKeys.SuccessMessage] = "Trainer Deleted Successfully";
         return RedirectToAction(nameof(Index));
     }
 }

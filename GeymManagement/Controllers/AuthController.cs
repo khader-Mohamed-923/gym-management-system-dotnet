@@ -1,5 +1,6 @@
 using GymManagement.Domain.DTOs.Auth;
 using GymManagement.Domain.Services.Auth;
+using GymManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagement.Presentation.Controllers;
@@ -28,9 +29,13 @@ public async Task<IActionResult> Register(RegisterRequest request)
     var result = await _authService.RegisterAsync(request);
 
     if (result.IsSuccess)
+    {
+        if (User.IsInRole(nameof(Role.Admin))) return RedirectToAction("Dashboard", "Admin");
+        if (User.IsInRole(nameof(Role.Trainer))) return RedirectToAction("Dashboard", "Trainers");
         return RedirectToAction("Dashboard", "Member");
+    }
 
-    ModelState.AddModelError(string.Empty, result.Error);
+    ModelState.AddModelError(string.Empty, result.Error ?? "Authentication failed");
     return View(request);
 }
 
@@ -46,7 +51,11 @@ public async Task<IActionResult> Register(RegisterRequest request)
         var result = await _authService.LoginAsync(request);
 
         if (result.IsSuccess)
-            return RedirectToAction("Index", "Home");
+        {
+            if (User.IsInRole(nameof(Role.Admin))) return RedirectToAction("Dashboard", "Admin");
+            if (User.IsInRole(nameof(Role.Trainer))) return RedirectToAction("Dashboard", "Trainers");
+            return RedirectToAction("Dashboard", "Member");
+        }
 
         if (!string.IsNullOrEmpty(result.Error))
             ModelState.AddModelError(result.ErrorKey ?? string.Empty, result.Error);
