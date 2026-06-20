@@ -4,88 +4,82 @@
     ViewData["Title"] = $"{Model.Name} - Member Details";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
+<div class="container py-5">
     
-    <div class="iron-page-header">
-        <h1 class="iron-title">MEMBER DETAILS</h1>
-        <p class="iron-subtitle">View complete information about this member</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">MEMBER DETAILS</h1>
+            <p class="ke-subtitle">View complete information about this member</p>
+        </div>
     </div>
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            
-            <div class="details-header">
-                <div class="member-avatar member-avatar--orange" style="width: 100px; height: 100px; font-size: 2rem; margin: 0 auto var(--space-lg);">
-                    @(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card card-elevated text-center mb-4">
+                <div class="d-flex align-items-center justify-content-center border-structural bg-surface mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2rem;">
+                    <span class="data-mono">@(Model.Name.Length >= 2 ? Model.Name.Substring(0, 2).ToUpper() : Model.Name.ToUpper())</span>
                 </div>
-                <h2 class="iron-title" style="font-size: 2rem; margin-bottom: var(--space-md);">@Model.Name</h2>
+                <h2 class="display-md mb-3">@Model.Name</h2>
                 @if (!string.IsNullOrEmpty(Model.PlanName))
                 {
-                    <span class="plan-badge plan-@Model.PlanName.ToLower()">@Model.PlanName</span>
+                    <span class="plan-chip">@Model.PlanName</span>
                 }
                 else
                 {
-                    <span class="plan-badge plan-basic">No Plan</span>
+                    <span class="plan-chip" style="background: var(--surface); color: var(--on-surface);">No Plan</span>
                 }
             </div>
 
-            
-            <div class="details-body">
-                
-                <div class="details-grid">
-                    
-                    <div class="details-block">
-                        <div class="details-label">📧 Email</div>
-                        <div class="details-value">@Model.Email</div>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="ke-detail-block">
+                        <div class="ke-detail-label">📧 Email</div>
+                        <div class="ke-detail-value data-mono">@Model.Email</div>
                     </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">📞 Phone</div>
-                        <div class="details-value">@Model.Phone</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ke-detail-block">
+                        <div class="ke-detail-label">📞 Phone</div>
+                        <div class="ke-detail-value data-mono">@Model.Phone</div>
                     </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">👤 Gender</div>
-                        <div class="details-value">@Model.Gender</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ke-detail-block">
+                        <div class="ke-detail-label">👤 Gender</div>
+                        <div class="ke-detail-value data-mono">@Model.Gender</div>
                     </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">📅 Date of Birth</div>
-                        <div class="details-value">@Model.DateOfBirth</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ke-detail-block">
+                        <div class="ke-detail-label">📅 Date of Birth</div>
+                        <div class="ke-detail-value data-mono">@Model.DateOfBirth</div>
                     </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">🏃 Membership Start</div>
-                        <div class="details-value" style="color: var(--lime);">@Model.MembershipStartDate</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ke-detail-block" style="border-left-color: var(--primary);">
+                        <div class="ke-detail-label">🏃 Membership Start</div>
+                        <div class="ke-detail-value data-mono text-primary">@Model.MembershipStartDate</div>
                     </div>
-
-                    
-                    <div class="details-block">
-                        <div class="details-label">⏱️ Membership End</div>
-                        <div class="details-value" style="color: var(--fire);">@Model.MembershipEndDate</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ke-detail-block" style="border-left-color: var(--error);">
+                        <div class="ke-detail-label">⏱️ Membership End</div>
+                        <div class="ke-detail-value data-mono text-error">@Model.MembershipEndDate</div>
                     </div>
-
-                    
-                    <div class="details-block details-block-full">
-                        <div class="details-label">📍 Address</div>
-                        <div class="details-value">@Model.Address</div>
+                </div>
+                <div class="col-12">
+                    <div class="ke-detail-block">
+                        <div class="ke-detail-label">📍 Address</div>
+                        <div class="ke-detail-value data-mono">@Model.Address</div>
                     </div>
                 </div>
             </div>
 
-            
-            <div class="details-footer">
-                <a asp-controller="Members" asp-action="Index" class="btn btn-secondary">
+            <div class="d-flex justify-content-between align-items-center">
+                <a asp-controller="Members" asp-action="Index" class="btn-secondary">
                     ← Back to List
                 </a>
-                <a asp-controller="Members" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" class="btn btn-primary">
+                <a asp-controller="Members" asp-action="Edit" asp-route-id="@ViewContext.RouteData.Values["id"]" class="ke-btn ke-btn-primary">
                     Edit Member
                 </a>
             </div>

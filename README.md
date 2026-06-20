@@ -12,6 +12,7 @@ A comprehensive ASP.NET Core MVC application for managing gym operations, built 
 ## 📋 Table of Contents
 
 - [Project Overview](#-project-overview)
+- [Application Screenshots](#-application-screenshots)
 - [Architecture](#-architecture)
 - [Key Features](#-key-features)
 - [Technology Stack](#-technology-stack)
@@ -44,6 +45,28 @@ The Gym Management System is an enterprise-level web application designed to str
 
 ---
 
+## 📸 Application Screenshots
+
+### 🛡️ Authentication
+<div align="center">
+  <img src="photos/login.png" alt="Login Page" width="45%">
+  <img src="photos/register.png" alt="Registration Page" width="45%">
+</div>
+
+### 👑 Admin Views
+<div align="center">
+  <img src="photos/admin-dashboard.png" alt="Admin Dashboard" width="45%">
+  <img src="photos/admin-member-page.png" alt="Admin Members Page" width="45%">
+</div>
+
+### 🏋️ Member Views
+<div align="center">
+  <img src="photos/member-dashboard.png" alt="Member Dashboard" width="45%">
+  <img src="photos/member-view-schedule-page.png" alt="Schedule & Booking" width="45%">
+</div>
+
+---
+
 ## 🏗️ Architecture
 
 ### Clean N-Tier Architecture
@@ -67,7 +90,7 @@ graph TD
 
 ### Request Flow
 
-The system employs a clear request flow leveraging the Result pattern for robust operation outcomes:
+The system employs a clear request flow leveraging the Result pattern for robust operation outcomes, supporting both standard MVC navigation and dynamic AJAX interactions:
 
 ```mermaid
 sequenceDiagram
@@ -77,7 +100,7 @@ sequenceDiagram
     participant Repo as Infrastructure Repository
     participant DB as SQL Server
 
-    Client->>Controller: HTTP Request
+    Client->>Controller: HTTP Request (Standard or AJAX)
     Controller->>Service: Execute Logic (DTOs)
     Service->>Repo: Fetch Data
     Repo->>DB: EF Core Query
@@ -88,8 +111,14 @@ sequenceDiagram
     Repo->>DB: Execute Update
     DB-->>Repo: Success
     Repo-->>Service: Result<T>.Success()
-    Service-->>Controller: Return Result
-    Controller-->>Client: HTTP Response (View/JSON)
+    
+    alt Standard MVC Flow
+        Service-->>Controller: Return Result
+        Controller-->>Client: HTTP Response (Razor View)
+    else Dynamic AJAX Flow (e.g. Booking)
+        Service-->>Controller: Return Result
+        Controller-->>Client: JSON Response ({success, message})
+    end
 ```
 
 ### Layer Responsibilities
@@ -153,6 +182,19 @@ sequenceDiagram
 - Database constraints and indexes
 - Owned entities for value objects
 
+### 7. **Modern UI/UX Design System (Kinetic Engine)**
+- High-contrast, "industrial brutalist" aesthetics tailored for fitness environments.
+- Completely responsive grid layouts for mobile, tablet, and desktop.
+- Utility-first CSS architecture for maintainable styling.
+
+### 8. **Dynamic Dashboards & Interactivity**
+- **Admin Dashboard**: Real-time SQL-calculated analytics (revenue, active members) optimized via EF Core.
+- **Member Schedule**: Seamless AJAX-based class booking and cancellations without full page reloads.
+
+### 9. **Cloudinary Integration**
+- **External Media Storage**: Efficient and secure management of images (e.g., profile pictures) using Cloudinary as an external storage feature.
+- **Optimized Delivery**: High-performance cloud-based media serving to ensure fast load times and reduced server bandwidth.
+
 ---
 
 ## 🛠️ Technology Stack
@@ -178,6 +220,9 @@ sequenceDiagram
 
 ### Package Management
 - **Central Package Management (CPM)** - .NET 10 feature for centralized NuGet version control
+
+### External Services
+- **Cloudinary** - Cloud-based image and media management service
 
 ---
 
@@ -858,39 +903,6 @@ private readonly TimeSpan _cleanupInterval = TimeSpan.FromDays(30); // Change as
           .As<IEquipmentRepository>()
           .InstancePerLifetimeScope();
    ```
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes using Conventional Commits
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Commit Message Format
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-
-**Example**:
-```
-feat(soft-delete): implement global query filters for all entities
-
-- Add HasQueryFilter to all entity configurations
-- Update DbContext SaveChangesAsync to handle soft deletes
-- Add AllowHardDelete flag for administrative operations
-
-Closes #123
-```
 
 ---
 

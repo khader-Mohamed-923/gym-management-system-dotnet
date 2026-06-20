@@ -2,65 +2,80 @@ using GymManagement.Domain.DTOs.Admin.Responses;
 using GymManagement.Domain.Repositories;
 using GymManagement.Domain.Services.Admin;
 
+using GymManagement.Infrastructure.Data.DbContexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace GymManagement.Infrastructure.Services.Admin;
 
 public class AdminDashboardService : IAdminDashboardService
 {
-    private readonly IMemberRepository _memberRepository;
-    private readonly ITrainerRepository _trainerRepository;
-    private readonly ISessionRepository _sessionRepository;
-    private readonly IMembershipRepository _membershipRepository;
+    private readonly GymDbContext _dbContext;
 
-    public AdminDashboardService(
-        IMemberRepository memberRepository,
-        ITrainerRepository trainerRepository,
-        ISessionRepository sessionRepository,
-        IMembershipRepository membershipRepository)
+    public AdminDashboardService(GymDbContext dbContext)
     {
-        _memberRepository = memberRepository;
-        _trainerRepository = trainerRepository;
-        _sessionRepository = sessionRepository;
-        _membershipRepository = membershipRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<AdminDashboardResponse> GetDashboardAsync(CancellationToken cancellationToken = default)
     {
-        var members    = await _memberRepository.GetAllAsync(cancellationToken);
-        var trainers   = await _trainerRepository.GetAllAsync(cancellationToken);
-        var sessions   = await _sessionRepository.GetAllAsync(cancellationToken);
-        var memberships = await _membershipRepository.GetAllAsync(cancellationToken);
-
-        var now         = DateTime.UtcNow;
+        var now = DateTime.UtcNow;
         var startOfWeek = now.Date.AddDays(-(int)now.DayOfWeek);
+        var endOfWeek = startOfWeek.AddDays(7);
 
-        var weeklySessions = sessions.Count(s => s.StartDate >= startOfWeek && s.StartDate < startOfWeek.AddDays(7));
+        var weeklySessions = await _dbContext.Sessions
+            .Where(s => s.StartDate >= startOfWeek && s.StartDate < endOfWeek && !s.IsDeleted)
+            .CountAsync(cancellationToken);
 
-        var activeMemberships = memberships.Where(m => m.EndDate >= now).ToList();
+        var activeMemberships = await _dbContext.MemberShips
+            .Include(m => m.Plan)
+            .Where(m => m.EndDate >= now && !m.IsDeleted)
+            .ToListAsync(cancellationToken);
 
         var monthlyRevenue = activeMemberships
             .Where(m => m.Plan != null)
             .Sum(m => m.Plan.Price);
 
-        var recentRegistrations = members
+        var totalActiveMembers = activeMemberships
+            .Select(m => m.MemberId)
+            .Distinct()
+            .Count();
+
+        var totalTrainers = await _dbContext.Trainers
+            .Where(t => !t.IsDeleted)
+            .CountAsync(cancellationToken);
+
+        var recentRegistrationsQuery = await _dbContext.Members
+            .Where(m => !m.IsDeleted)
             .OrderByDescending(m => m.JoinDate)
             .Take(5)
-            .Select(m => new RecentRegistrationResponse
+            .Select(m => new
             {
-                Name     = m.Name,
-                Email    = m.Email,
-                PlanName = activeMemberships
-                    .FirstOrDefault(ms => ms.MemberId == m.Id)
-                    ?.Plan?.Name ?? "No Plan",
-                Date   = m.JoinDate.ToString("MMM dd, yyyy"),
-                Status = activeMemberships.Any(ms => ms.MemberId == m.Id) ? GymManagement.Domain.Enums.MembershipStatus.Active : GymManagement.Domain.Enums.MembershipStatus.Inactive
-            });
+                m.Id,
+                m.Name,
+                m.Email,
+                m.JoinDate,
+                Membership = _dbContext.MemberShips
+                    .Include(ms => ms.Plan)
+                    .Where(ms => ms.MemberId == m.Id && ms.EndDate >= now && !ms.IsDeleted)
+                    .FirstOrDefault()
+            })
+            .ToListAsync(cancellationToken);
+
+        var recentRegistrations = recentRegistrationsQuery.Select(m => new RecentRegistrationResponse
+        {
+            Name = m.Name,
+            Email = m.Email,
+            PlanName = m.Membership?.Plan?.Name ?? "No Plan",
+            Date = m.JoinDate.ToString("MMM dd, yyyy"),
+            Status = m.Membership != null ? GymManagement.Domain.Enums.MembershipStatus.Active : GymManagement.Domain.Enums.MembershipStatus.Inactive
+        });
 
         return new AdminDashboardResponse
         {
-            TotalActiveMembers  = activeMemberships.Select(ms => ms.MemberId).Distinct().Count(),
-            TotalTrainers       = trainers.Count,
-            WeeklySessions      = weeklySessions,
-            MonthlyRevenue      = monthlyRevenue,
+            TotalActiveMembers = totalActiveMembers,
+            TotalTrainers = totalTrainers,
+            WeeklySessions = weeklySessions,
+            MonthlyRevenue = monthlyRevenue,
             RecentRegistrations = recentRegistrations
         };
     }

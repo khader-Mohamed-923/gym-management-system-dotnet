@@ -5,51 +5,69 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    <div class="iron-page-header">
-        <a asp-controller="Booking" asp-action="Schedule" class="btn btn-secondary mb-3">
-            <i class="bi bi-arrow-left me-1"></i>Back to Schedule
+<div class="container py-5">
+    <div class="ke-header-content mb-4">
+        <a asp-controller="Booking" asp-action="Schedule" class="btn-secondary px-3 py-1 mb-3 text-decoration-none d-inline-block">
+            ← Back to Schedule
         </a>
-        <h1 class="iron-title">SESSION MEMBERS</h1>
-        <p class="iron-subtitle">View and manage attendance for this session</p>
+        <div class="ke-header-text">
+            <h1 class="ke-title">SESSION MEMBERS</h1>
+            <p class="ke-subtitle">View and manage attendance for this session</p>
+        </div>
     </div>
 
     <!-- Session Info Card -->
-    <div class="session-info-card animate-in mb-4">
-        <div class="session-info-header">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div>
-                    <h2 class="session-name">@Model.SessionName</h2>
-                    <span class="status-badge status-@Model.Status.ToString().ToLower()">@Model.Status</span>
-                </div>
-                <span class="trainer-badge">
-                    <i class="bi bi-person-badge me-1"></i>@Model.TrainerName
-                </span>
+    <div class="card card-elevated p-4 mb-5">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 pb-3 border-bottom border-structural">
+            <div>
+                <h2 class="display-sm text-primary mb-2">@Model.SessionName</h2>
+                @if (Model.Status.ToString().ToLower() == "upcoming")
+                {
+                    <span class="d-inline-flex align-items-center gap-2 label-sm data-mono text-muted">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> @Model.Status
+                    </span>
+                }
+                else if (Model.Status.ToString().ToLower() == "ongoing")
+                {
+                    <span class="d-inline-flex align-items-center gap-2 label-sm data-mono" style="color: var(--lime);">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> @Model.Status
+                    </span>
+                }
+                else
+                {
+                    <span class="d-inline-flex align-items-center gap-2 label-sm data-mono text-muted">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> @Model.Status
+                    </span>
+                }
+            </div>
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 label-sm data-mono" style="border: 1px solid var(--primary); color: var(--primary); background: var(--surface-container-high);">
+                <i class="bi bi-person-badge"></i> @Model.TrainerName
             </div>
         </div>
-        <div class="session-info-body">
-            <div class="info-grid">
-                <div class="info-item">
-                    <i class="bi bi-calendar3"></i>
-                    <span class="info-label">Date</span>
-                    <span class="info-value">@Model.StartDate.ToString("MMM dd, yyyy")</span>
+        
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="d-flex flex-column gap-1">
+                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-calendar3"></i> Date</span>
+                    <span class="body-md text-on-surface data-mono">@Model.StartDate.ToString("MMM dd, yyyy")</span>
                 </div>
-                <div class="info-item">
-                    <i class="bi bi-clock"></i>
-                    <span class="info-label">Time</span>
-                    <span class="info-value">@Model.StartDate.ToString("HH:mm") - @Model.EndDate.ToString("HH:mm")</span>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="d-flex flex-column gap-1">
+                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-clock"></i> Time</span>
+                    <span class="body-md text-on-surface data-mono">@Model.StartDate.ToString("HH:mm") - @Model.EndDate.ToString("HH:mm")</span>
                 </div>
-                <div class="info-item">
-                    <i class="bi bi-stopwatch"></i>
-                    <span class="info-label">Duration</span>
-                    <span class="info-value">@((int)(Model.EndDate - Model.StartDate).TotalMinutes) min</span>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="d-flex flex-column gap-1">
+                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-stopwatch"></i> Duration</span>
+                    <span class="body-md text-on-surface data-mono">@((int)(Model.EndDate - Model.StartDate).TotalMinutes) min</span>
                 </div>
-                <div class="info-item">
-                    <i class="bi bi-people"></i>
-                    <span class="info-label">Members</span>
-                    <span class="info-value">@Model.Members.Count()</span>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="d-flex flex-column gap-1">
+                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-people"></i> Members</span>
+                    <span class="body-md text-on-surface data-mono">@Model.Members.Count()</span>
                 </div>
             </div>
         </div>
@@ -57,87 +75,83 @@
 
     @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
-        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">✓</span>
-            <span>@TempData[TempDataKeys.SuccessMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--primary);">
+            <i class="bi bi-check-circle-fill text-primary fs-4 me-3"></i>
+            <span class="body-md">@TempData[TempDataKeys.SuccessMessage]</span>
         </div>
     }
     else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
-        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">⚠️</span>
-            <span>@TempData[TempDataKeys.ErrorMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--error);">
+            <i class="bi bi-exclamation-triangle-fill text-error fs-4 me-3"></i>
+            <span class="body-md text-error">@TempData[TempDataKeys.ErrorMessage]</span>
         </div>
     }
 
     @if (Model.Members.Any())
     {
-        <div class="members-table-container animate-in">
+        <div class="card card-elevated" style="padding: 0; overflow: hidden;">
             <div class="table-responsive">
-                <table class="table table-dark table-hover align-middle">
-                    <thead>
+                <table class="table table-dark table-hover mb-0" style="--bs-table-bg: var(--surface); --bs-table-color: var(--on-surface);">
+                    <thead style="border-bottom: 2px solid var(--border-color);">
                         <tr>
-                            <th>Member</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Booking Date</th>
-                            <th>Attendance</th>
+                            <th class="label-sm text-muted p-3">Member</th>
+                            <th class="label-sm text-muted p-3">Email</th>
+                            <th class="label-sm text-muted p-3">Phone</th>
+                            <th class="label-sm text-muted p-3">Booking Date</th>
+                            <th class="label-sm text-muted p-3">Attendance</th>
                             @if (Model.Status == SessionStatus.Ongoing || Model.Status == SessionStatus.Completed)
                             {
-                                <th>Actions</th>
+                                <th class="label-sm text-muted p-3">Actions</th>
                             }
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var member in Model.Members)
                         {
-                            <tr>
-                                <td>
-                                    <div class="member-cell">
-                                        <div class="member-avatar">
-                                            <i class="bi bi-person-fill"></i>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3 align-middle">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="d-flex align-items-center justify-content-center bg-background border-structural" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-person-fill text-primary"></i>
                                         </div>
                                         <div>
-                                            <div class="member-name">@member.MemberName</div>
-                                            <div class="member-id">ID: @member.MemberId</div>
+                                            <div class="body-md fw-bold text-on-surface">@member.MemberName</div>
+                                            <div class="label-sm text-muted">ID: @member.MemberId</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>@member.MemberEmail</td>
-                                <td>@member.MemberPhone</td>
-                                <td>@member.BookingDate.ToString("MMM dd, yyyy HH:mm")</td>
-                                <td>
+                                <td class="p-3 align-middle body-md text-on-surface">@member.MemberEmail</td>
+                                <td class="p-3 align-middle body-md text-on-surface data-mono">@member.MemberPhone</td>
+                                <td class="p-3 align-middle body-sm text-muted data-mono">@member.BookingDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td class="p-3 align-middle">
                                     @if (member.IsAttended)
                                     {
-                                        <span class="attendance-badge attended">
+                                        <span class="d-inline-flex align-items-center gap-2 px-2 py-1 label-sm data-mono" style="border: 1px solid var(--lime); color: var(--lime); background: var(--surface-container-high);">
                                             <i class="bi bi-check-circle-fill"></i> Attended
                                         </span>
                                     }
                                     else
                                     {
-                                        <span class="attendance-badge pending">
+                                        <span class="d-inline-flex align-items-center gap-2 px-2 py-1 label-sm data-mono text-muted" style="border: 1px solid var(--text-muted); background: var(--surface-container-high);">
                                             <i class="bi bi-clock"></i> Pending
                                         </span>
                                     }
                                 </td>
                                 @if (Model.Status == SessionStatus.Ongoing || Model.Status == SessionStatus.Completed)
                                 {
-                                    <td>
-                                        <div class="action-buttons">
+                                    <td class="p-3 align-middle">
+                                        <div class="d-flex gap-2">
                                             @if (!member.IsAttended)
                                             {
-                                                <button class="btn btn-success btn-sm" onclick="markAttendance(@member.BookingId, true)">
-                                                    <i class="bi bi-check"></i> Mark Present
+                                                <button class="ke-btn py-1 px-3 label-sm" style="background: var(--lime); border-color: var(--lime); color: #000;" onclick="markAttendance(@member.BookingId, true)">
+                                                    Mark Present
                                                 </button>
                                             }
                                             else
                                             {
-                                                <button class="btn btn-outline-warning btn-sm" onclick="markAttendance(@member.BookingId, false)">
-                                                    <i class="bi bi-x"></i> Mark Absent
+                                                <button class="btn-secondary py-1 px-3 label-sm text-error" style="border-color: var(--error);" onclick="markAttendance(@member.BookingId, false)">
+                                                    Mark Absent
                                                 </button>
                                             }
                                         </div>
@@ -152,216 +166,13 @@
     }
     else
     {
-        <div class="empty-state animate-in">
-            <div class="empty-icon">👥</div>
-            <h3 class="empty-title">No Members Booked</h3>
-            <p class="empty-text">No members have booked this session yet.</p>
+        <div class="card card-elevated p-5 text-center">
+            <div class="display-lg mb-3">👥</div>
+            <h3 class="display-md mb-2 text-on-surface">No Members Booked</h3>
+            <p class="body-md text-muted m-0">No members have booked this session yet.</p>
         </div>
     }
 </div>
-
-<style>
-    .session-info-card {
-        background: var(--glass-fill);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-    }
-
-    .session-info-header {
-        padding: var(--space-lg);
-        background: rgba(255, 255, 255, 0.02);
-        border-bottom: 1px solid var(--steel-line);
-    }
-
-    .session-name {
-        font-family: var(--font-display);
-        font-size: 1.5rem;
-        font-weight: 400;
-        color: var(--text-primary);
-        margin: 0 0 var(--space-sm) 0;
-    }
-
-    .trainer-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        border-radius: var(--radius-md);
-        background: rgba(249, 115, 22, 0.12);
-        color: var(--fire);
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-
-    .session-info-body {
-        padding: var(--space-lg);
-    }
-
-    .session-info-body .info-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-lg);
-    }
-
-    .session-info-body .info-item {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-xs);
-    }
-
-    .session-info-body .info-item i {
-        color: var(--text-muted);
-        font-size: 1rem;
-    }
-
-    .session-info-body .info-item .info-label {
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-    }
-
-    .session-info-body .info-item .info-value {
-        font-size: 1rem;
-        font-weight: 500;
-        color: var(--text-primary);
-    }
-
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.35rem 0.85rem;
-        border-radius: var(--radius-full);
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-    }
-
-    .status-badge::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-    }
-
-    .status-upcoming {
-        background: rgba(56, 189, 248, 0.12);
-        color: var(--ice);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .status-ongoing {
-        background: rgba(132, 204, 22, 0.12);
-        color: var(--lime);
-        border: 1px solid rgba(132, 204, 22, 0.25);
-    }
-
-    .status-completed {
-        background: rgba(163, 163, 163, 0.12);
-        color: var(--text-secondary);
-        border: 1px solid rgba(163, 163, 163, 0.25);
-    }
-
-    .members-table-container {
-        background: var(--glass-fill);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-    }
-
-    .table {
-        margin-bottom: 0;
-    }
-
-    .table thead th {
-        background: rgba(255, 255, 255, 0.02);
-        color: var(--text-muted);
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        padding: var(--space-lg);
-        border-bottom: 1px solid var(--steel-line);
-    }
-
-    .table tbody td {
-        padding: var(--space-lg);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        color: var(--text-primary);
-    }
-
-    .member-cell {
-        display: flex;
-        align-items: center;
-        gap: var(--space-md);
-    }
-
-    .member-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: var(--radius-md);
-        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--fire);
-    }
-
-    .member-name {
-        font-weight: 500;
-        color: var(--text-primary);
-    }
-
-    .member-id {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-    }
-
-    .attendance-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-sm);
-        padding: 0.35rem 0.75rem;
-        border-radius: var(--radius-md);
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-
-    .attendance-badge.attended {
-        background: rgba(34, 197, 94, 0.12);
-        color: #22c55e;
-    }
-
-    .attendance-badge.pending {
-        background: rgba(251, 191, 36, 0.12);
-        color: var(--text-warning);
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: var(--space-sm);
-    }
-
-    @@media (max-width: 992px) {
-        .session-info-body .info-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @@media (max-width: 768px) {
-        .session-info-body .info-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
 
 @section Scripts {
     <partial name="_AlertDismissScript"/>
@@ -389,6 +200,5 @@
         }
     </script>
 }
-
 
 

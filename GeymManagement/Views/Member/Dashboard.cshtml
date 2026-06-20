@@ -5,33 +5,35 @@
 }
 
 <div class="container py-5">
-    <div class="mb-5">
-        <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">WELCOME BACK</h1>
-        <p class="text-muted mt-1 mb-0">Track your progress and manage your memberships.</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">WELCOME BACK</h1>
+            <p class="ke-subtitle">Track your progress and manage your memberships.</p>
+        </div>
     </div>
 
     <div class="row g-4 mb-5">
         <div class="col-md-8">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-5">
-                    <h5 class="fw-bold text-white mb-4" style="font-family: 'Oswald', sans-serif;">ACTIVE MEMBERSHIP</h5>
+            <div class="card card-elevated h-100">
+                <div class="card-body p-4 p-md-5">
+                    <h5 class="ke-section-header mb-4 text-primary">ACTIVE MEMBERSHIP</h5>
                     
                     @if (Model.ActiveMembership != null)
                     {
-                        <div class="d-flex align-items-center justify-content-between p-4 rounded" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(239, 68, 68, 0.1)); border: 1px solid rgba(249, 115, 22, 0.2);">
+                        <div class="d-flex align-items-center justify-content-between p-4 border-structural" style="border-color: var(--primary); background: var(--surface-container-low);">
                             <div>
-                                <span class="badge bg-success bg-opacity-25 text-success px-3 py-2 rounded-pill mb-2">Active</span>
-                                <h3 class="text-white fw-bold mb-1">@Model.ActiveMembership.PlanName</h3>
-                                <p class="text-muted mb-0">Renews on @Model.ActiveMembership.EndDate</p>
+                                <span class="d-inline-block px-3 py-1 label-sm data-mono mb-2" style="border: 2px solid var(--primary); color: var(--primary); background: var(--surface-container-high);">Active</span>
+                                <h3 class="headline-md mb-1">@Model.ActiveMembership.PlanName</h3>
+                                <p class="body-sm text-muted mb-0">Renews on @Model.ActiveMembership.EndDate</p>
                             </div>
-                            <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem; opacity: 0.8;"></i>
+                            <i class="bi bi-check-square-fill display-md text-primary"></i>
                         </div>
                     }
                     else
                     {
-                        <div class="p-4 rounded text-center" style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05);">
-                            <p class="text-muted mb-3">You don't have an active membership.</p>
-                            <a asp-controller="Member" asp-action="Memberships" class="btn btn-sm btn-outline-warning rounded-pill px-4" style="color: var(--text-accent); border-color: rgba(249,115,22,0.5);">View Plans</a>
+                        <div class="p-4 border-structural text-center bg-surface">
+                            <p class="body-md text-muted mb-3">You don't have an active membership.</p>
+                            <a asp-controller="Member" asp-action="Memberships" class="ke-btn ke-btn-primary">View Plans</a>
                         </div>
                     }
                 </div>
@@ -39,23 +41,23 @@
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+            <div class="card card-elevated h-100">
                 <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
                     <div class="mb-3">
-                        <i class="bi bi-fire fs-1" style="color: var(--text-accent);"></i>
+                        <i class="bi bi-fire display-md text-primary"></i>
                     </div>
-                    <h2 class="fw-bold text-white mb-1" style="font-family: 'JetBrains Mono', monospace;">@Model.TotalBookings</h2>
-                    <p class="text-muted mb-0 small text-uppercase fw-bold letter-spacing-1">Total Bookings</p>
+                    <h2 class="display-md mb-1 text-primary data-mono">@Model.TotalBookings</h2>
+                    <p class="label-sm text-muted mb-0">Total Bookings</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-        <div class="card-body p-5">
+    <div class="card card-elevated">
+        <div class="card-body p-4 p-md-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="fw-bold text-white mb-0" style="font-family: 'Oswald', sans-serif;">MY BOOKINGS</h5>
-                <a asp-controller="Member" asp-action="Bookings" class="btn btn-sm btn-outline-warning rounded-pill px-3" style="color: var(--text-accent); border-color: rgba(249,115,22,0.5);">View All</a>
+                <h5 class="ke-section-header mb-0 text-primary">MY BOOKINGS</h5>
+                <a asp-controller="Member" asp-action="Bookings" class="btn-secondary px-3 py-1 text-decoration-none">View All</a>
             </div>
             
             @if (Model.UpcomingBookings.Any())
@@ -64,15 +66,13 @@
                     @foreach (var booking in Model.UpcomingBookings)
                     {
                         <div class="col-md-6">
-                            <div class="p-4 rounded d-flex align-items-center" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05);">
-                                <div class="bg-dark text-white rounded text-center p-2 me-4" style="min-width: 60px;">
-                                    <div class="fs-4 fw-bold">
-                                        <i class="bi bi-calendar-check text-warning" style="font-size: 1.5rem;"></i>
-                                    </div>
+                            <div class="d-flex align-items-center border-structural bg-surface p-3">
+                                <div class="d-flex align-items-center justify-content-center border-structural me-3" style="width: 60px; height: 60px; background: var(--surface-container-high);">
+                                    <i class="bi bi-calendar-check fs-4 text-primary"></i>
                                 </div>
                                 <div>
-                                    <h6 class="text-white fw-bold mb-1">@booking.SessionName</h6>
-                                    <p class="text-muted small mb-0"><i class="bi bi-clock me-1"></i> @booking.Date @booking.Time &bull; Trainer: @booking.TrainerName</p>
+                                    <h6 class="body-md fw-bold mb-1">@booking.SessionName</h6>
+                                    <p class="body-sm text-muted mb-0 data-mono"><i class="bi bi-clock me-1"></i> @booking.Date @booking.Time &bull; Trainer: @booking.TrainerName</p>
                                 </div>
                             </div>
                         </div>
@@ -81,9 +81,8 @@
             }
             else
             {
-                <p class="text-muted text-center py-4">No upcoming bookings found.</p>
+                <p class="body-md text-muted text-center py-4">No upcoming bookings found.</p>
             }
         </div>
     </div>
 </div>
-

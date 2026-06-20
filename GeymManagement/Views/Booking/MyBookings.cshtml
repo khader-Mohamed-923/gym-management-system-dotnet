@@ -5,104 +5,123 @@
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    <div class="iron-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-lg);">
-        <div>
-            <h1 class="iron-title">MY BOOKINGS</h1>
-            <p class="iron-subtitle">View and manage your session bookings</p>
+<div class="container py-5">
+    <div class="ke-header-content mb-5 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="ke-header-text">
+            <h1 class="ke-title">MY BOOKINGS</h1>
+            <p class="ke-subtitle">View and manage your session bookings</p>
         </div>
-        <a asp-controller="Booking" asp-action="Schedule" class="btn btn-primary">
-            <i class="bi bi-calendar-plus me-1"></i>Browse Sessions
+        <a asp-controller="Booking" asp-action="Schedule" class="ke-btn ke-btn-primary px-4 py-2 text-decoration-none">
+            <span class="fw-bold me-2">+</span> Browse Sessions
         </a>
     </div>
 
     @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
-        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">✓</span>
-            <span>@TempData[TempDataKeys.SuccessMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--primary);">
+            <i class="bi bi-check-circle-fill text-primary fs-4 me-3"></i>
+            <span class="body-md">@TempData[TempDataKeys.SuccessMessage]</span>
         </div>
     }
     else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
-        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">⚠️</span>
-            <span>@TempData[TempDataKeys.ErrorMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--error);">
+            <i class="bi bi-exclamation-triangle-fill text-error fs-4 me-3"></i>
+            <span class="body-md text-error">@TempData[TempDataKeys.ErrorMessage]</span>
         </div>
     }
 
     @if (Model.Any())
     {
-        <div class="bookings-list">
+        <div class="d-flex flex-column gap-4">
             @foreach (var booking in Model)
             {
                 var isPast = booking.EndDate < DateTime.Now;
                 
-                <div class="booking-card animate-in @(isPast ? "past-session" : "")">
-                    <div class="booking-card-header">
-                        <div class="session-icon">
-                            <i class="bi bi-activity"></i>
-                        </div>
-                        <div class="booking-info">
-                            <h3 class="booking-title">@booking.SessionName</h3>
-                            <div class="booking-meta">
-                                <span class="category-tag">@booking.CategoryName</span>
-                                <span class="status-badge status-@booking.Status.ToString().ToLower()">@booking.Status</span>
+                <div class="card card-elevated @(isPast ? "opacity-75" : "")">
+                    <div class="p-3 border-bottom border-structural d-flex justify-content-between align-items-center flex-wrap gap-3" style="@(isPast ? "filter: grayscale(1);" : "")">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center justify-content-center bg-background border-structural" style="width: 48px; height: 48px;">
+                                <i class="bi bi-activity text-primary fs-4"></i>
+                            </div>
+                            <div>
+                                <h3 class="body-lg fw-bold m-0 mb-1 text-on-surface">@booking.SessionName</h3>
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="d-inline-block px-2 py-1 label-sm data-mono" style="border: 1px solid var(--primary); color: var(--primary); background: var(--surface-container-high);">
+                                        @booking.CategoryName
+                                    </span>
+                                    @if (booking.Status.ToString().ToLower() == "upcoming")
+                                    {
+                                        <span class="d-inline-flex align-items-center gap-2 label-sm data-mono" style="color: var(--ice);">
+                                            <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> @booking.Status
+                                        </span>
+                                    }
+                                    else if (booking.Status.ToString().ToLower() == "ongoing")
+                                    {
+                                        <span class="d-inline-flex align-items-center gap-2 label-sm data-mono" style="color: var(--lime);">
+                                            <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> @booking.Status
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="d-inline-flex align-items-center gap-2 label-sm data-mono text-muted">
+                                            <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span> @booking.Status
+                                        </span>
+                                    }
+                                </div>
                             </div>
                         </div>
-                        <div class="booking-actions">
+                        <div>
                             @if (!isPast)
                             {
-                                <button class="btn btn-outline-danger btn-sm" onclick="cancelBooking(@booking.BookingId)">
-                                    <i class="bi bi-x-circle"></i> Cancel
+                                <button class="btn-secondary px-3 py-1 text-error" style="border-color: var(--error);" onclick="cancelBooking(@booking.BookingId)">
+                                    <i class="bi bi-x-circle me-1"></i> Cancel
                                 </button>
                             }
                         </div>
                     </div>
 
-                    <div class="booking-card-body">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <i class="bi bi-person-badge"></i>
-                                <span class="info-label">Trainer</span>
-                                <span class="info-value">@booking.TrainerName</span>
+                    <div class="p-3 bg-surface">
+                        <div class="row g-3 mb-3">
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-person-badge"></i> Trainer</span>
+                                    <span class="body-sm text-primary fw-bold">@booking.TrainerName</span>
+                                </div>
                             </div>
-                            <div class="info-item">
-                                <i class="bi bi-calendar3"></i>
-                                <span class="info-label">Date</span>
-                                <span class="info-value">@booking.StartDate.ToString("MMM dd, yyyy")</span>
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-calendar3"></i> Date</span>
+                                    <span class="body-sm text-on-surface data-mono">@booking.StartDate.ToString("MMM dd, yyyy")</span>
+                                </div>
                             </div>
-                            <div class="info-item">
-                                <i class="bi bi-clock"></i>
-                                <span class="info-label">Time</span>
-                                <span class="info-value">@booking.StartDate.ToString("HH:mm") - @booking.EndDate.ToString("HH:mm")</span>
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-clock"></i> Time</span>
+                                    <span class="body-sm text-on-surface data-mono">@booking.StartDate.ToString("HH:mm") - @booking.EndDate.ToString("HH:mm")</span>
+                                </div>
                             </div>
-                            <div class="info-item">
-                                <i class="bi bi-stopwatch"></i>
-                                <span class="info-label">Duration</span>
-                                <span class="info-value">@booking.DurationMinutes min</span>
+                            <div class="col-6 col-md-3">
+                                <div class="d-flex flex-column gap-1">
+                                    <span class="label-sm text-muted d-flex align-items-center gap-2"><i class="bi bi-stopwatch"></i> Duration</span>
+                                    <span class="body-sm text-on-surface data-mono">@booking.DurationMinutes min</span>
+                                </div>
                             </div>
                         </div>
 
                         @if (isPast)
                         {
-                            <div class="attendance-status">
+                            <div class="pt-3 border-top border-structural text-end">
                                 @if (booking.IsAttended)
                                 {
-                                    <span class="attended-badge">
-                                        <i class="bi bi-check-circle-fill"></i> Attended
+                                    <span class="d-inline-flex align-items-center gap-2 px-3 py-2 label-sm data-mono" style="border: 2px solid var(--lime); color: var(--lime); background: var(--surface-container-high);">
+                                        <i class="bi bi-check-circle-fill"></i> ATTENDED
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="missed-badge">
-                                        <i class="bi bi-x-circle-fill"></i> Missed
+                                    <span class="d-inline-flex align-items-center gap-2 px-3 py-2 label-sm data-mono" style="border: 2px solid var(--error); color: var(--error); background: var(--surface-container-high);">
+                                        <i class="bi bi-x-circle-fill"></i> MISSED
                                     </span>
                                 }
                             </div>
@@ -114,227 +133,16 @@
     }
     else
     {
-        <div class="empty-state animate-in">
-            <div class="empty-icon">📅</div>
-            <h2 class="empty-title">No Bookings Yet</h2>
-            <p class="empty-text">You haven't booked any sessions yet. Browse available sessions to get started!</p>
-            <a asp-controller="Booking" asp-action="Schedule" class="btn btn-primary btn-lg">
-                <i class="bi bi-calendar-event me-1"></i>Browse Sessions
+        <div class="card card-elevated p-5 text-center">
+            <div class="display-lg mb-3">📅</div>
+            <h2 class="display-md mb-2 text-on-surface">No Bookings Yet</h2>
+            <p class="body-md text-muted mb-4">You haven't booked any sessions yet. Browse available sessions to get started!</p>
+            <a asp-controller="Booking" asp-action="Schedule" class="ke-btn ke-btn-primary px-4 py-2 d-inline-block mx-auto text-decoration-none" style="width: fit-content;">
+                <span class="fw-bold me-2">+</span> Browse Sessions
             </a>
         </div>
     }
 </div>
-
-<style>
-    .bookings-list {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-lg);
-    }
-
-    .booking-card {
-        background: var(--glass-fill);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        transition: all 0.25s ease;
-    }
-
-    .booking-card.past-session {
-        opacity: 0.8;
-    }
-
-    .booking-card:hover {
-        background: var(--glass-hover);
-        border-color: rgba(255, 255, 255, 0.12);
-    }
-
-    .booking-card-header {
-        display: flex;
-        align-items: center;
-        gap: var(--space-lg);
-        padding: var(--space-lg);
-        background: rgba(255, 255, 255, 0.02);
-        border-bottom: 1px solid var(--steel-line);
-    }
-
-    .booking-card-header .session-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(239, 68, 68, 0.2));
-        color: var(--fire);
-    }
-
-    .booking-info {
-        flex: 1;
-    }
-
-    .booking-title {
-        font-family: var(--font-display);
-        font-size: 1.125rem;
-        font-weight: 400;
-        color: var(--text-primary);
-        margin: 0 0 var(--space-sm) 0;
-    }
-
-    .booking-meta {
-        display: flex;
-        align-items: center;
-        gap: var(--space-sm);
-    }
-
-    .category-tag {
-        display: inline-flex;
-        padding: 0.2rem 0.6rem;
-        border-radius: var(--radius-sm);
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        background: rgba(56, 189, 248, 0.12);
-        color: var(--ice);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: var(--radius-full);
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-    }
-
-    .status-badge::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-    }
-
-    .status-upcoming {
-        background: rgba(56, 189, 248, 0.12);
-        color: var(--ice);
-        border: 1px solid rgba(56, 189, 248, 0.25);
-    }
-
-    .status-ongoing {
-        background: rgba(132, 204, 22, 0.12);
-        color: var(--lime);
-        border: 1px solid rgba(132, 204, 22, 0.25);
-    }
-
-    .status-completed {
-        background: rgba(163, 163, 163, 0.12);
-        color: var(--text-secondary);
-        border: 1px solid rgba(163, 163, 163, 0.25);
-    }
-
-    .booking-actions {
-        display: flex;
-        gap: var(--space-sm);
-    }
-
-    .booking-card-body {
-        padding: var(--space-lg);
-    }
-
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-lg);
-    }
-
-    .info-item {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-xs);
-    }
-
-    .info-item i {
-        color: var(--text-muted);
-        font-size: 0.875rem;
-    }
-
-    .info-item .info-label {
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-    }
-
-    .info-item .info-value {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--text-primary);
-    }
-
-    .attendance-status {
-        margin-top: var(--space-lg);
-        padding-top: var(--space-lg);
-        border-top: 1px solid var(--steel-line);
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .attended-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-sm);
-        padding: 0.5rem 1rem;
-        border-radius: var(--radius-md);
-        background: rgba(34, 197, 94, 0.12);
-        color: #22c55e;
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-
-    .missed-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--space-sm);
-        padding: 0.5rem 1rem;
-        border-radius: var(--radius-md);
-        background: rgba(239, 68, 68, 0.12);
-        color: var(--text-error);
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-
-    @@media (max-width: 992px) {
-        .info-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @@media (max-width: 576px) {
-        .info-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .booking-card-header {
-            flex-wrap: wrap;
-        }
-
-        .booking-actions {
-            width: 100%;
-            margin-top: var(--space-md);
-            justify-content: flex-end;
-        }
-    }
-</style>
 
 @section Scripts {
     <partial name="_AlertDismissScript"/>
@@ -366,5 +174,4 @@
         }
     </script>
 }
-
 

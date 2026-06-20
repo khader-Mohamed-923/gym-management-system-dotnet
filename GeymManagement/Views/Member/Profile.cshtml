@@ -5,10 +5,10 @@
 }
 
 <div class="container py-5">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">MY PROFILE</h1>
-                <p class="text-muted mt-1 mb-0">Manage your personal information and health records.</p>
+        <div class="d-flex justify-content-between align-items-center mb-5 border-bottom border-structural pb-4">
+            <div class="ke-header-text">
+                <h1 class="ke-title">MY PROFILE</h1>
+                <p class="ke-subtitle">Manage your personal information and health records.</p>
             </div>
             
             @{
@@ -17,102 +17,101 @@
                 if (Model.HealthRecord.Height > 0 || Model.HealthRecord.Weight > 0) progress += 25;
             }
 
-            <div class="text-end" style="min-width: 250px;">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="small text-uppercase fw-bold" style="color: var(--text-body);">Profile Completion</span>
-                    <span class="small fw-bold" style="color: @(progress == 100 ? "#10b981" : "#f97316");">@progress%</span>
+            <div class="text-end border-structural p-3 bg-surface" style="min-width: 250px;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="label-sm">Profile Completion</span>
+                    <span class="body-md data-mono" style="color: @(progress == 100 ? "var(--primary)" : "var(--warning, var(--gold))");">@progress%</span>
                 </div>
-                <div class="progress" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-                    <div class="progress-bar" role="progressbar" style="width: @progress%; background: @(progress == 100 ? "#10b981" : "linear-gradient(135deg, #f97316, #ef4444)"); border-radius: 10px;" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress border-structural mb-3" style="height: 8px; background: var(--surface-container-highest); border-radius: 0;">
+                    <div class="progress-bar" role="progressbar" style="width: @progress%; background: @(progress == 100 ? "var(--primary)" : "var(--warning, var(--gold))"); border-radius: 0;" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 @if (progress < 100)
                 {
-                    <a asp-action="CompleteProfile" class="btn btn-sm mt-3 fw-bold w-100" style="background: rgba(249, 115, 22, 0.1); color: var(--text-accent); border: 1px solid rgba(249, 115, 22, 0.2); border-radius: 6px;">
-                        <i class="bi bi-pencil-square me-1"></i> Complete Profile
+                    <a asp-action="CompleteProfile" class="ke-btn ke-btn-primary w-100 px-3 py-2 text-decoration-none">
+                        <i class="bi bi-pencil-square me-2"></i> Complete Profile
                     </a>
                 }
                 else
                 {
-                    <a asp-action="CompleteProfile" class="btn btn-sm mt-3 fw-bold w-100" style="background: rgba(255, 255, 255, 0.05); color: #e5e7eb; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px;">
-                        <i class="bi bi-pencil-square me-1"></i> Edit Profile
+                    <a asp-action="CompleteProfile" class="btn-secondary w-100 px-3 py-2 text-decoration-none">
+                        <i class="bi bi-pencil-square me-2"></i> Edit Profile
                     </a>
                 }
             </div>
         </div>
-    </div>
 
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-4 text-center">
+            <div class="card card-elevated h-100">
+                <div class="card-body p-4 p-md-5 text-center d-flex flex-column justify-content-center">
                     <div class="mb-4">
                         @if (!string.IsNullOrEmpty(Model.PhotoUrl))
                         {
-                            <img src="@Model.PhotoUrl" alt="Profile Photo" class="rounded-circle img-thumbnail bg-dark border-secondary" style="width: 150px; height: 150px; object-fit: cover;" />
+                            <img src="@Model.PhotoUrl" alt="Profile Photo" class="border-structural bg-surface" style="width: 150px; height: 150px; object-fit: cover;" />
                         }
                         else
                         {
-                            <div class="rounded-circle bg-dark d-inline-flex align-items-center justify-content-center border border-secondary" style="width: 150px; height: 150px;">
-                                <i class="bi bi-person text-secondary" style="font-size: 5rem;"></i>
+                            <div class="bg-surface d-inline-flex align-items-center justify-content-center border-structural" style="width: 150px; height: 150px;">
+                                <i class="bi bi-person text-muted" style="font-size: 5rem;"></i>
                             </div>
                         }
                     </div>
-                    <h3 class="fw-bold mb-1" style="font-family: 'Oswald', sans-serif; color: var(--text-primary);">@Model.Name</h3>
-                    <p class="mb-0" style="color: var(--text-body);">Member since @Model.JoinDate</p>
+                    <h3 class="display-md mb-2 text-primary">@Model.Name</h3>
+                    <p class="body-md text-muted mb-0 data-mono">Member since @Model.JoinDate</p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-8">
-            <div class="card shadow-lg border-0 mb-4" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-5">
-                    <h5 class="fw-bold text-white mb-4" style="font-family: 'Oswald', sans-serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">PERSONAL INFORMATION</h5>
+            <div class="card card-elevated mb-4">
+                <div class="card-body p-4 p-md-5">
+                    <h5 class="ke-section-header mb-4 text-primary pb-2 border-bottom border-structural">PERSONAL INFORMATION</h5>
                     
-                    <div class="row g-3">
+                    <div class="row g-4">
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Email</label>
-                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.Email</p>
+                            <div class="label-sm mb-1 text-muted">Email</div>
+                            <p class="body-md data-mono mb-0">@Model.Email</p>
                         </div>
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Phone</label>
-                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@(string.IsNullOrEmpty(Model.Phone) ? "N/A" : Model.Phone)</p>
+                            <div class="label-sm mb-1 text-muted">Phone</div>
+                            <p class="body-md data-mono mb-0">@(string.IsNullOrEmpty(Model.Phone) ? "N/A" : Model.Phone)</p>
                         </div>
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Gender</label>
-                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.Gender</p>
+                            <div class="label-sm mb-1 text-muted">Gender</div>
+                            <p class="body-md mb-0">@Model.Gender</p>
                         </div>
                         <div class="col-sm-6">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Date of Birth</label>
-                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.DateOfBirth</p>
+                            <div class="label-sm mb-1 text-muted">Date of Birth</div>
+                            <p class="body-md data-mono mb-0">@Model.DateOfBirth</p>
                         </div>
                         <div class="col-12">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Address</label>
-                            <p class="fs-5 mb-0" style="color: var(--text-primary);">@Model.Address</p>
+                            <div class="label-sm mb-1 text-muted">Address</div>
+                            <p class="body-md mb-0">@Model.Address</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-                <div class="card-body p-5">
-                    <h5 class="fw-bold text-white mb-4" style="font-family: 'Oswald', sans-serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">HEALTH RECORD</h5>
+            <div class="card card-elevated">
+                <div class="card-body p-4 p-md-5">
+                    <h5 class="ke-section-header mb-4 text-primary pb-2 border-bottom border-structural">HEALTH RECORD</h5>
                     
-                    <div class="row g-3">
+                    <div class="row g-4">
                         <div class="col-sm-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Height (cm)</label>
-                            <p class="fs-4 mb-0 fw-bold" style="color: var(--text-primary); !important;">@(Model.HealthRecord.Height > 0 ? Model.HealthRecord.Height.ToString() : "Not updated yet")</p>
+                            <div class="label-sm mb-1 text-muted">Height (cm)</div>
+                            <p class="headline-md data-mono mb-0 text-primary">@(Model.HealthRecord.Height > 0 ? Model.HealthRecord.Height.ToString() : "--")</p>
                         </div>
                         <div class="col-sm-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Weight (kg)</label>
-                            <p class="fs-4 mb-0 fw-bold" style="color: var(--text-primary); !important;">@(Model.HealthRecord.Weight > 0 ? Model.HealthRecord.Weight.ToString() : "Not updated yet")</p>
+                            <div class="label-sm mb-1 text-muted">Weight (kg)</div>
+                            <p class="headline-md data-mono mb-0 text-primary">@(Model.HealthRecord.Weight > 0 ? Model.HealthRecord.Weight.ToString() : "--")</p>
                         </div>
                         <div class="col-sm-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Blood Type</label>
-                            <p class="fs-4 mb-0 fw-bold" style="color: var(--text-primary);">@(Model.HealthRecord.BloodType == "Unknown" ? "Not updated yet" : Model.HealthRecord.BloodType)</p>
+                            <div class="label-sm mb-1 text-muted">Blood Type</div>
+                            <p class="headline-md data-mono mb-0" style="color: var(--error);">@(Model.HealthRecord.BloodType == "Unknown" ? "--" : Model.HealthRecord.BloodType)</p>
                         </div>
-                        <div class="col-12 mt-4">
-                            <label class="small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Medical Notes</label>
-                            <p class="mb-0" style="color: #e5e7eb;">@(string.IsNullOrEmpty(Model.HealthRecord.Note) ? "No medical conditions reported." : Model.HealthRecord.Note)</p>
+                        <div class="col-12 pt-3 border-top border-structural mt-4">
+                            <div class="label-sm mb-2 text-muted">Medical Notes</div>
+                            <p class="body-md text-muted mb-0">@(string.IsNullOrEmpty(Model.HealthRecord.Note) ? "No medical conditions reported." : Model.HealthRecord.Note)</p>
                         </div>
                     </div>
                 </div>
