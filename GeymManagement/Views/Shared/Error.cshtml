@@ -3,41 +3,33 @@
     var requestId = Context.TraceIdentifier;
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container" style="text-align: center; padding-top: 100px;">
-    <div class="animate-in">
-        
+<div class="container" style="text-align: center; padding-top: 100px;">
+    <div>
         <div style="font-size: 6rem; margin-bottom: var(--space-xl); animation: shake 0.5s infinite alternate;">
             ⚠️
         </div>
 
-        
-        <h1 class="iron-title" style="font-size: 2.5rem; margin-bottom: var(--space-lg); color: var(--ember);">
+        <h1 class="display-md" style="margin-bottom: var(--space-lg); color: var(--error);">
             OOPS! SOMETHING WENT WRONG
         </h1>
 
-        
-        <p class="iron-subtitle" style="font-size: 1.125rem; max-width: 600px; margin: 0 auto var(--space-xl); color: var(--text-secondary);">
+        <p class="body-md text-muted" style="max-width: 600px; margin: 0 auto var(--space-xl);">
             We are experiencing a temporary technical issue with the Gym System. 
             Our technical team has been notified automatically and is working to resolve it.
         </p>
 
-        
         @if (!string.IsNullOrEmpty(requestId))
         {
-            <div class="glass-card" style="display: inline-block; padding: var(--space-lg); margin-bottom: var(--space-xl);">
-                <span class="details-label">Error Tracking ID (Ticket ID)</span>
-                <code style="display: block; margin-top: var(--space-sm); color: var(--ice); font-size: 1rem;">
+            <div class="ke-detail-block" style="display: inline-block; padding: var(--space-lg); margin-bottom: var(--space-xl);">
+                <span class="ke-detail-label">Error Tracking ID (Ticket ID)</span>
+                <code style="display: block; margin-top: var(--space-sm); color: var(--primary); font-size: 1rem; font-family: var(--font-data);">
                     @requestId
                 </code>
             </div>
         }
 
-        
         <div>
-            <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
+            <a asp-controller="Home" asp-action="Index" class="ke-btn ke-btn-primary">
                 ← Back to Home Page
             </a>
         </div>

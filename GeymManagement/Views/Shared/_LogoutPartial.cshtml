@@ -3,13 +3,13 @@
 @if (User.Identity?.IsAuthenticated == true)
 {
     <li class="nav-item">
-        <span class="nav-link-iron" style="cursor: default; color: var(--text-primary);">
+        <span class="nav-link" style="cursor: default; color: var(--on-surface);">
             <i class="bi bi-person-circle"></i> @User.Identity.Name
         </span>
     </li>
     <li class="nav-item">
         <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
-            <button type="submit" class="nav-link-iron" style="background: none; border: none; cursor: pointer;">
+            <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
                 <i class="bi bi-box-arrow-right"></i> Logout
             </button>
         </form>
@@ -18,12 +18,12 @@
 else
 {
     <li class="nav-item">
-        <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" && ViewContext.RouteData.Values["action"]?.ToString() == "Register" ? "active" : "")" asp-controller="Auth" asp-action="Register">
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" && ViewContext.RouteData.Values["action"]?.ToString() == "Register" ? "active" : "")" asp-controller="Auth" asp-action="Register">
             <i class="bi bi-person-plus"></i> Register
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link-iron @(ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" && ViewContext.RouteData.Values["action"]?.ToString() == "Login" ? "active" : "")" asp-controller="Auth" asp-action="Login">
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Auth" && ViewContext.RouteData.Values["action"]?.ToString() == "Login" ? "active" : "")" asp-controller="Auth" asp-action="Login">
             <i class="bi bi-box-arrow-in-right"></i> Login
         </a>
     </li>

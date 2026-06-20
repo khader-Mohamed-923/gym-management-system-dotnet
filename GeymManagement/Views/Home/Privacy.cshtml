@@ -2,60 +2,56 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
-    
-    <div class="iron-page-header">
-        <h1 class="iron-title">PRIVACY POLICY</h1>
-        <p class="iron-subtitle">Your privacy matters to us</p>
+<div class="container py-5">
+    <div class="ke-header-content text-center mb-5 border-bottom border-structural pb-4">
+        <h1 class="ke-title">PRIVACY POLICY</h1>
+        <p class="ke-subtitle">Your privacy matters to us</p>
     </div>
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            <div class="details-body">
-                <h2 class="iron-title" style="font-size: 1.5rem; margin-bottom: var(--space-xl);">
-                    Data Protection at IronCore Gym
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-elevated p-4 p-md-5">
+                <h2 class="display-md text-primary mb-5 text-center">
+                    Data Protection at Kinetic Engine Gym
                 </h2>
 
-                <div class="glass-card" style="margin-bottom: var(--space-xl); padding: var(--space-xl);">
-                    <h3 class="iron-subtitle" style="color: var(--fire); margin-bottom: var(--space-md);">🔒 Information We Collect</h3>
-                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                <div class="p-4 border-structural bg-surface mb-4" style="border-left: 4px solid var(--primary);">
+                    <h3 class="display-sm text-primary mb-3">🔒 Information We Collect</h3>
+                    <p class="body-md text-muted m-0">
                         We collect personal information that you provide directly to us, including name, email address, 
                         phone number, and health-related data for fitness tracking purposes.
                     </p>
                 </div>
 
-                <div class="glass-card" style="margin-bottom: var(--space-xl); padding: var(--space-xl);">
-                    <h3 class="iron-subtitle" style="color: var(--lime); margin-bottom: var(--space-md);">💪 How We Use Your Data</h3>
-                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                <div class="p-4 border-structural bg-surface mb-4" style="border-left: 4px solid var(--lime);">
+                    <h3 class="display-sm mb-3" style="color: var(--lime);">💪 How We Use Your Data</h3>
+                    <p class="body-md text-muted m-0">
                         Your information is used to provide and improve our services, process memberships, 
                         track fitness progress, and communicate with you about your membership.
                     </p>
                 </div>
 
-                <div class="glass-card" style="margin-bottom: var(--space-xl); padding: var(--space-xl);">
-                    <h3 class="iron-subtitle" style="color: var(--ice); margin-bottom: var(--space-md);">🛡️ Data Security</h3>
-                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                <div class="p-4 border-structural bg-surface mb-4" style="border-left: 4px solid var(--ice);">
+                    <h3 class="display-sm mb-3" style="color: var(--ice);">🛡️ Data Security</h3>
+                    <p class="body-md text-muted m-0">
                         We implement appropriate security measures to protect your personal information against 
                         unauthorized access, alteration, disclosure, or destruction.
                     </p>
                 </div>
 
-                <div class="glass-card" style="padding: var(--space-xl);">
-                    <h3 class="iron-subtitle" style="color: var(--gold); margin-bottom: var(--space-md);">📧 Contact Us</h3>
-                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                <div class="p-4 border-structural bg-surface" style="border-left: 4px solid var(--gold);">
+                    <h3 class="display-sm mb-3" style="color: var(--gold);">📧 Contact Us</h3>
+                    <p class="body-md text-muted m-0">
                         If you have any questions about this Privacy Policy, please contact us at 
-                        <span style="color: var(--fire);">privacy@ironcoregym.com</span>
+                        <span class="text-primary fw-bold">privacy@kineticengine.com</span>
                     </p>
                 </div>
-            </div>
 
-            <div class="details-footer">
-                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
-                    ← Back to Home
-                </a>
+                <div class="mt-5 pt-4 border-top border-structural text-center">
+                    <a asp-controller="Home" asp-action="Index" class="btn-secondary px-4 py-2 text-decoration-none">
+                        ← Back to Home
+                    </a>
+                </div>
             </div>
         </div>
     </div>
