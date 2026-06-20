@@ -4,135 +4,121 @@
     ViewData["Title"] = "Edit Trainer";
 }
 
-
-<link rel="stylesheet" href="~/css/iron-ui.css" />
-
-<div class="iron-container">
+<div class="container py-5">
     
-    <div class="iron-page-header">
-        <h1 class="iron-title">EDIT TRAINER</h1>
-        <p class="iron-subtitle">Update professional trainer information</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">EDIT TRAINER</h1>
+            <p class="ke-subtitle">Update professional trainer information</p>
+        </div>
     </div>
 
-    
     @if (TempData[TempDataKeys.SuccessMessage] != null)
     {
-        <div class="alert alert-success alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">✓</span>
-            <span>@TempData[TempDataKeys.SuccessMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--primary);">
+            <i class="bi bi-check-circle-fill text-primary fs-4 me-3"></i>
+            <span class="body-md">@TempData[TempDataKeys.SuccessMessage]</span>
         </div>
     }
     else if (TempData[TempDataKeys.ErrorMessage] != null)
     {
-        <div class="alert alert-danger alert-dismissible animate-in" data-auto-dismiss="5000">
-            <span class="alert-icon">⚠️</span>
-            <span>@TempData[TempDataKeys.ErrorMessage]</span>
-            <button type="button" class="alert-close" onclick="dismissAlert(this)">×</button>
-            <div class="alert-progress"></div>
+        <div class="mb-4 p-3 border-structural bg-surface d-flex align-items-center" style="border-left-color: var(--error);">
+            <i class="bi bi-exclamation-triangle-fill text-error fs-4 me-3"></i>
+            <span class="body-md text-error">@TempData[TempDataKeys.ErrorMessage]</span>
         </div>
     }
 
-    <div class="details-container">
-        <div class="details-card animate-in">
-            <form asp-controller="Trainers" asp-action="Edit" method="post">
-                @Html.AntiForgeryToken()
-                <input type="hidden" asp-for="Id" />
-                <input type="hidden" asp-for="Name" />
-                <input type="hidden" asp-for="DateOfBirth" />
-                <input type="hidden" asp-for="Gender" />
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card card-elevated">
+                <div class="card-body p-4 p-md-5">
+                    <form asp-controller="Trainers" asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Name" />
+                        <input type="hidden" asp-for="DateOfBirth" />
+                        <input type="hidden" asp-for="Gender" />
 
-                <div class="details-body">
-                    
-                    <div style="text-align: center; margin-bottom: var(--space-2xl);">
-                        <p class="iron-subtitle" style="margin-bottom: var(--space-sm);">Editing Profile For</p>
-                        <h2 class="iron-title" style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--space-md);">@Model.Name</h2>
-                        
-                        <div style="display: flex; justify-content: center; gap: var(--space-lg); color: var(--text-secondary); font-size: 0.875rem;">
-                            <span>🎂 Date of Birth: @Model.DateOfBirth</span>
-                            <span>👤 Gender: @Model.Gender</span>
+                        <div class="text-center mb-5 pb-4 border-bottom border-structural">
+                            <p class="label-sm text-muted mb-2">Editing Profile For</p>
+                            <h2 class="display-lg text-primary mb-3">@Model.Name</h2>
+                            
+                            <div class="d-flex justify-content-center gap-4 text-muted body-sm data-mono">
+                                <span><i class="bi bi-calendar3 me-1"></i> @Model.DateOfBirth</span>
+                                <span><i class="bi bi-person me-1"></i> @Model.Gender</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <hr class="divider" />
+                        <h3 class="ke-section-header text-primary pb-2 border-bottom border-structural mb-4">
+                            CONTACT INFORMATION
+                        </h3>
 
-                    
-                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fire);">
-                        CONTACT INFORMATION
-                    </h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label asp-for="Email" class="form-label form-label-required">Email Address</label>
-                            <input asp-for="Email" class="form-input" placeholder="Enter email address" />
-                            <span asp-validation-for="Email" class="form-error-text"></span>
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="label-sm mb-1">Email Address <span class="text-error">*</span></label>
+                                <input asp-for="Email" class="input-field" placeholder="Enter email address" />
+                                <span asp-validation-for="Email" class="text-error small mt-1"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="label-sm mb-1">Phone Number <span class="text-error">*</span></label>
+                                <input asp-for="Phone" class="input-field" placeholder="Enter phone number" />
+                                <span asp-validation-for="Phone" class="text-error small mt-1"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Phone" class="form-label form-label-required">Phone Number</label>
-                            <input asp-for="Phone" class="form-input" placeholder="Enter phone number" />
-                            <span asp-validation-for="Phone" class="form-error-text"></span>
+
+                        <h3 class="ke-section-header text-primary pb-2 border-bottom border-structural mb-4">
+                            ADDRESS INFORMATION
+                        </h3>
+
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-4">
+                                <label asp-for="BuildingNumber" class="label-sm mb-1">Building Number <span class="text-error">*</span></label>
+                                <input asp-for="BuildingNumber" class="input-field" placeholder="Enter building number" />
+                                <span asp-validation-for="BuildingNumber" class="text-error small mt-1"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="Street" class="label-sm mb-1">Street <span class="text-error">*</span></label>
+                                <input asp-for="Street" class="input-field" placeholder="Enter street name" />
+                                <span asp-validation-for="Street" class="text-error small mt-1"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <label asp-for="City" class="label-sm mb-1">City <span class="text-error">*</span></label>
+                                <input asp-for="City" class="input-field" placeholder="Enter city" />
+                                <span asp-validation-for="City" class="text-error small mt-1"></span>
+                            </div>
                         </div>
-                    </div>
 
-                    <hr class="divider" />
+                        <h3 class="ke-section-header text-primary pb-2 border-bottom border-structural mb-4">
+                            PROFESSIONAL INFORMATION
+                        </h3>
 
-                    
-                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ice);">
-                        ADDRESS INFORMATION
-                    </h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label asp-for="BuildingNumber" class="form-label form-label-required">Building Number</label>
-                            <input asp-for="BuildingNumber" class="form-input" placeholder="Enter building number" />
-                            <span asp-validation-for="BuildingNumber" class="form-error-text"></span>
+                        <div class="row g-4 mb-5">
+                            <div class="col-md-6">
+                                <label asp-for="Specialty" class="label-sm mb-1">Specialty <span class="text-error">*</span></label>
+                                <select asp-for="Specialty" class="input-field">
+                                    <option value="" style="background: var(--surface); color: var(--on-surface);">Select Specialty</option>
+                                    <option value="Cardio" style="background: var(--surface); color: var(--on-surface);">Cardio</option>
+                                    <option value="Balance" style="background: var(--surface); color: var(--on-surface);">Balance</option>
+                                    <option value="Boxing" style="background: var(--surface); color: var(--on-surface);">Boxing</option>
+                                    <option value="Yoga" style="background: var(--surface); color: var(--on-surface);">Yoga</option>
+                                    <option value="CrossFit" style="background: var(--surface); color: var(--on-surface);">CrossFit</option>
+                                    <option value="Fitness" style="background: var(--surface); color: var(--on-surface);">Fitness</option>
+                                </select>
+                                <span asp-validation-for="Specialty" class="text-error small mt-1"></span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Street" class="form-label form-label-required">Street</label>
-                            <input asp-for="Street" class="form-input" placeholder="Enter street name" />
-                            <span asp-validation-for="Street" class="form-error-text"></span>
+
+                        <div class="d-flex justify-content-end gap-3 pt-4 border-top border-structural">
+                            <a asp-controller="Trainers" asp-action="Index" class="btn-secondary px-4 py-2">
+                                Cancel
+                            </a>
+                            <button type="submit" class="ke-btn ke-btn-primary px-4 py-2">
+                                Save Changes
+                            </button>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="City" class="form-label form-label-required">City</label>
-                        <input asp-for="City" class="form-input" placeholder="Enter city" />
-                        <span asp-validation-for="City" class="form-error-text"></span>
-                    </div>
-
-                    <hr class="divider" />
-
-                    
-                    <h3 class="iron-subtitle" style="margin-bottom: var(--space-xl); text-transform: uppercase; letter-spacing: 0.08em; color: var(--lime);">
-                        PROFESSIONAL INFORMATION
-                    </h3>
-
-                    <div class="form-group">
-                        <label asp-for="Specialty" class="form-label form-label-required">Specialty</label>
-                        <select asp-for="Specialty" class="form-input">
-                            <option value="">Select Specialty</option>
-                            <option value="Cardio">Cardio</option>
-                            <option value="Balance">Balance</option>
-                            <option value="Boxing">Boxing</option>
-                            <option value="Yoga">Yoga</option>
-                            <option value="CrossFit">CrossFit</option>
-                            <option value="Fitness">Fitness</option>
-                        </select>
-                        <span asp-validation-for="Specialty" class="form-error-text"></span>
-                    </div>
+                    </form>
                 </div>
-
-                
-                <div class="details-footer">
-                    <a asp-controller="Trainers" asp-action="Index" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -141,4 +127,3 @@
     <partial name="_ValidationScriptsPartial" />
     <partial name="_AlertDismissScript" />
 }
-

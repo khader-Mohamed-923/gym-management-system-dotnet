@@ -5,81 +5,88 @@
 }
 
 <div class="container py-5">
-    <div class="mb-5">
-        <h1 class="fw-bold mb-0 text-white" style="font-family: 'Oswald', sans-serif; letter-spacing: 1px;">TRAINER DASHBOARD</h1>
-        <p class="text-muted mt-1 mb-0">Manage your schedule and assigned sessions.</p>
+    <div class="ke-header-content mb-5">
+        <div class="ke-header-text">
+            <h1 class="ke-title">TRAINER DASHBOARD</h1>
+            <p class="ke-subtitle">Manage your schedule and assigned sessions.</p>
+        </div>
     </div>
 
     <div class="row g-4 mb-5">
         <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+            <div class="card card-elevated h-100">
                 <div class="card-body p-4 d-flex align-items-center">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.2);">
-                        <i class="bi bi-calendar-event fs-3" style="color: var(--text-accent);"></i>
+                    <div class="d-flex align-items-center justify-content-center me-4 border-structural bg-surface" style="width: 60px; height: 60px; color: var(--primary);">
+                        <i class="bi bi-calendar-event fs-3"></i>
                     </div>
                     <div>
-                        <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Today's Sessions</p>
-                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.TodaysSessionsCount</h3>
+                        <p class="mb-1 label-sm text-muted">Today's Sessions</p>
+                        <h3 class="display-md mb-0 data-mono text-primary">@Model.TodaysSessionsCount</h3>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+            <div class="card card-elevated h-100">
                 <div class="card-body p-4 d-flex align-items-center">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2);">
-                        <i class="bi bi-people fs-3" style="color: var(--text-error);"></i>
+                    <div class="d-flex align-items-center justify-content-center me-4 border-structural bg-surface" style="width: 60px; height: 60px; color: var(--error);">
+                        <i class="bi bi-people fs-3"></i>
                     </div>
                     <div>
-                        <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Total Trainees</p>
-                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.TotalTraineesCount</h3>
+                        <p class="mb-1 label-sm text-muted">Total Trainees</p>
+                        <h3 class="display-md mb-0 data-mono text-primary">@Model.TotalTraineesCount</h3>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-lg border-0 h-100" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
+            <div class="card card-elevated h-100">
                 <div class="card-body p-4 d-flex align-items-center">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.2);">
-                        <i class="bi bi-star fs-3" style="color: var(--text-accent);"></i>
+                    <div class="d-flex align-items-center justify-content-center me-4 border-structural bg-surface" style="width: 60px; height: 60px; color: var(--warning, var(--gold));">
+                        <i class="bi bi-star fs-3"></i>
                     </div>
                     <div>
-                        <p class="mb-0 small text-uppercase fw-bold letter-spacing-1" style="color: var(--text-body);">Avg Rating</p>
-                        <h3 class="fw-bold mb-0" style="font-family: 'JetBrains Mono', monospace; color: var(--text-primary);">@Model.AverageRating.ToString("0.0")</h3>
+                        <p class="mb-1 label-sm text-muted">Avg Rating</p>
+                        <h3 class="display-md mb-0 data-mono text-primary">@Model.AverageRating.ToString("0.0")</h3>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 12px;">
-        <div class="card-body p-5">
-            <h5 class="fw-bold mb-4" style="font-family: 'Oswald', sans-serif; color: var(--text-primary);">UPCOMING SESSIONS</h5>
+    <div class="card card-elevated">
+        <div class="card-body p-4 p-md-5">
+            <h5 class="ke-section-header mb-4 text-primary pb-2 border-bottom border-structural">UPCOMING SESSIONS</h5>
             
-            <div class="d-flex flex-column gap-3">
+            <div class="d-flex flex-column gap-3 mt-4">
                 @if(!Model.UpcomingSessions.Any())
                 {
-                    <p class="text-muted">No upcoming sessions scheduled.</p>
+                    <p class="body-md text-muted">No upcoming sessions scheduled.</p>
                 }
                 else
                 {
                     foreach(var session in Model.UpcomingSessions)
                     {
-                        var borderClass = session.RegisteredTrainees >= session.MaxCapacity ? "border-left: 4px solid #ef4444;" : "border-left: 4px solid #f97316;";
-                        <div class="p-4 rounded" style="background: rgba(0,0,0,0.4); @borderClass">
+                        var isFull = session.RegisteredTrainees >= session.MaxCapacity;
+                        var borderClass = isFull ? "border-left-color: var(--error);" : "border-left-color: var(--primary);";
+                        var statusColor = isFull ? "var(--error)" : "var(--primary)";
+
+                        <div class="p-4 border-structural bg-surface ke-detail-block" style="@borderClass">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h5 class="fw-bold mb-1" style="color: var(--text-primary);">@session.Name</h5>
-                                    <p class="mb-0" style="color: var(--text-body);"><i class="bi bi-clock me-2"></i> @session.TimeRange &bull; @session.Location</p>
+                                    <h5 class="headline-md mb-2 text-on-surface">@session.Name</h5>
+                                    <p class="body-md data-mono text-muted mb-0"><i class="bi bi-clock me-2"></i> @session.TimeRange &bull; @session.Location</p>
                                 </div>
                                 <div class="text-end">
-                                    @if(session.RegisteredTrainees >= session.MaxCapacity)
+                                    @if(isFull)
                                     {
-                                        <span class="badge bg-danger bg-opacity-25 text-danger px-3 py-2 rounded-pill mb-2">Full</span>
+                                        <span class="d-inline-block px-3 py-1 label-sm data-mono mb-2" style="border: 2px solid var(--error); color: var(--error); background: var(--surface-container-high);">
+                                            Full
+                                        </span>
                                     }
-                                    <div class="small" style="color: var(--text-primary);">@session.RegisteredTrainees/@session.MaxCapacity Registered</div>
+                                    <div class="label-sm data-mono" style="color: @statusColor;">@session.RegisteredTrainees/@session.MaxCapacity Registered</div>
                                 </div>
                             </div>
                         </div>
